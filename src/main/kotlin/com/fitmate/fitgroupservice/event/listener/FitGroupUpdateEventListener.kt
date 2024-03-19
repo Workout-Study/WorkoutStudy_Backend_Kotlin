@@ -15,7 +15,7 @@ class FitGroupUpdateEventListener(private val fitGroupHistoryService: FitGroupHi
     }
 
     /**
-     * register fit group history event
+     * update event register fit group history
      *
      * @param updateFitGroupEvent update fit group event
      */

@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -47,17 +46,19 @@ class FitGroupControllerBootTest {
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
     private val frequency = 7
+    private val maxFitMate = 20
+    private val multiMediaEndPoint: List<String> = listOf("https://avatars.githubusercontent.com/u/105261146?v=4")
 
     private lateinit var fitGroup: FitGroup
 
     @BeforeEach
     fun createTestFitGroup() {
         val fitGroup = FitGroup(fitGroupName, penaltyAmount, category, introduction, cycle
-                ?: 1, frequency, false, Instant.now(), "test")
+                ?: 1, frequency, maxFitMate, "test")
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, false, Instant.now(), "test")
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, "test")
 
         fitLeaderRepository.save(fitLeader)
 
@@ -69,7 +70,7 @@ class FitGroupControllerBootTest {
     @Throws(Exception::class)
     fun `register fit group controller success boot test`() {
         //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency)
+        val registerFitGroupRequest = RegisterFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
 
         //when
         val resultActions = mockMvc.perform(
@@ -102,7 +103,7 @@ class FitGroupControllerBootTest {
     @Throws(Exception::class)
     fun `update fit group controller success boot test`() {
         //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency)
+        val updateFitGroupRequest = UpdateFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
 
         //when
         val resultActions = mockMvc.perform(

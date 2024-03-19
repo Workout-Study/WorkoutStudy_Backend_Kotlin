@@ -45,13 +45,16 @@ class FitGroupControllerTest {
     private val cycle = null
     private val frequency = 7
     private val fitGroupId = 1L
+    private val maxFitMate = 20
+    private val presentFitMateCount = 7
+    private val multiMediaEndPoint: List<String> = listOf("https://avatars.githubusercontent.com/u/105261146?v=4")
 
     @Test
     @DisplayName("[단위][Controller] Fit group 등록 - 성공 테스트")
     @Throws(Exception::class)
     fun `register fit group controller success test`() {
         //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency)
+        val registerFitGroupRequest = RegisterFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
         val registerFitGroupResponse = RegisterFitGroupResponse(true)
 
         Mockito.`when`(fitGroupService.registerFitGroup(registerFitGroupRequest)).thenReturn(registerFitGroupResponse)
@@ -72,7 +75,9 @@ class FitGroupControllerTest {
                                 fieldWithPath("category").type(JsonFieldType.NUMBER).description("운동 category ( 1:헬스, 2:축구, 3:농구, 4:야구, 5: 클라이밍, 6: 배드민턴, 7: 필라테스, 10: 기타 )"),
                                 fieldWithPath("introduction").type(JsonFieldType.STRING).description("스터디 설명"),
                                 fieldWithPath("cycle").type(JsonFieldType.NULL).description("운동 인증 주기 ( null시 기본값 일주일 - 1: 일주일, 2: 한달, 3: 일년 )"),
-                                fieldWithPath("frequency").type(JsonFieldType.NUMBER).description("주기별 운동 인증 필요 횟수")
+                                fieldWithPath("frequency").type(JsonFieldType.NUMBER).description("주기별 운동 인증 필요 횟수"),
+                                fieldWithPath("maxFitMate").type(JsonFieldType.NUMBER).description("fit group의 최대 fit mate 수"),
+                                fieldWithPath("multiMediaEndPoints").type(JsonFieldType.ARRAY).description("멀티 미디어 end point list ( 주어진 index 순으로 return )")
                         ),
                         responseFields(
                                 fieldWithPath("isRegisterSuccess").type(JsonFieldType.BOOLEAN).description("등록 성공 여부")
@@ -87,7 +92,7 @@ class FitGroupControllerTest {
     fun `get detail data about fit group success test`() {
         //given
         val fitGroupDetailResponse = FitGroupDetailResponse(fitGroupId, requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle
-                ?: 1, frequency, Instant.now())
+                ?: 1, frequency, Instant.now(), maxFitMate, presentFitMateCount, multiMediaEndPoint)
 
         Mockito.`when`(fitGroupService.getFitGroupDetail(fitGroupId)).thenReturn(fitGroupDetailResponse)
         //when
@@ -111,7 +116,10 @@ class FitGroupControllerTest {
                                 fieldWithPath("introduction").type(JsonFieldType.STRING).description("스터디 설명"),
                                 fieldWithPath("cycle").type(JsonFieldType.NUMBER).description("운동 인증 주기 ( 1: 일주일, 2: 한달, 3: 일년 )"),
                                 fieldWithPath("frequency").type(JsonFieldType.NUMBER).description("주기별 운동 인증 필요 횟수"),
-                                fieldWithPath("createdAt").type(JsonFieldType.STRING).description("등록 일시")
+                                fieldWithPath("createdAt").type(JsonFieldType.STRING).description("등록 일시"),
+                                fieldWithPath("presentFitMateCount").type(JsonFieldType.NUMBER).description("현재 fit mate 수"),
+                                fieldWithPath("maxFitMate").type(JsonFieldType.NUMBER).description("fit group의 최대 fit mate 수"),
+                                fieldWithPath("multiMediaEndPoints").type(JsonFieldType.ARRAY).description("멀티 미디어 end point list")
                         )
                 )
                 )
@@ -122,7 +130,7 @@ class FitGroupControllerTest {
     @Throws(Exception::class)
     fun `update fit group controller success test`() {
         //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency)
+        val updateFitGroupRequest = UpdateFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
         val updateFitGroupResponse = UpdateFitGroupResponse(true)
 
         Mockito.`when`(fitGroupService.updateFitGroup(fitGroupId, updateFitGroupRequest)).thenReturn(updateFitGroupResponse)
@@ -146,7 +154,9 @@ class FitGroupControllerTest {
                                 fieldWithPath("category").type(JsonFieldType.NUMBER).description("수정할 운동 category ( 1:헬스, 2:축구, 3:농구, 4:야구, 5: 클라이밍, 6: 배드민턴, 7: 필라테스, 10: 기타 )"),
                                 fieldWithPath("introduction").type(JsonFieldType.STRING).description("수정할 스터디 설명"),
                                 fieldWithPath("cycle").type(JsonFieldType.NULL).description("수정할 운동 인증 주기 ( null시 기본값 일주일 - 1: 일주일, 2: 한달, 3: 일년 )"),
-                                fieldWithPath("frequency").type(JsonFieldType.NUMBER).description("수정할 주기별 운동 인증 필요 횟수")
+                                fieldWithPath("frequency").type(JsonFieldType.NUMBER).description("수정할 주기별 운동 인증 필요 횟수"),
+                                fieldWithPath("maxFitMate").type(JsonFieldType.NUMBER).description("fit group의 최대 fit mate 수"),
+                                fieldWithPath("multiMediaEndPoints").type(JsonFieldType.ARRAY).description("멀티 미디어 end point list ( 기존 기등록 멀티 미디어 list 미포함시 삭제 )")
                         ),
                         responseFields(
                                 fieldWithPath("isUpdateSuccess").type(JsonFieldType.BOOLEAN).description("수정 성공 여부")
