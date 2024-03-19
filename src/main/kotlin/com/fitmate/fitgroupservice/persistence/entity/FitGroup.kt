@@ -1,5 +1,6 @@
 package com.fitmate.fitgroupservice.persistence.entity
 
+import com.fitmate.fitgroupservice.common.GlobalStatus
 import com.fitmate.fitgroupservice.dto.group.UpdateFitGroupRequest
 import jakarta.persistence.*
 import lombok.EqualsAndHashCode
@@ -16,9 +17,8 @@ class FitGroup(@Column(nullable = false) var fitGroupName: String,
                // cycle - ( 1:week, 2:month, 3:year )
                var cycle: Int,
                @Column(nullable = false) var frequency: Int,
-               state: Boolean,
-               createdAt: Instant,
-               createUser: String) : BaseEntity(state, createdAt, createUser) {
+               @Column(nullable = false) var maxFitMate: Int,
+               createUser: String) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -29,6 +29,8 @@ class FitGroup(@Column(nullable = false) var fitGroupName: String,
         this.category = updateFitGroupRequest.category
         this.introduction = updateFitGroupRequest.introduction
         this.cycle = updateFitGroupRequest.cycle ?: 1
+        this.frequency = updateFitGroupRequest.frequency
+        this.maxFitMate = updateFitGroupRequest.maxFitMate
         this.updatedAt = Instant.now()
         this.updateUser = updateFitGroupRequest.requestUserId
     }

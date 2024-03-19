@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface FitLeaderRepository : JpaRepository<FitLeader, Long> {
-    fun findByFitGroupAndState(fitGroup: FitGroup, persistenceNotDeleted: Boolean): Optional<FitLeader>
+    fun findByFitGroupAndState(fitGroup: FitGroup, state: Boolean): Optional<FitLeader>
 }

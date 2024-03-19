@@ -41,6 +41,9 @@ class FitGroupControllerValidationTest {
     private val cycle = null
     private val frequency = 7
     private val fitGroupId = 1L
+    private val maxFitMate = 20
+    private val presentFitMateCount = 7
+    private val multiMediaEndPoint: List<String> = listOf("https://avatars.githubusercontent.com/u/105261146?v=4")
 
     @ParameterizedTest
     @EmptySource
@@ -48,7 +51,7 @@ class FitGroupControllerValidationTest {
     @Throws(Exception::class)
     fun `register fit group controller request user id validation fail test`(testRequestUserId: String) {
         //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(testRequestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency)
+        val registerFitGroupRequest = RegisterFitGroupRequest(testRequestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
 
         //when
         val resultActions = mockMvc.perform(
@@ -67,7 +70,7 @@ class FitGroupControllerValidationTest {
     @Throws(Exception::class)
     fun `register fit group controller fit group name validation fail test`(testFitGroupName: String) {
         //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(requestUserId, testFitGroupName, penaltyAmount, category, introduction, cycle, frequency)
+        val registerFitGroupRequest = RegisterFitGroupRequest(requestUserId, testFitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
 
         //when
         val resultActions = mockMvc.perform(
@@ -86,7 +89,29 @@ class FitGroupControllerValidationTest {
     @Throws(Exception::class)
     fun `register fit group controller introduction validation success test`(testIntroduction: String?) {
         //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, testIntroduction, cycle, frequency)
+        val registerFitGroupRequest = RegisterFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, testIntroduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
+
+        val registerFitGroupResponse = RegisterFitGroupResponse(true)
+
+        Mockito.`when`(fitGroupService.registerFitGroup(registerFitGroupRequest)).thenReturn(registerFitGroupResponse)
+        //when
+        val resultActions = mockMvc.perform(
+                post(GlobalURI.GROUP_ROOT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(registerFitGroupRequest))
+                        .accept(MediaType.APPLICATION_JSON))
+        //then
+        resultActions.andExpect(status().isCreated())
+                .andDo(print())
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("[단위][Controller] Fit group 등록 multiMediaEndPoint - Validation 성공 테스트")
+    @Throws(Exception::class)
+    fun `register fit group controller multiMediaEndPoint validation success test`(testMultiMediaEndPoint: List<String>?) {
+        //given
+        val registerFitGroupRequest = RegisterFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, testMultiMediaEndPoint)
 
         val registerFitGroupResponse = RegisterFitGroupResponse(true)
 
@@ -125,7 +150,7 @@ class FitGroupControllerValidationTest {
     @Throws(Exception::class)
     fun `update fit group controller request user id validation fail test`(testRequestUserId: String) {
         //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(testRequestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency)
+        val updateFitGroupRequest = UpdateFitGroupRequest(testRequestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
 
         //when
         val resultActions = mockMvc.perform(
@@ -144,7 +169,7 @@ class FitGroupControllerValidationTest {
     @Throws(Exception::class)
     fun `update fit group controller fit group name validation fail test`(testFitGroupName: String) {
         //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(requestUserId, testFitGroupName, penaltyAmount, category, introduction, cycle, frequency)
+        val updateFitGroupRequest = UpdateFitGroupRequest(requestUserId, testFitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
 
         //when
         val resultActions = mockMvc.perform(
@@ -163,7 +188,29 @@ class FitGroupControllerValidationTest {
     @Throws(Exception::class)
     fun `update fit group controller introduction validation success test`(testIntroduction: String) {
         //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, testIntroduction, cycle, frequency)
+        val updateFitGroupRequest = UpdateFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, testIntroduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
+
+        val updateFitGroupResponse = UpdateFitGroupResponse(true)
+
+        Mockito.`when`(fitGroupService.updateFitGroup(fitGroupId, updateFitGroupRequest)).thenReturn(updateFitGroupResponse)
+        //when
+        val resultActions = mockMvc.perform(
+                put("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}", fitGroupId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateFitGroupRequest))
+                        .accept(MediaType.APPLICATION_JSON))
+        //then
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+    }
+
+    @ParameterizedTest
+    @EmptySource
+    @DisplayName("[단위][Controller] Fit group 수정 multiMediaEndPoint - Validation 성공 테스트")
+    @Throws(Exception::class)
+    fun `update fit group controller multiMediaEndPoint validation success test`(testMultiMediaEndPoint: List<String>?) {
+        //given
+        val updateFitGroupRequest = UpdateFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, testMultiMediaEndPoint)
 
         val updateFitGroupResponse = UpdateFitGroupResponse(true)
 

@@ -8,4 +8,6 @@ data class RegisterFitGroupRequest(@field:NotEmpty val requestUserId: String,
                                    val category: Int,
                                    val introduction: String?,
                                    val cycle: Int?,
-                                   val frequency: Int)
+                                   val frequency: Int,
+                                   val maxFitMate: Int,
+                                   val multiMediaEndPoints: List<String>?)

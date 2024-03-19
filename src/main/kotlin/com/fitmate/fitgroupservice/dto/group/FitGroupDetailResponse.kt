@@ -10,5 +10,8 @@ data class FitGroupDetailResponse(val fitGroupId: Long,
                                   val introduction: String?,
                                   val cycle: Int,
                                   val frequency: Int,
-                                  val createdAt: Instant) {
+                                  val createdAt: Instant,
+                                  val maxFitMate: Int,
+                                  val presentFitMateCount: Int,
+                                  val multiMediaEndPoints: List<String>) {
 }
