@@ -90,19 +90,9 @@ class FitGroupServiceImpl(
         val fitLeader = findFitLeaderAndGet(fitGroup)
 
         return FitGroupDetailResponse(
-            fitGroupId,
-            fitLeader.fitLeaderUserId,
-            fitGroup.fitGroupName,
-            fitGroup.penaltyAmount,
-            fitGroup.penaltyAccountBankCode,
-            fitGroup.penaltyAccountNumber,
-            fitGroup.category,
-            fitGroup.introduction,
-            fitGroup.cycle,
-            fitGroup.frequency,
-            fitGroup.createdAt,
-            fitGroup.maxFitMate,
-            getFitMateCountByFitGroup(fitGroup) + fitLeader.let { 1 },
+            fitLeader,
+            fitGroup,
+            getFitMateCountByFitGroup(fitGroup),
             findMultiMediaEndPointsAndGet(fitGroup)
         )
     }
