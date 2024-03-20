@@ -7,11 +7,13 @@ import java.time.Instant
 
 @Entity
 @EqualsAndHashCode
-class MultiMediaEndPoint(@ManyToOne(fetch = FetchType.LAZY)
-                         @JoinColumn(name = "fit_group_id", nullable = false)
-                         val fitGroup: FitGroup,
-                         val endPoint: String,
-                         createUser: String) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
+class MultiMediaEndPoint(
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fit_group_id", nullable = false)
+    val fitGroup: FitGroup,
+    val endPoint: String,
+    createUser: String
+) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

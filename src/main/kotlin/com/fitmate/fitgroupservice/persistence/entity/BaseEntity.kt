@@ -14,24 +14,25 @@ import java.time.Instant
 
 @EntityListeners(AuditingEntityListener::class)
 @MappedSuperclass
-open class BaseEntity(@Convert(converter = BooleanNumberConverter::class)
-                      var state: Boolean,
-                      @CreatedDate
-                      @Column(updatable = false)
-                      @Convert(converter = Jsr310JpaConverters.InstantConverter::class)
-                      var createdAt: Instant,
-                      @Column(nullable = false) var createUser: String,
-                      @LastModifiedDate
-                      @Convert(converter = Jsr310JpaConverters.InstantConverter::class)
-                      var updatedAt: Instant? = null,
-                      @Column
-                      var updateUser: String? = null) {
-
-    fun isDeleted(): Boolean {
-        return state
-    }
+open class BaseEntity(
+    @Convert(converter = BooleanNumberConverter::class)
+    var state: Boolean,
+    @CreatedDate
+    @Column(updatable = false)
+    @Convert(converter = Jsr310JpaConverters.InstantConverter::class)
+    var createdAt: Instant,
+    @Column(nullable = false) var createUser: String,
+    @LastModifiedDate
+    @Convert(converter = Jsr310JpaConverters.InstantConverter::class)
+    var updatedAt: Instant? = null,
+    @Column
+    var updateUser: String? = null
+) {
 
     fun delete() {
         this.state = GlobalStatus.PERSISTENCE_DELETED
     }
+
+    val isDeleted: Boolean
+        get() = state
 }

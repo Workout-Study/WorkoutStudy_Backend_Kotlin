@@ -19,7 +19,7 @@ class FitGroupController(private val fitGroupService: FitGroupService) {
      */
     @PostMapping(GlobalURI.GROUP_ROOT)
     fun registerFitGroup(@RequestBody @Valid registerFitGroupRequest: RegisterFitGroupRequest): ResponseEntity<RegisterFitGroupResponse> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(fitGroupService.registerFitGroup(registerFitGroupRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(fitGroupService.registerFitGroup(registerFitGroupRequest))
     }
 
     /**
@@ -41,8 +41,10 @@ class FitGroupController(private val fitGroupService: FitGroupService) {
      * @return Boolean about update fit group success with response entity
      */
     @PutMapping("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}")
-    fun updateFitGroup(@PathVariable(GlobalURI.PATH_VARIABLE_FIT_GROUP_ID) fitGroupId: Long,
-                       @RequestBody @Valid updateFitGroupRequest: UpdateFitGroupRequest): ResponseEntity<UpdateFitGroupResponse> {
+    fun updateFitGroup(
+        @PathVariable(GlobalURI.PATH_VARIABLE_FIT_GROUP_ID) fitGroupId: Long,
+        @RequestBody @Valid updateFitGroupRequest: UpdateFitGroupRequest
+    ): ResponseEntity<UpdateFitGroupResponse> {
         return ResponseEntity.ok().body(fitGroupService.updateFitGroup(fitGroupId, updateFitGroupRequest));
     }
 
@@ -54,8 +56,10 @@ class FitGroupController(private val fitGroupService: FitGroupService) {
      * @return Boolean about delete fit group success with response entity
      */
     @DeleteMapping("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}")
-    fun deleteFitGroup(@PathVariable(GlobalURI.PATH_VARIABLE_FIT_GROUP_ID) fitGroupId: Long,
-                       @RequestBody @Valid deleteFitGroupRequest: DeleteFitGroupRequest): ResponseEntity<DeleteFitGroupResponse> {
+    fun deleteFitGroup(
+        @PathVariable(GlobalURI.PATH_VARIABLE_FIT_GROUP_ID) fitGroupId: Long,
+        @RequestBody @Valid deleteFitGroupRequest: DeleteFitGroupRequest
+    ): ResponseEntity<DeleteFitGroupResponse> {
         return ResponseEntity.ok().body(fitGroupService.deleteFitGroup(fitGroupId, deleteFitGroupRequest));
     }
 }

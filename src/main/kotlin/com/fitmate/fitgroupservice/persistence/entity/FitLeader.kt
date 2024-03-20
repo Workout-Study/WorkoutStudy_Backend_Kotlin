@@ -7,11 +7,13 @@ import java.time.Instant
 
 @Entity
 @EqualsAndHashCode
-class FitLeader(@ManyToOne(fetch = FetchType.LAZY)
-                @JoinColumn(name = "fit_group_id", nullable = false)
-                val fitGroup: FitGroup,
-                @Column(nullable = false) val fitLeaderUserId: String,
-                createUser: String) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
+class FitLeader(
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fit_group_id", nullable = false)
+    val fitGroup: FitGroup,
+    @Column(nullable = false) val fitLeaderUserId: String,
+    createUser: String
+) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

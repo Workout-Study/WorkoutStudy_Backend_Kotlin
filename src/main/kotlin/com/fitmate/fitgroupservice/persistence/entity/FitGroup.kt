@@ -8,17 +8,21 @@ import java.time.Instant
 
 @Entity
 @EqualsAndHashCode
-class FitGroup(@Column(nullable = false) var fitGroupName: String,
-               @Column(nullable = false) var penaltyAmount: Int,
-               @Column(nullable = false)
-               var category: Int,
-               var introduction: String?,
-               @Column(nullable = false)
-               // cycle - ( 1:week, 2:month, 3:year )
-               var cycle: Int,
-               @Column(nullable = false) var frequency: Int,
-               @Column(nullable = false) var maxFitMate: Int,
-               createUser: String) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
+class FitGroup(
+    @Column(nullable = false) var fitGroupName: String,
+    @Column(nullable = false) var penaltyAmount: Int,
+    @Column(nullable = false) var penaltyAccountBankCode: String,
+    @Column(nullable = false) var penaltyAccountNumber: String,
+    @Column(nullable = false)
+    var category: Int,
+    var introduction: String?,
+    @Column(nullable = false)
+    // cycle - ( 1:week, 2:month, 3:year )
+    var cycle: Int,
+    @Column(nullable = false) var frequency: Int,
+    @Column(nullable = false) var maxFitMate: Int,
+    createUser: String
+) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -26,6 +30,8 @@ class FitGroup(@Column(nullable = false) var fitGroupName: String,
     fun update(updateFitGroupRequest: UpdateFitGroupRequest) {
         this.fitGroupName = updateFitGroupRequest.fitGroupName
         this.penaltyAmount = updateFitGroupRequest.penaltyAmount
+        this.penaltyAccountBankCode = updateFitGroupRequest.penaltyAccountBankCode
+        this.penaltyAccountNumber = updateFitGroupRequest.penaltyAccountNumber
         this.category = updateFitGroupRequest.category
         this.introduction = updateFitGroupRequest.introduction
         this.cycle = updateFitGroupRequest.cycle ?: 1
