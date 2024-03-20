@@ -15,6 +15,11 @@ class FitMate(
     createUser: String
 ) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
 
+    fun kick(kicker: String) {
+        this.updatedAt = Instant.now()
+        this.updateUser = kicker
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

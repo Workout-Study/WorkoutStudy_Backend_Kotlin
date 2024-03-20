@@ -52,20 +52,18 @@ class FitGroupServiceImpl(
         endPoint: String,
         fitGroup: FitGroup,
         requestUserId: String
-    ): MultiMediaEndPoint {
-        return MultiMediaEndPoint(fitGroup, endPoint, requestUserId)
-    }
+    ): MultiMediaEndPoint =
+        MultiMediaEndPoint(fitGroup, endPoint, requestUserId)
 
-    private fun createFitLeader(savedFitGroup: FitGroup, registerFitGroupRequest: RegisterFitGroupRequest): FitLeader {
-        return FitLeader(
+    private fun createFitLeader(savedFitGroup: FitGroup, registerFitGroupRequest: RegisterFitGroupRequest): FitLeader =
+        FitLeader(
             savedFitGroup,
             registerFitGroupRequest.requestUserId,
             registerFitGroupRequest.requestUserId
         )
-    }
 
-    private fun createFitGroup(registerFitGroupRequest: RegisterFitGroupRequest): FitGroup {
-        return FitGroup(
+    private fun createFitGroup(registerFitGroupRequest: RegisterFitGroupRequest): FitGroup =
+        FitGroup(
             registerFitGroupRequest.fitGroupName,
             registerFitGroupRequest.penaltyAmount,
             registerFitGroupRequest.penaltyAccountBankCode,
@@ -77,7 +75,6 @@ class FitGroupServiceImpl(
             registerFitGroupRequest.maxFitMate,
             registerFitGroupRequest.requestUserId
         )
-    }
 
     /**
      * Get Detail about fit group
@@ -110,15 +107,13 @@ class FitGroupServiceImpl(
         )
     }
 
-    private fun findFitGroupAndGet(fitGroupId: Long): FitGroup {
-        return fitGroupRepository.findById(fitGroupId)
+    private fun findFitGroupAndGet(fitGroupId: Long): FitGroup =
+        fitGroupRepository.findById(fitGroupId)
             .orElseThrow { ResourceNotFoundException("Fit group does not exist") }
-    }
 
-    private fun findFitLeaderAndGet(fitGroup: FitGroup): FitLeader {
-        return fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
+    private fun findFitLeaderAndGet(fitGroup: FitGroup): FitLeader =
+        fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
             .orElseThrow { ResourceNotFoundException("Fit Leader does not exist") }
-    }
 
     private fun findMultiMediaEndPointsAndGet(fitGroup: FitGroup): List<String> {
         val multiMediaEndpoints = multiMediaEndPointRepository.findByFitGroupAndStateOrderByIdAsc(
@@ -128,9 +123,8 @@ class FitGroupServiceImpl(
         return multiMediaEndpoints?.map { it.endPoint } ?: listOf()
     }
 
-    private fun getFitMateCountByFitGroup(fitGroup: FitGroup): Int {
-        return fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED) ?: 0
-    }
+    private fun getFitMateCountByFitGroup(fitGroup: FitGroup): Int =
+        fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED) ?: 0
 
     /**
      * Update Data About Fit Group service
@@ -210,7 +204,6 @@ class FitGroupServiceImpl(
             throw BadRequestException("Request user does not match with fit leader. fit group only the leader can update.")
     }
 
-    private fun getFitMatesByFitGroup(fitGroup: FitGroup): List<FitMate> {
-        return fitMateRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED) ?: listOf()
-    }
+    private fun getFitMatesByFitGroup(fitGroup: FitGroup): List<FitMate> =
+        fitMateRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED) ?: listOf()
 }

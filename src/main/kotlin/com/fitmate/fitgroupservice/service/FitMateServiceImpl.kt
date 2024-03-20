@@ -55,10 +55,10 @@ class FitMateServiceImpl(
         return RegisterMateResponse(savedFitMate.id != null)
     }
 
-    private fun findFitGroupAndGet(fitGroupId: Long): FitGroup {
-        return fitGroupRepository.findById(fitGroupId)
+    private fun findFitGroupAndGet(fitGroupId: Long): FitGroup =
+        fitGroupRepository.findById(fitGroupId)
             .orElseThrow { ResourceNotFoundException("Fit group does not exist") }
-    }
+
 
     /**
      * Get Fit mate list by group id service
