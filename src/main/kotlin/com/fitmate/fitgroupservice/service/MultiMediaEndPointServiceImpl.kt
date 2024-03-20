@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class MultiMediaEndPointServiceImpl(private val fitGroupRepository: FitGroupRepository,
-                                    private val multiMediaEndPointRepository: MultiMediaEndPointRepository) : MultiMediaEndPointService {
+class MultiMediaEndPointServiceImpl(
+    private val fitGroupRepository: FitGroupRepository,
+    private val multiMediaEndPointRepository: MultiMediaEndPointRepository
+) : MultiMediaEndPointService {
 
     /**
      * delete Multi Media End Point
@@ -19,10 +21,12 @@ class MultiMediaEndPointServiceImpl(private val fitGroupRepository: FitGroupRepo
     @Transactional
     override fun deleteMultiMediaEndPoint(fitGroupId: Long) {
         val fitGroup = fitGroupRepository.findById(fitGroupId)
-                .orElseThrow { ResourceNotFoundException("delete multi media end point event fit group not found") }
+            .orElseThrow { ResourceNotFoundException("delete multi media end point event fit group not found") }
 
-        val multiMediaList = multiMediaEndPointRepository.findByFitGroupAndStateOrderByIdAsc(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
-
+        val multiMediaList = multiMediaEndPointRepository.findByFitGroupAndStateOrderByIdAsc(
+            fitGroup,
+            GlobalStatus.PERSISTENCE_NOT_DELETED
+        )
         multiMediaList?.forEach { it.delete() }
     }
 }

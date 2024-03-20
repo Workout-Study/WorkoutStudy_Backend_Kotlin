@@ -33,6 +33,8 @@ class FitGroupUpdateEventListenerTest {
     private val requestUserId = "testUserId"
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
+    private val bankCode = "090"
+    private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
@@ -46,8 +48,10 @@ class FitGroupUpdateEventListenerTest {
 
     @BeforeEach
     fun createTestFitGroup() {
-        val fitGroup = FitGroup(fitGroupName, penaltyAmount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, "test")
+        val fitGroup = FitGroup(
+            fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+                ?: 1, frequency, maxFitMate, "test"
+        )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
@@ -62,7 +66,19 @@ class FitGroupUpdateEventListenerTest {
     @Transactional
     @DisplayName("[통합][Event] Update fit group register fit group history - 성공 테스트")
     fun `update fit group register fit group history success test`() {
-        val updateFitGroupRequest = UpdateFitGroupRequest(requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle, frequency, maxFitMate, multiMediaEndPoint)
+        val updateFitGroupRequest = UpdateFitGroupRequest(
+            requestUserId,
+            fitGroupName,
+            penaltyAmount,
+            bankCode,
+            penaltyAccount,
+            category,
+            introduction,
+            cycle,
+            frequency,
+            maxFitMate,
+            multiMediaEndPoint
+        )
 
         fitGroupService.updateFitGroup(fitGroup.id!!, updateFitGroupRequest)
 

@@ -9,8 +9,9 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class FitGroupHistoryServiceImpl(
-        private val fitGroupRepository: FitGroupRepository,
-        private val fitGroupHistoryRepository: FitGroupHistoryRepository) : FitGroupHistoryService {
+    private val fitGroupRepository: FitGroupRepository,
+    private val fitGroupHistoryRepository: FitGroupHistoryRepository
+) : FitGroupHistoryService {
 
     /**
      * register fit group history
@@ -20,7 +21,7 @@ class FitGroupHistoryServiceImpl(
     @Transactional
     override fun registerFitGroupHistory(fitGroupId: Long) {
         val fitGroup = fitGroupRepository.findById(fitGroupId)
-                .orElseThrow { ResourceNotFoundException("fit group history update fit group not found") }
+            .orElseThrow { ResourceNotFoundException("fit group history update fit group not found") }
 
         val fitGroupHistory = FitGroupHistory(fitGroup)
 

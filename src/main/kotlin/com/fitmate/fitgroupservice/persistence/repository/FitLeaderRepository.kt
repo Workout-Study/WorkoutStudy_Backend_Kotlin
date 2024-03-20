@@ -7,4 +7,9 @@ import java.util.*
 
 interface FitLeaderRepository : JpaRepository<FitLeader, Long> {
     fun findByFitGroupAndState(fitGroup: FitGroup, state: Boolean): Optional<FitLeader>
+    fun findByFitGroupAndFitLeaderUserIdAndState(
+        fitGroup: FitGroup,
+        requestUserId: String,
+        persistenceNotDeleted: Boolean
+    ): Optional<FitLeader>
 }

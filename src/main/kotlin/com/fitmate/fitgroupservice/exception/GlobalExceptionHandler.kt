@@ -31,4 +31,10 @@ class GlobalExceptionHandler {
         logger?.info("MethodArgumentNotValidException", methodArgumentNotValidException)
         return ResponseEntity.badRequest().body(methodArgumentNotValidException.message)
     }
+
+    @ExceptionHandler(ResourceAlreadyExistException::class)
+    fun resourceAlreadyExistException(resourceAlreadyExistException: ResourceAlreadyExistException): ResponseEntity<String> {
+        logger?.info("ResourceAlreadyExistException", resourceAlreadyExistException)
+        return ResponseEntity.badRequest().body(resourceAlreadyExistException.message)
+    }
 }

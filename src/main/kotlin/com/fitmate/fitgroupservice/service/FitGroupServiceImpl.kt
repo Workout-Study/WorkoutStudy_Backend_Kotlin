@@ -10,20 +10,20 @@ import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.FitMate
 import com.fitmate.fitgroupservice.persistence.entity.MultiMediaEndPoint
-import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
-import com.fitmate.fitgroupservice.persistence.repository.MultiMediaEndPointRepository
+import com.fitmate.fitgroupservice.persistence.repository.*
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class FitGroupServiceImpl(private val fitGroupRepository: FitGroupRepository,
-                          private val fitLeaderRepository: FitLeaderRepository,
-                          private val fitMateRepository: FitMateRepository,
-                          private val multiMediaEndPointRepository: MultiMediaEndPointRepository,
-                          private val eventPublisher: ApplicationEventPublisher) : FitGroupService {
+class FitGroupServiceImpl(
+    private val fitGroupRepository: FitGroupRepository,
+    private val fitLeaderRepository: FitLeaderRepository,
+    private val fitMateRepository: FitMateRepository,
+    private val multiMediaEndPointRepository: MultiMediaEndPointRepository,
+    private val bankCodeRepository: BankCodeRepository,
+    private val eventPublisher: ApplicationEventPublisher
+) : FitGroupService {
 
     /**
      * Register Fit Group service
@@ -33,40 +33,49 @@ class FitGroupServiceImpl(private val fitGroupRepository: FitGroupRepository,
      */
     @Transactional
     override fun registerFitGroup(registerFitGroupRequest: RegisterFitGroupRequest): RegisterFitGroupResponse {
+        bankCodeRepository.findByCode(registerFitGroupRequest.penaltyAccountBankCode)
+            .orElseThrow { ResourceNotFoundException("Bank code does not exist") }
+
         val savedFitGroup = fitGroupRepository.save(createFitGroup(registerFitGroupRequest));
         val savedFitLeader = fitLeaderRepository.save(createFitLeader(savedFitGroup, registerFitGroupRequest))
 
         registerFitGroupRequest.multiMediaEndPoints?.forEach {
             multiMediaEndPointRepository.save(
-                    createMultiMediaEndPoint(it, savedFitGroup, registerFitGroupRequest.requestUserId)
+                createMultiMediaEndPoint(it, savedFitGroup, registerFitGroupRequest.requestUserId)
             )
         }
 
         return RegisterFitGroupResponse(savedFitGroup.id != null && savedFitLeader.id != null)
     }
 
-    private fun createMultiMediaEndPoint(endPoint: String, fitGroup: FitGroup, requestUserId: String): MultiMediaEndPoint {
+    private fun createMultiMediaEndPoint(
+        endPoint: String,
+        fitGroup: FitGroup,
+        requestUserId: String
+    ): MultiMediaEndPoint {
         return MultiMediaEndPoint(fitGroup, endPoint, requestUserId)
     }
 
     private fun createFitLeader(savedFitGroup: FitGroup, registerFitGroupRequest: RegisterFitGroupRequest): FitLeader {
         return FitLeader(
-                savedFitGroup,
-                registerFitGroupRequest.requestUserId,
-                registerFitGroupRequest.requestUserId
+            savedFitGroup,
+            registerFitGroupRequest.requestUserId,
+            registerFitGroupRequest.requestUserId
         )
     }
 
     private fun createFitGroup(registerFitGroupRequest: RegisterFitGroupRequest): FitGroup {
         return FitGroup(
-                registerFitGroupRequest.fitGroupName,
-                registerFitGroupRequest.penaltyAmount,
-                registerFitGroupRequest.category,
-                registerFitGroupRequest.introduction,
-                registerFitGroupRequest.cycle ?: 1,
-                registerFitGroupRequest.frequency,
-                registerFitGroupRequest.maxFitMate,
-                registerFitGroupRequest.requestUserId
+            registerFitGroupRequest.fitGroupName,
+            registerFitGroupRequest.penaltyAmount,
+            registerFitGroupRequest.penaltyAccountBankCode,
+            registerFitGroupRequest.penaltyAccountNumber,
+            registerFitGroupRequest.category,
+            registerFitGroupRequest.introduction,
+            registerFitGroupRequest.cycle ?: 1,
+            registerFitGroupRequest.frequency,
+            registerFitGroupRequest.maxFitMate,
+            registerFitGroupRequest.requestUserId
         )
     }
 
@@ -79,37 +88,43 @@ class FitGroupServiceImpl(private val fitGroupRepository: FitGroupRepository,
     @Transactional(readOnly = true)
     override fun getFitGroupDetail(fitGroupId: Long): FitGroupDetailResponse {
         val fitGroup = findFitGroupAndGet(fitGroupId)
-        if (fitGroup.isDeleted()) throw BadRequestException("Fit group already deleted")
+        if (fitGroup.isDeleted) throw BadRequestException("Fit group already deleted")
 
         val fitLeader = findFitLeaderAndGet(fitGroup)
 
         return FitGroupDetailResponse(
-                fitGroupId,
-                fitLeader.fitLeaderUserId,
-                fitGroup.fitGroupName,
-                fitGroup.penaltyAmount,
-                fitGroup.category,
-                fitGroup.introduction,
-                fitGroup.cycle,
-                fitGroup.frequency,
-                fitGroup.createdAt,
-                fitGroup.maxFitMate,
-                getFitMateCountByFitGroup(fitGroup),
-                findMultiMediaEndPointsAndGet(fitGroup)
+            fitGroupId,
+            fitLeader.fitLeaderUserId,
+            fitGroup.fitGroupName,
+            fitGroup.penaltyAmount,
+            fitGroup.penaltyAccountBankCode,
+            fitGroup.penaltyAccountNumber,
+            fitGroup.category,
+            fitGroup.introduction,
+            fitGroup.cycle,
+            fitGroup.frequency,
+            fitGroup.createdAt,
+            fitGroup.maxFitMate,
+            getFitMateCountByFitGroup(fitGroup) + fitLeader.let { 1 },
+            findMultiMediaEndPointsAndGet(fitGroup)
         )
     }
 
     private fun findFitGroupAndGet(fitGroupId: Long): FitGroup {
-        return fitGroupRepository.findById(fitGroupId).orElseThrow { ResourceNotFoundException("Fit group does not exist") }
+        return fitGroupRepository.findById(fitGroupId)
+            .orElseThrow { ResourceNotFoundException("Fit group does not exist") }
     }
 
     private fun findFitLeaderAndGet(fitGroup: FitGroup): FitLeader {
         return fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
-                .orElseThrow { ResourceNotFoundException("Fit Leader does not exist") }
+            .orElseThrow { ResourceNotFoundException("Fit Leader does not exist") }
     }
 
     private fun findMultiMediaEndPointsAndGet(fitGroup: FitGroup): List<String> {
-        val multiMediaEndpoints = multiMediaEndPointRepository.findByFitGroupAndStateOrderByIdAsc(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
+        val multiMediaEndpoints = multiMediaEndPointRepository.findByFitGroupAndStateOrderByIdAsc(
+            fitGroup,
+            GlobalStatus.PERSISTENCE_NOT_DELETED
+        )
         return multiMediaEndpoints?.map { it.endPoint } ?: listOf()
     }
 
@@ -125,24 +140,34 @@ class FitGroupServiceImpl(private val fitGroupRepository: FitGroupRepository,
      * @return Boolean about update fit group success
      */
     @Transactional
-    override fun updateFitGroup(fitGroupId: Long, updateFitGroupRequest: UpdateFitGroupRequest): UpdateFitGroupResponse {
+    override fun updateFitGroup(
+        fitGroupId: Long,
+        updateFitGroupRequest: UpdateFitGroupRequest
+    ): UpdateFitGroupResponse {
         val fitGroup = findFitGroupAndGet(fitGroupId)
-        if (fitGroup.isDeleted()) throw BadRequestException("Fit group already deleted")
+        if (fitGroup.isDeleted) throw BadRequestException("Fit group already deleted")
 
         val fitLeader = findFitLeaderAndGet(fitGroup)
         checkFitLeaderWithRequestUser(fitLeader, updateFitGroupRequest.requestUserId)
 
-        val presentFitMateCount = getFitMateCountByFitGroup(fitGroup)
+        val presentFitMateCount = getFitMateCountByFitGroup(fitGroup) + fitLeader.let { 1 }
+
         if (presentFitMateCount > updateFitGroupRequest.maxFitMate) throw BadRequestException("Fit mate count bigger then new max fit mate")
+
+        bankCodeRepository.findByCode(updateFitGroupRequest.penaltyAccountBankCode)
+            .orElseThrow { ResourceNotFoundException("Bank code does not exist") }
 
         fitGroup.update(updateFitGroupRequest)
 
-        val multiMediaEndpoints = multiMediaEndPointRepository.findByFitGroupAndStateOrderByIdAsc(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
+        val multiMediaEndpoints = multiMediaEndPointRepository.findByFitGroupAndStateOrderByIdAsc(
+            fitGroup,
+            GlobalStatus.PERSISTENCE_NOT_DELETED
+        )
         multiMediaEndpoints?.forEach { it.delete() }
 
         updateFitGroupRequest.multiMediaEndPoints?.forEach {
             multiMediaEndPointRepository.save(
-                    createMultiMediaEndPoint(it, fitGroup, updateFitGroupRequest.requestUserId)
+                createMultiMediaEndPoint(it, fitGroup, updateFitGroupRequest.requestUserId)
             )
         }
 
@@ -159,9 +184,12 @@ class FitGroupServiceImpl(private val fitGroupRepository: FitGroupRepository,
      * @return Boolean about delete fit group success
      */
     @Transactional
-    override fun deleteFitGroup(fitGroupId: Long, deleteFitGroupRequest: DeleteFitGroupRequest): DeleteFitGroupResponse {
+    override fun deleteFitGroup(
+        fitGroupId: Long,
+        deleteFitGroupRequest: DeleteFitGroupRequest
+    ): DeleteFitGroupResponse {
         val fitGroup = findFitGroupAndGet(fitGroupId)
-        if (fitGroup.isDeleted()) throw BadRequestException("Fit group already deleted")
+        if (fitGroup.isDeleted) throw BadRequestException("Fit group already deleted")
 
         val fitLeader = findFitLeaderAndGet(fitGroup)
 
@@ -174,7 +202,7 @@ class FitGroupServiceImpl(private val fitGroupRepository: FitGroupRepository,
 
         eventPublisher.publishEvent(DeleteFitGroupEvent(fitGroup.id!!))
 
-        return DeleteFitGroupResponse(fitGroup.isDeleted() && fitLeader.isDeleted())
+        return DeleteFitGroupResponse(fitGroup.isDeleted && fitLeader.isDeleted)
     }
 
     private fun checkFitLeaderWithRequestUser(fitLeader: FitLeader, requestUserId: String) {

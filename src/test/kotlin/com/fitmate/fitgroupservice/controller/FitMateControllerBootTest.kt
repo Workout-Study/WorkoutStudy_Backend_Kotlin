@@ -2,30 +2,33 @@ package com.fitmate.fitgroupservice.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fitmate.fitgroupservice.common.GlobalURI
-import com.fitmate.fitgroupservice.dto.group.*
+import com.fitmate.fitgroupservice.dto.mate.*
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
+import com.fitmate.fitgroupservice.persistence.entity.FitMate
 import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
+import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*
 import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.restdocs.request.RequestDocumentation.*
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class FitGroupControllerBootTest {
+class FitMateControllerBootTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -35,6 +38,9 @@ class FitGroupControllerBootTest {
 
     @Autowired
     private lateinit var fitGroupRepository: FitGroupRepository
+
+    @Autowired
+    private lateinit var fitMateRepository: FitMateRepository
 
     @Autowired
     private lateinit var fitLeaderRepository: FitLeaderRepository
@@ -49,7 +55,6 @@ class FitGroupControllerBootTest {
     private val cycle = null
     private val frequency = 7
     private val maxFitMate = 20
-    private val multiMediaEndPoint: List<String> = listOf("https://avatars.githubusercontent.com/u/105261146?v=4")
 
     private lateinit var fitGroup: FitGroup
 
@@ -67,32 +72,24 @@ class FitGroupControllerBootTest {
         fitLeaderRepository.save(fitLeader)
 
         this.fitGroup = savedFitGroup
+
+        for (i in 0..3) {
+            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, requestUserId + i))
+        }
     }
 
     @Test
-    @DisplayName("[통합][Controller] Fit group 등록 - 성공 테스트")
+    @DisplayName("[통합][Controller] Fit mate 등록 - 성공 테스트")
     @Throws(Exception::class)
-    fun `register fit group controller success boot test`() {
+    fun `register fit mate controller success test`() {
         //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(
-            requestUserId,
-            fitGroupName,
-            penaltyAmount,
-            bankCode,
-            penaltyAccount,
-            category,
-            introduction,
-            cycle,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
+        val registerFitMateRequest = RegisterMateRequest("newTestUserId", fitGroup.id!!)
 
         //when
         val resultActions = mockMvc.perform(
-            post(GlobalURI.GROUP_ROOT)
+            post(GlobalURI.MATE_ROOT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(registerFitGroupRequest))
+                .content(objectMapper.writeValueAsString(registerFitMateRequest))
                 .accept(MediaType.APPLICATION_JSON)
         )
         //then
@@ -101,13 +98,12 @@ class FitGroupControllerBootTest {
     }
 
     @Test
-    @DisplayName("[통합][Controller] Fit group 상세정보 조회 - 성공 테스트")
+    @DisplayName("[통합][Controller] Fit mate 목록 조회 - 성공 테스트")
     @Throws(Exception::class)
-    fun `get detail data about fit group success boot test`() {
-        //given
-        //when
+    fun `get fit mate list controller success test`() {
+        //given when
         val resultActions = mockMvc.perform(
-            get("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}", fitGroup.id)
+            get(GlobalURI.MATE_ROOT + GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE, fitGroup.id!!)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         )
@@ -117,48 +113,18 @@ class FitGroupControllerBootTest {
     }
 
     @Test
-    @DisplayName("[통합][Controller] Fit group 수정 - 성공 테스트")
+    @DisplayName("[통합][Controller] Fit mate 탈퇴 - 성공 테스트")
     @Throws(Exception::class)
-    fun `update fit group controller success boot test`() {
+    fun `delete fit mate controller success test`() {
         //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId,
-            fitGroupName,
-            penaltyAmount,
-            bankCode,
-            penaltyAccount,
-            category,
-            introduction,
-            cycle,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
+        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId))
 
+        val deleteMateRequest = DeleteMateRequest(requestUserId)
         //when
         val resultActions = mockMvc.perform(
-            put("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}", fitGroup.id)
+            delete(GlobalURI.MATE_ROOT + GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE, fitGroup.id!!)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updateFitGroupRequest))
-                .accept(MediaType.APPLICATION_JSON)
-        )
-        //then
-        resultActions.andExpect(status().isOk())
-            .andDo(print())
-    }
-
-    @Test
-    @DisplayName("[통합][Controller] Fit group 삭제 - 성공 테스트")
-    @Throws(Exception::class)
-    fun `delete fit group controller success boot test`() {
-        //given
-        val deleteFitGroupRequest = DeleteFitGroupRequest(requestUserId)
-
-        //when
-        val resultActions = mockMvc.perform(
-            delete("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}", fitGroup.id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(deleteFitGroupRequest))
+                .content(objectMapper.writeValueAsString(deleteMateRequest))
                 .accept(MediaType.APPLICATION_JSON)
         )
         //then
