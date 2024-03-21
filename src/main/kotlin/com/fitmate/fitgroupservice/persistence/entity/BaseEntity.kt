@@ -31,6 +31,8 @@ open class BaseEntity(
 
     fun delete() {
         this.state = GlobalStatus.PERSISTENCE_DELETED
+        this.updatedAt = Instant.now()
+        this.updateUser = this.createUser
     }
 
     val isDeleted: Boolean

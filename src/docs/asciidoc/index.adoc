@@ -268,3 +268,39 @@ include::{snippets}/delete-fit-mate/response-body.adoc[]
 http-response
 
 include::{snippets}/delete-fit-mate/http-response.adoc[]
+
+== 4. fit-management
+
+=== Kick Fit Mate
+
+path-parameters
+
+include::{snippets}/kick-fit-mate/path-parameters.adoc[]
+
+http-request
+
+include::{snippets}/kick-fit-mate/http-request.adoc[]
+
+request-fields
+
+include::{snippets}/kick-fit-mate/request-fields.adoc[]
+
+request-body
+
+include::{snippets}/kick-fit-mate/request-body.adoc[]
+
+curl-request
+
+include::{snippets}/kick-fit-mate/curl-request.adoc[]
+
+response-fields
+
+include::{snippets}/kick-fit-mate/response-fields.adoc[]
+
+response-body
+
+include::{snippets}/kick-fit-mate/response-body.adoc[]
+
+http-response
+
+include::{snippets}/kick-fit-mate/http-response.adoc[]
