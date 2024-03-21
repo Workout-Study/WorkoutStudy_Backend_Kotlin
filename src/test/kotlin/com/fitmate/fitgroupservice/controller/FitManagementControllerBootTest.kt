@@ -3,9 +3,11 @@ package com.fitmate.fitgroupservice.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.management.KickFitMateRequest
+import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.FitMate
+import com.fitmate.fitgroupservice.persistence.repository.BankCodeRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
@@ -46,11 +48,14 @@ class FitManagementControllerBootTest {
     @Autowired
     private lateinit var fitLeaderRepository: FitLeaderRepository
 
+    @Autowired
+    private lateinit var bankCodeRepository: BankCodeRepository
+
     private val requestUserId = "requestUserId"
     private val fitMateUserId = "testUserId"
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val bankCode = "090"
+    private val penaltyAccountBankCode = "090"
     private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
@@ -58,11 +63,14 @@ class FitManagementControllerBootTest {
     private val frequency = 7
     private val maxFitMate = 20
 
+    private lateinit var bankCode: BankCode
     private lateinit var fitGroup: FitGroup
     private lateinit var fitMate: FitMate
 
     @BeforeEach
     fun createTestFitGroup() {
+        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode).get()
+
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, requestUserId

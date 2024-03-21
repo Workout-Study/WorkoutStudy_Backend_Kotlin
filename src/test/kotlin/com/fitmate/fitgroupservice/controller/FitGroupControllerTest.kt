@@ -3,6 +3,7 @@ package com.fitmate.fitgroupservice.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.group.*
+import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.service.FitGroupService
@@ -42,7 +43,7 @@ class FitGroupControllerTest {
     private val requestUserId = "testUserId"
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val bankCode = "090"
+    private val bankCode = BankCode("090", "카카오뱅크")
     private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
@@ -84,7 +85,7 @@ class FitGroupControllerTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
+            bankCode.code,
             penaltyAccount,
             category,
             introduction,
@@ -197,7 +198,7 @@ class FitGroupControllerTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
+            bankCode.code,
             penaltyAccount,
             category,
             introduction,

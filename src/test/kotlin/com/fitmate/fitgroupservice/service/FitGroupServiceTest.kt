@@ -67,7 +67,7 @@ class FitGroupServiceTest {
     @BeforeEach
     fun setFitGroupAndFitLeader() {
         fitGroup = FitGroup(
-            fitGroupName, penaltyAmount, penaltyAccountBankCode, penaltyAccount, category, introduction, cycle
+            fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, requestUserId
         )
 

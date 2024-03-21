@@ -15,7 +15,7 @@ data class FitGroupDetailResponse(
     val fitLeaderUserId: String? = fitLeader?.fitLeaderUserId
     val fitGroupName: String = fitGroup.fitGroupName
     val penaltyAmount: Int = fitGroup.penaltyAmount
-    val penaltyAccountBankCode: String = fitGroup.penaltyAccountBankCode
+    val penaltyAccountBankCode: String = fitGroup.penaltyAccountBankCode.code
     val penaltyAccountNumber: String = fitGroup.penaltyAccountNumber
     val category: Int = fitGroup.category
     val introduction: String? = fitGroup.introduction
