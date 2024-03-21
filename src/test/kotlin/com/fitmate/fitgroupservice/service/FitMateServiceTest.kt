@@ -219,7 +219,7 @@ class FitMateServiceTest {
         ).thenReturn(Optional.empty())
         Mockito.`when`(
             fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
-        ).thenReturn(maxFitMate - 1)
+        ).thenReturn(maxFitMate)
         //when then
         Assertions.assertThrows(BadRequestException::class.java) {
             fitMateService.registerFitMate(

@@ -35,6 +35,7 @@ class FitGroupServiceImpl(
 
         val savedFitGroup = fitGroupRepository.save(createFitGroup(registerFitGroupRequest, bankCode));
         val savedFitLeader = fitLeaderRepository.save(createFitLeader(savedFitGroup, registerFitGroupRequest))
+        fitMateRepository.save(createFitMate(savedFitGroup, registerFitGroupRequest))
 
         registerFitGroupRequest.multiMediaEndPoints?.forEach {
             multiMediaEndPointRepository.save(
@@ -44,6 +45,9 @@ class FitGroupServiceImpl(
 
         return RegisterFitGroupResponse(savedFitGroup.id != null && savedFitLeader.id != null)
     }
+
+    private fun createFitMate(fitGroup: FitGroup, registerFitGroupRequest: RegisterFitGroupRequest): FitMate =
+        FitMate(fitGroup, registerFitGroupRequest.requestUserId, registerFitGroupRequest.requestUserId)
 
     private fun createMultiMediaEndPoint(
         endPoint: String,
@@ -131,7 +135,7 @@ class FitGroupServiceImpl(
         val fitLeader = findFitLeaderAndGet(fitGroup)
         checkFitLeaderWithRequestUser(fitLeader, updateFitGroupRequest.requestUserId)
 
-        val presentFitMateCount = getFitMateCountByFitGroup(fitGroup) + fitLeader.let { 1 }
+        val presentFitMateCount = getFitMateCountByFitGroup(fitGroup)
 
         if (presentFitMateCount > updateFitGroupRequest.maxFitMate) throw BadRequestException("Fit mate count bigger then new max fit mate")
 

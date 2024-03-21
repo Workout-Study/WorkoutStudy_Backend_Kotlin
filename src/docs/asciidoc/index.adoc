@@ -149,6 +149,28 @@ http-response
 
 include::{snippets}/delete-fit-group/http-response.adoc[]
 
+=== Fit Group Filter
+
+http-request
+
+include::{snippets}/fit-group-filter/http-request.adoc[]
+
+curl-request
+
+include::{snippets}/fit-group-filter/curl-request.adoc[]
+
+response-fields
+
+include::{snippets}/fit-group-filter/response-fields.adoc[]
+
+response-body
+
+include::{snippets}/fit-group-filter/response-body.adoc[]
+
+http-response
+
+include::{snippets}/fit-group-filter/http-response.adoc[]
+
 == 2. bank-code
 
 === Get Bank-code List

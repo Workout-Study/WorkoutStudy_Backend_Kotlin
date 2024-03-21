@@ -4,10 +4,7 @@ import com.fitmate.fitgroupservice.common.GlobalStatus
 import com.fitmate.fitgroupservice.dto.filter.FitGroupFilterRequest
 import com.fitmate.fitgroupservice.dto.group.FitGroupDetailResponse
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
-import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
 import com.fitmate.fitgroupservice.persistence.repository.MultiMediaEndPointRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
@@ -17,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class FitGroupFilterServiceImpl(
-    private val fitMateRepository: FitMateRepository,
     private val fitGroupRepository: FitGroupRepository,
-    private val fitLeaderRepository: FitLeaderRepository,
     private val multiMediaEndPointRepository: MultiMediaEndPointRepository
 ) : FitGroupFilterService {
 
@@ -41,21 +36,14 @@ class FitGroupFilterServiceImpl(
 
         val fitGroupDetailResponseList: List<FitGroupDetailResponse> = fitGroupList.map {
             FitGroupDetailResponse(
-                findFitLeaderAndGet(it),
-                it,
-                getFitMateCountByFitGroup(it),
-                findMultiMediaEndPointsAndGet(it)
+                it.fitLeader,
+                it.fitGroup,
+                it.presentFitMateCount + (it.fitLeader?.let { 1 } ?: 0),
+                findMultiMediaEndPointsAndGet(it.fitGroup)
             )
         }.toList()
 
         return SliceImpl(fitGroupDetailResponseList, pageable, hasNext)
-    }
-
-    private fun findFitLeaderAndGet(fitGroup: FitGroup): FitLeader? {
-        val optionalFitLeader =
-            fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
-        return if (optionalFitLeader.isPresent) optionalFitLeader.get()
-        else null
     }
 
     private fun findMultiMediaEndPointsAndGet(fitGroup: FitGroup): List<String> {
@@ -64,9 +52,5 @@ class FitGroupFilterServiceImpl(
             GlobalStatus.PERSISTENCE_NOT_DELETED
         )
         return multiMediaEndpoints?.map { it.endPoint } ?: listOf()
-    }
-
-    private fun getFitMateCountByFitGroup(fitGroup: FitGroup): Int {
-        return fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED) ?: 0
     }
 }
