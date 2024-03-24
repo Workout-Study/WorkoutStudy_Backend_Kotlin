@@ -11,7 +11,9 @@ import java.time.Instant
 class FitGroup(
     @Column(nullable = false) var fitGroupName: String,
     @Column(nullable = false) var penaltyAmount: Int,
-    @Column(nullable = false) var penaltyAccountBankCode: String,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "penalty_account_bank_code_id", nullable = false)
+    var penaltyAccountBankCode: BankCode,
     @Column(nullable = false) var penaltyAccountNumber: String,
     @Column(nullable = false)
     var category: Int,
@@ -27,10 +29,10 @@ class FitGroup(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    fun update(updateFitGroupRequest: UpdateFitGroupRequest) {
+    fun update(updateFitGroupRequest: UpdateFitGroupRequest, bankCode: BankCode) {
         this.fitGroupName = updateFitGroupRequest.fitGroupName
         this.penaltyAmount = updateFitGroupRequest.penaltyAmount
-        this.penaltyAccountBankCode = updateFitGroupRequest.penaltyAccountBankCode
+        this.penaltyAccountBankCode = bankCode
         this.penaltyAccountNumber = updateFitGroupRequest.penaltyAccountNumber
         this.category = updateFitGroupRequest.category
         this.introduction = updateFitGroupRequest.introduction

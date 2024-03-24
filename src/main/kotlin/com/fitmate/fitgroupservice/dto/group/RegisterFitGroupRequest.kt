@@ -10,7 +10,7 @@ data class RegisterFitGroupRequest(
     @field:NotEmpty val penaltyAccountNumber: String,
     val category: Int,
     val introduction: String?,
-    val cycle: Int?,
+    val cycle: Int? = 1,
     val frequency: Int,
     val maxFitMate: Int,
     val multiMediaEndPoints: List<String>?

@@ -46,7 +46,7 @@ class FitMateServiceImpl(
 
         val presentFitMateCount =
             fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED) ?: 0
-        val presentFitMateCountWithLeaderCount = presentFitMateCount + 1
+        val presentFitMateCountWithLeaderCount = presentFitMateCount
         if (presentFitMateCountWithLeaderCount >= fitGroup.maxFitMate) throw BadRequestException("fit group already full")
 
         val newFitMate = FitMate(fitGroup, registerMateRequest.requestUserId, registerMateRequest.requestUserId)

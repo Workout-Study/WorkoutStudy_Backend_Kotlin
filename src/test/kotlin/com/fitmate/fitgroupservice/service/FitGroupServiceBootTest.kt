@@ -5,14 +5,8 @@ import com.fitmate.fitgroupservice.dto.group.RegisterFitGroupRequest
 import com.fitmate.fitgroupservice.dto.group.UpdateFitGroupRequest
 import com.fitmate.fitgroupservice.exception.BadRequestException
 import com.fitmate.fitgroupservice.exception.ResourceNotFoundException
-import com.fitmate.fitgroupservice.persistence.entity.FitGroup
-import com.fitmate.fitgroupservice.persistence.entity.FitLeader
-import com.fitmate.fitgroupservice.persistence.entity.FitMate
-import com.fitmate.fitgroupservice.persistence.entity.MultiMediaEndPoint
-import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
-import com.fitmate.fitgroupservice.persistence.repository.MultiMediaEndPointRepository
+import com.fitmate.fitgroupservice.persistence.entity.*
+import com.fitmate.fitgroupservice.persistence.repository.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -40,10 +34,13 @@ class FitGroupServiceBootTest {
     @Autowired
     private lateinit var multiMediaEndPointRepository: MultiMediaEndPointRepository
 
+    @Autowired
+    private lateinit var bankCodeRepository: BankCodeRepository
+
     private val requestUserId = "testUserId"
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val bankCode = "090"
+    private val penaltyAccountBankCode = "090"
     private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
@@ -53,12 +50,14 @@ class FitGroupServiceBootTest {
     private val maxFitMate = 20
     private val multiMediaEndPoint: List<String> = listOf("https://avatars.githubusercontent.com/u/105261146?v=4")
 
+    private lateinit var bankCode: BankCode
     private lateinit var fitGroup: FitGroup
-
     private lateinit var fitLeader: FitLeader
 
     @BeforeEach
     fun createTestFitGroup() {
+        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode).get()
+
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, "test"
@@ -81,7 +80,7 @@ class FitGroupServiceBootTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
+            bankCode.code,
             penaltyAccount,
             category,
             introduction,
@@ -103,7 +102,7 @@ class FitGroupServiceBootTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
+            bankCode.code,
             penaltyAccount,
             category,
             introduction,
@@ -125,7 +124,7 @@ class FitGroupServiceBootTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
+            bankCode.code,
             penaltyAccount,
             category,
             introduction,
@@ -170,7 +169,7 @@ class FitGroupServiceBootTest {
     fun `update fit group service success test`() {
         //given
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
@@ -183,7 +182,7 @@ class FitGroupServiceBootTest {
     fun `update fit group service fit group not found fail test`() {
         //given
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
@@ -201,7 +200,7 @@ class FitGroupServiceBootTest {
     fun `update fit group service fit group already deleted fail test`() {
         //given
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
@@ -222,7 +221,7 @@ class FitGroupServiceBootTest {
     fun `update fit group service fit leader does not exist fail test`() {
         //given
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
@@ -243,7 +242,7 @@ class FitGroupServiceBootTest {
     fun `update fit group service fit leader does not match fail test`() {
         //given
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
@@ -278,7 +277,7 @@ class FitGroupServiceBootTest {
         }
 
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
                 ?: 1, frequency, newMaxFitMate, multiMediaEndPoint
         )
 

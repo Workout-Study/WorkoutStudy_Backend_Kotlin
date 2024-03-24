@@ -3,7 +3,11 @@ package com.fitmate.fitgroupservice.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.group.*
+import com.fitmate.fitgroupservice.persistence.entity.BankCode
+import com.fitmate.fitgroupservice.persistence.entity.FitGroup
+import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.service.FitGroupService
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.*
@@ -22,7 +26,6 @@ import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.time.Instant
 
 @WebMvcTest(FitGroupController::class)
 @AutoConfigureRestDocs
@@ -40,16 +43,38 @@ class FitGroupControllerTest {
     private val requestUserId = "testUserId"
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val bankCode = "090"
+    private val bankCode = BankCode("090", "카카오뱅크")
     private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
     private val frequency = 7
     private val fitGroupId = 1L
+    private val fitLeaderId = 3L
     private val maxFitMate = 20
     private val presentFitMateCount = 7
     private val multiMediaEndPoint: List<String> = listOf("https://avatars.githubusercontent.com/u/105261146?v=4")
+
+    private val fitGroup = FitGroup(
+        fitGroupName,
+        penaltyAmount,
+        bankCode,
+        penaltyAccount,
+        category,
+        introduction,
+        cycle ?: 1,
+        frequency,
+        maxFitMate,
+        requestUserId
+    )
+
+    private val fitLeader = FitLeader(fitGroup, requestUserId, requestUserId)
+
+    @BeforeEach
+    fun setFitGroupFitLeaderId() {
+        fitGroup.id = fitGroupId
+        fitLeader.id = fitLeaderId
+    }
 
     @Test
     @DisplayName("[단위][Controller] Fit group 등록 - 성공 테스트")
@@ -60,7 +85,7 @@ class FitGroupControllerTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
+            bankCode.code,
             penaltyAccount,
             category,
             introduction,
@@ -117,19 +142,8 @@ class FitGroupControllerTest {
     fun `get detail data about fit group success test`() {
         //given
         val fitGroupDetailResponse = FitGroupDetailResponse(
-            fitGroupId,
-            requestUserId,
-            fitGroupName,
-            penaltyAmount,
-            bankCode,
-            penaltyAccount,
-            category,
-            introduction,
-            cycle
-                ?: 1,
-            frequency,
-            Instant.now(),
-            maxFitMate,
+            fitLeader,
+            fitGroup,
             presentFitMateCount,
             multiMediaEndPoint
         )
@@ -184,7 +198,7 @@ class FitGroupControllerTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
+            bankCode.code,
             penaltyAccount,
             category,
             introduction,

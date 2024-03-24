@@ -6,6 +6,7 @@ import com.fitmate.fitgroupservice.dto.mate.RegisterMateRequest
 import com.fitmate.fitgroupservice.exception.BadRequestException
 import com.fitmate.fitgroupservice.exception.ResourceAlreadyExistException
 import com.fitmate.fitgroupservice.exception.ResourceNotFoundException
+import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.FitMate
@@ -42,7 +43,7 @@ class FitMateServiceTest {
     private val requestUserId = "testUserId"
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val penaltyAccountBankCode = "090"
+    private val bankCode = BankCode("090", "카카오뱅크")
     private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
@@ -60,7 +61,7 @@ class FitMateServiceTest {
     @BeforeEach
     fun setFitGroupAndFitLeader() {
         fitGroup = FitGroup(
-            fitGroupName, penaltyAmount, penaltyAccountBankCode, penaltyAccount, category, introduction, cycle
+            fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, requestUserId
         )
 
@@ -218,7 +219,7 @@ class FitMateServiceTest {
         ).thenReturn(Optional.empty())
         Mockito.`when`(
             fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
-        ).thenReturn(maxFitMate - 1)
+        ).thenReturn(maxFitMate)
         //when then
         Assertions.assertThrows(BadRequestException::class.java) {
             fitMateService.registerFitMate(
