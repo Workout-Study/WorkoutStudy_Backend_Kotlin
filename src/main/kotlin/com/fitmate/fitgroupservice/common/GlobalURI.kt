@@ -8,7 +8,7 @@ class GlobalURI {
         const val BANK_CODE_ROOT = "$ROOT_URI/bank-codes"
 
         const val GROUP_ROOT = "$ROOT_URI/groups"
-        const val FILTER_ROOT = "$ROOT_URI/groups"
+        const val FILTER_ROOT = "$GROUP_ROOT/filters"
 
         const val PATH_VARIABLE_FIT_GROUP_ID = "fit-group-id"
         const val PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE = "/{$PATH_VARIABLE_FIT_GROUP_ID}"

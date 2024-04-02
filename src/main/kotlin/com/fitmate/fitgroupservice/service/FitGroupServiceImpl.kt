@@ -3,6 +3,7 @@ package com.fitmate.fitgroupservice.service
 import com.fitmate.fitgroupservice.common.GlobalStatus
 import com.fitmate.fitgroupservice.dto.group.*
 import com.fitmate.fitgroupservice.event.event.DeleteFitGroupEvent
+import com.fitmate.fitgroupservice.event.event.RegisterFitGroupEvent
 import com.fitmate.fitgroupservice.event.event.UpdateFitGroupEvent
 import com.fitmate.fitgroupservice.exception.BadRequestException
 import com.fitmate.fitgroupservice.exception.ResourceNotFoundException
@@ -42,6 +43,8 @@ class FitGroupServiceImpl(
                 createMultiMediaEndPoint(it, savedFitGroup, registerFitGroupRequest.requestUserId)
             )
         }
+
+        eventPublisher.publishEvent(RegisterFitGroupEvent(savedFitGroup.id!!))
 
         return RegisterFitGroupResponse(savedFitGroup.id != null && savedFitLeader.id != null)
     }
