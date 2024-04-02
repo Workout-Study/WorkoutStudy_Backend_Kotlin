@@ -348,16 +348,6 @@ class FitGroupServiceBootTest {
     }
 
     @Test
-    @DisplayName("[통합][Service] Get fit group detail data fit group already deleted - 실패 테스트")
-    fun `get fit group detail service fit group already deleted fail test`() {
-        //given
-        fitGroup.delete()
-        fitGroupRepository.save(fitGroup)
-        //when then
-        Assertions.assertThrows(BadRequestException::class.java) { fitGroupService.getFitGroupDetail(fitGroup.id!!) }
-    }
-
-    @Test
     @DisplayName("[통합][Service] Get fit group detail data fit leader does not exist - 실패 테스트")
     fun `get fit group detail service fit leader does not exist fail test`() {
         //given

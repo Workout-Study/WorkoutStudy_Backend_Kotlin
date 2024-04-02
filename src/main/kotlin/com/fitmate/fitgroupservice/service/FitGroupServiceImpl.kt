@@ -89,8 +89,6 @@ class FitGroupServiceImpl(
     @Transactional(readOnly = true)
     override fun getFitGroupDetail(fitGroupId: Long): FitGroupDetailResponse {
         val fitGroup = findFitGroupAndGet(fitGroupId)
-        if (fitGroup.isDeleted) throw BadRequestException("Fit group already deleted")
-
         val fitLeader = findFitLeaderAndGet(fitGroup)
 
         return FitGroupDetailResponse(

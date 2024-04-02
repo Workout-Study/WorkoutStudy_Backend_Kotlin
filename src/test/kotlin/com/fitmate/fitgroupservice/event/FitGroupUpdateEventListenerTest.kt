@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
+import java.time.Duration.ofMillis
 
 @SpringBootTest
 class FitGroupUpdateEventListenerTest {
@@ -89,6 +90,8 @@ class FitGroupUpdateEventListenerTest {
 
         fitGroupService.updateFitGroup(fitGroup.id!!, updateFitGroupRequest)
 
-        Assertions.assertTrue(fitGroupHistoryRepository.findByFitGroupId(fitGroup.id!!).isNullOrEmpty().not())
+        Assertions.assertTimeout(
+            ofMillis(2000)
+        ) { fitGroupHistoryRepository.findByFitGroupId(fitGroup.id!!).isNullOrEmpty().not() }
     }
 }

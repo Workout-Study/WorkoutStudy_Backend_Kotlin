@@ -183,7 +183,9 @@ class FitGroupControllerTest {
                         fieldWithPath("presentFitMateCount").type(JsonFieldType.NUMBER).description("현재 fit mate 수"),
                         fieldWithPath("maxFitMate").type(JsonFieldType.NUMBER).description("fit group의 최대 fit mate 수"),
                         fieldWithPath("multiMediaEndPoints").type(JsonFieldType.ARRAY)
-                            .description("멀티 미디어 end point list")
+                            .description("멀티 미디어 end point list"),
+                        fieldWithPath("state").type(JsonFieldType.BOOLEAN)
+                            .description("fit group의 상태 (false: 정상, true: 삭제)"),
                     )
                 )
             )
