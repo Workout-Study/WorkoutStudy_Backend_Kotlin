@@ -2,10 +2,7 @@ package com.fitmate.fitgroupservice.service
 
 import com.fitmate.fitgroupservice.common.GlobalStatus
 import com.fitmate.fitgroupservice.dto.group.*
-import com.fitmate.fitgroupservice.event.event.DeleteFitGroupEvent
-import com.fitmate.fitgroupservice.event.event.RegisterFitGroupEvent
-import com.fitmate.fitgroupservice.event.event.RegisterFitMateEvent
-import com.fitmate.fitgroupservice.event.event.UpdateFitGroupEvent
+import com.fitmate.fitgroupservice.event.event.*
 import com.fitmate.fitgroupservice.exception.BadRequestException
 import com.fitmate.fitgroupservice.exception.ResourceNotFoundException
 import com.fitmate.fitgroupservice.persistence.entity.*
@@ -193,11 +190,20 @@ class FitGroupServiceImpl(
         fitGroup.delete()
         fitLeader.delete()
 
-        getFitMatesByFitGroup(fitGroup).forEach { it.delete() }
+        val fitMates = getFitMatesByFitGroup(fitGroup)
+        fitMates.forEach { it.delete() }
 
-        eventPublisher.publishEvent(DeleteFitGroupEvent(fitGroup.id!!))
+        publishDeleteEvent(fitGroup, fitMates)
 
         return DeleteFitGroupResponse(fitGroup.isDeleted && fitLeader.isDeleted)
+    }
+
+    private fun publishDeleteEvent(
+        fitGroup: FitGroup,
+        fitMates: List<FitMate>
+    ) {
+        eventPublisher.publishEvent(DeleteFitGroupEvent(fitGroup.id!!))
+        if (fitMates.isNotEmpty()) eventPublisher.publishEvent(DeleteFitMateEvent(fitGroup.id!!, fitMates[0].id!!))
     }
 
     private fun checkFitLeaderWithRequestUser(fitLeader: FitLeader, requestUserId: String) {
