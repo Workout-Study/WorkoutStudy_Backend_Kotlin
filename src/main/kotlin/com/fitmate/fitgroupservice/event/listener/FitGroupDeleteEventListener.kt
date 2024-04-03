@@ -62,6 +62,6 @@ class FitGroupDeleteEventListener(
             "DeleteFitGroupEvent with produceFitGroupDto start - fit group id = {}",
             deleteFitGroupEvent.fitGroupId
         )
-        fitGroupProducer.produceFitGroup(deleteFitGroupEvent.fitGroupId)
+        fitGroupProducer.produceFitGroupEvent(deleteFitGroupEvent.fitGroupId)
     }
 }

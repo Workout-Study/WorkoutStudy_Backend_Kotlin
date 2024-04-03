@@ -8,16 +8,16 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class FitGroupProducerImpl(
+class FitMateProducerImpl(
     private val fitGroupRepository: FitGroupRepository,
     private val fitGroupDtoKafkaTemplate: KafkaTemplate<String, String>
-) : FitGroupProducer {
+) : FitMateProducer {
 
     @Transactional(readOnly = true)
-    override fun produceFitGroupEvent(fitGroupId: Long) {
+    override fun produceFitMateEvent(fitGroupId: Long) {
         val fitGroup = fitGroupRepository.findById(fitGroupId)
-            .orElseThrow { ResourceNotFoundException("produce fit group not found") }
+            .orElseThrow { ResourceNotFoundException("produce fit mate on fit group not found") }
 
-        fitGroupDtoKafkaTemplate.send(GlobalStatus.KAFKA_TOPIC_FIT_GROUP, fitGroup.id.toString())
+        fitGroupDtoKafkaTemplate.send(GlobalStatus.KAFKA_TOPIC_FIT_MATE, fitGroup.id.toString())
     }
 }

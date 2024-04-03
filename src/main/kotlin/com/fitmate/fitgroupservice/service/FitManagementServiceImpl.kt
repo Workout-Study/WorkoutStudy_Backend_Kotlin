@@ -3,6 +3,7 @@ package com.fitmate.fitgroupservice.service
 import com.fitmate.fitgroupservice.common.GlobalStatus
 import com.fitmate.fitgroupservice.dto.management.KickFitMateRequest
 import com.fitmate.fitgroupservice.dto.management.KickFitMateResponse
+import com.fitmate.fitgroupservice.event.event.DeleteFitMateEvent
 import com.fitmate.fitgroupservice.exception.BadRequestException
 import com.fitmate.fitgroupservice.exception.ResourceNotFoundException
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
@@ -11,6 +12,7 @@ import com.fitmate.fitgroupservice.persistence.entity.FitMate
 import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,7 +20,8 @@ import org.springframework.transaction.annotation.Transactional
 class FitManagementServiceImpl(
     private val fitMateRepository: FitMateRepository,
     private val fitGroupRepository: FitGroupRepository,
-    private val fitLeaderRepository: FitLeaderRepository
+    private val fitLeaderRepository: FitLeaderRepository,
+    private val eventPublisher: ApplicationEventPublisher
 ) : FitManagementService {
 
     /**
@@ -39,12 +42,12 @@ class FitManagementServiceImpl(
         if (fitGroup.isDeleted) throw BadRequestException("Fit group already deleted")
 
         val fitLeader = getFitLeaderByFitGroup(fitGroup)
-
         if (fitLeader.fitLeaderUserId != kickFitMateRequest.requestUserId) throw BadRequestException("Only the fit leader can kick a fit mate")
 
         val fitMate = getFitMateByFitGroupAndUserId(fitGroup, userId)
-
         fitMate.kick(kickFitMateRequest.requestUserId)
+
+        eventPublisher.publishEvent(DeleteFitMateEvent(fitGroup.id!!, fitMate.id!!))
 
         return KickFitMateResponse(fitMate.isDeleted)
     }

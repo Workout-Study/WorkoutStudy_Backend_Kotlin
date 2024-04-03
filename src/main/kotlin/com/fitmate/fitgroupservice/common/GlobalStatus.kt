@@ -7,5 +7,6 @@ class GlobalStatus {
         const val PERSISTENCE_DELETED: Boolean = true
 
         const val KAFKA_TOPIC_FIT_GROUP = "fit-group"
+        const val KAFKA_TOPIC_FIT_MATE = "fit-mate"
     }
 }

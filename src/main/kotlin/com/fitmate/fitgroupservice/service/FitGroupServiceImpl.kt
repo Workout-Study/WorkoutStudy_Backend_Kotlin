@@ -4,6 +4,7 @@ import com.fitmate.fitgroupservice.common.GlobalStatus
 import com.fitmate.fitgroupservice.dto.group.*
 import com.fitmate.fitgroupservice.event.event.DeleteFitGroupEvent
 import com.fitmate.fitgroupservice.event.event.RegisterFitGroupEvent
+import com.fitmate.fitgroupservice.event.event.RegisterFitMateEvent
 import com.fitmate.fitgroupservice.event.event.UpdateFitGroupEvent
 import com.fitmate.fitgroupservice.exception.BadRequestException
 import com.fitmate.fitgroupservice.exception.ResourceNotFoundException
@@ -36,7 +37,7 @@ class FitGroupServiceImpl(
 
         val savedFitGroup = fitGroupRepository.save(createFitGroup(registerFitGroupRequest, bankCode));
         val savedFitLeader = fitLeaderRepository.save(createFitLeader(savedFitGroup, registerFitGroupRequest))
-        fitMateRepository.save(createFitMate(savedFitGroup, registerFitGroupRequest))
+        val fitMate = fitMateRepository.save(createFitMate(savedFitGroup, registerFitGroupRequest))
 
         registerFitGroupRequest.multiMediaEndPoints?.forEach {
             multiMediaEndPointRepository.save(
@@ -44,9 +45,17 @@ class FitGroupServiceImpl(
             )
         }
 
-        eventPublisher.publishEvent(RegisterFitGroupEvent(savedFitGroup.id!!))
+        publishRegisterEvent(savedFitGroup, fitMate)
 
         return RegisterFitGroupResponse(savedFitGroup.id != null && savedFitLeader.id != null)
+    }
+
+    private fun publishRegisterEvent(
+        savedFitGroup: FitGroup,
+        fitMate: FitMate
+    ) {
+        eventPublisher.publishEvent(RegisterFitGroupEvent(savedFitGroup.id!!))
+        eventPublisher.publishEvent(RegisterFitMateEvent(savedFitGroup.id!!, fitMate.id!!))
     }
 
     private fun createFitMate(fitGroup: FitGroup, registerFitGroupRequest: RegisterFitGroupRequest): FitMate =

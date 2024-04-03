@@ -2,6 +2,8 @@ package com.fitmate.fitgroupservice.service
 
 import com.fitmate.fitgroupservice.common.GlobalStatus
 import com.fitmate.fitgroupservice.dto.mate.*
+import com.fitmate.fitgroupservice.event.event.DeleteFitMateEvent
+import com.fitmate.fitgroupservice.event.event.RegisterFitMateEvent
 import com.fitmate.fitgroupservice.exception.BadRequestException
 import com.fitmate.fitgroupservice.exception.ResourceAlreadyExistException
 import com.fitmate.fitgroupservice.exception.ResourceNotFoundException
@@ -11,6 +13,7 @@ import com.fitmate.fitgroupservice.persistence.entity.FitMate
 import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional
 class FitMateServiceImpl(
     private val fitMateRepository: FitMateRepository,
     private val fitGroupRepository: FitGroupRepository,
-    private val fitLeaderRepository: FitLeaderRepository
+    private val fitLeaderRepository: FitLeaderRepository,
+    private val eventPublisher: ApplicationEventPublisher
 ) : FitMateService {
 
     /**
@@ -46,11 +50,12 @@ class FitMateServiceImpl(
 
         val presentFitMateCount =
             fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED) ?: 0
-        val presentFitMateCountWithLeaderCount = presentFitMateCount
-        if (presentFitMateCountWithLeaderCount >= fitGroup.maxFitMate) throw BadRequestException("fit group already full")
+        if (presentFitMateCount >= fitGroup.maxFitMate) throw BadRequestException("fit group already full")
 
         val newFitMate = FitMate(fitGroup, registerMateRequest.requestUserId, registerMateRequest.requestUserId)
         val savedFitMate = fitMateRepository.save(newFitMate)
+
+        eventPublisher.publishEvent(RegisterFitMateEvent(fitGroup.id!!, savedFitMate.id!!))
 
         return RegisterMateResponse(savedFitMate.id != null)
     }
@@ -111,6 +116,8 @@ class FitMateServiceImpl(
         ).orElseThrow { throw ResourceNotFoundException("Request user are not included in fit group") }
 
         fitMate.delete()
+
+        eventPublisher.publishEvent(DeleteFitMateEvent(fitGroup.id!!, fitMate.id!!))
 
         return DeleteMateResponse(fitMate.isDeleted)
     }

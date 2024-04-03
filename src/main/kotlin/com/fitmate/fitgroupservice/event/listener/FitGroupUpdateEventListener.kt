@@ -46,6 +46,6 @@ class FitGroupUpdateEventListener(
             "UpdateFitGroupEvent with produceFitGroupDto start - fit group id = {}",
             updateFitGroupEvent.fitGroupId
         )
-        fitGroupProducer.produceFitGroup(updateFitGroupEvent.fitGroupId)
+        fitGroupProducer.produceFitGroupEvent(updateFitGroupEvent.fitGroupId)
     }
 }
