@@ -23,4 +23,5 @@ data class FitGroupDetailResponse(
     val frequency: Int = fitGroup.frequency
     val createdAt: Instant = fitGroup.createdAt
     val maxFitMate: Int = fitGroup.maxFitMate
+    val state: Boolean = fitGroup.state
 }

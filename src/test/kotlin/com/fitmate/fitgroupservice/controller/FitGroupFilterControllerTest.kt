@@ -148,6 +148,8 @@ class FitGroupFilterControllerTest {
                             .description("fit group현재 인원 수"),
                         fieldWithPath("content[].multiMediaEndPoints").type(JsonFieldType.ARRAY)
                             .description("fit group 멀티 미디어 end point list ( 주어진 index 순으로 return )"),
+                        fieldWithPath("content[].state").type(JsonFieldType.BOOLEAN)
+                            .description("fit group의 상태 (false: 정상, true: 삭제)"),
                         fieldWithPath("content[].createdAt").type(JsonFieldType.STRING).description("fit group 생성 일자"),
                         fieldWithPath("pageable").type(JsonFieldType.OBJECT).description("pageable object"),
                         fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER).description("조회 페이지 번호"),

@@ -23,6 +23,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.context.ApplicationEventPublisher
 import java.util.*
 
 @ExtendWith(MockitoExtension::class)
@@ -39,6 +40,9 @@ class FitMateServiceTest {
 
     @Mock
     private lateinit var fitMateRepository: FitMateRepository
+
+    @Mock
+    private lateinit var eventPublisher: ApplicationEventPublisher
 
     private val requestUserId = "testUserId"
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
