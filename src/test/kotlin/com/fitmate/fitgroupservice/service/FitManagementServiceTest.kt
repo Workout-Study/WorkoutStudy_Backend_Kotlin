@@ -20,6 +20,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
+import org.springframework.context.ApplicationEventPublisher
 import java.util.*
 
 @ExtendWith(MockitoExtension::class)
@@ -36,6 +37,9 @@ class FitManagementServiceTest {
 
     @Mock
     private lateinit var fitMateRepository: FitMateRepository
+
+    @Mock
+    private lateinit var eventPublisher: ApplicationEventPublisher
 
     private val fitMateUserId = "fitMateUserId"
     private val requestUserId = "testUserId"

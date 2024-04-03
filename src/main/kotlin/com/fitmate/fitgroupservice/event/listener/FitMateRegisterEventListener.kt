@@ -1,13 +1,13 @@
 package com.fitmate.fitgroupservice.event.listener
 
-import com.fitmate.fitgroupservice.event.event.RegisterFitGroupEvent
 import com.fitmate.fitgroupservice.event.event.RegisterFitMateEvent
 import com.fitmate.fitgroupservice.event.producer.FitMateProducer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
+import org.springframework.transaction.event.TransactionPhase
+import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 class FitMateRegisterEventListener(private val fitMateProducer: FitMateProducer) {
@@ -21,7 +21,7 @@ class FitMateRegisterEventListener(private val fitMateProducer: FitMateProducer)
      *
      * @param registerFitMateEvent register fit mate event
      */
-    @EventListener(RegisterFitGroupEvent::class)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     fun produceFitMateEvent(registerFitMateEvent: RegisterFitMateEvent) {
         logger?.info(

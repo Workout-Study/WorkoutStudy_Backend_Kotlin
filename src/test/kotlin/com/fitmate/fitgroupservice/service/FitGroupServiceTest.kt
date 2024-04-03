@@ -56,12 +56,14 @@ class FitGroupServiceTest {
     private val frequency = 7
     private val fitGroupId = 1L
     private val fitLeaderId = 3L
+    private val fitMateId = 16L
     private val maxFitMate = 20
     private val presentFitMateCount = 7
     private val multiMediaEndPoint: List<String> = listOf("https://avatars.githubusercontent.com/u/105261146?v=4")
     private lateinit var multiMediaEndPoints: List<MultiMediaEndPoint>
     private lateinit var fitGroup: FitGroup
     private lateinit var fitLeader: FitLeader
+    private lateinit var fitMate: FitMate
     private val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
 
     @BeforeEach
@@ -73,8 +75,11 @@ class FitGroupServiceTest {
 
         fitLeader = FitLeader(fitGroup, requestUserId, requestUserId)
 
+        fitMate = FitMate(fitGroup, requestUserId, requestUserId)
+
         fitGroup.id = fitGroupId
         fitLeader.id = fitLeaderId
+        fitMate.id = fitMateId
         multiMediaEndPoints = multiMediaEndPoint.map { MultiMediaEndPoint(fitGroup, it, requestUserId) }
     }
 
@@ -99,6 +104,7 @@ class FitGroupServiceTest {
         Mockito.`when`(bankCodeRepository.findByCode(penaltyAccountBankCode)).thenReturn(Optional.of(bankCode))
         Mockito.`when`(fitGroupRepository.save(any(fitGroup.javaClass))).thenReturn(fitGroup)
         Mockito.`when`(fitLeaderRepository.save(any(fitLeader.javaClass))).thenReturn(fitLeader)
+        Mockito.`when`(fitMateRepository.save(any(fitMate.javaClass))).thenReturn(fitMate)
         //when then
         Assertions.assertDoesNotThrow { fitGroupService.registerFitGroup(registerFitGroupRequest) }
     }
@@ -124,6 +130,7 @@ class FitGroupServiceTest {
         Mockito.`when`(bankCodeRepository.findByCode(penaltyAccountBankCode)).thenReturn(Optional.of(bankCode))
         Mockito.`when`(fitGroupRepository.save(any(fitGroup.javaClass))).thenReturn(fitGroup)
         Mockito.`when`(fitLeaderRepository.save(any(fitLeader.javaClass))).thenReturn(fitLeader)
+        Mockito.`when`(fitMateRepository.save(any(fitMate.javaClass))).thenReturn(fitMate)
         //when then
         Assertions.assertDoesNotThrow { fitGroupService.registerFitGroup(registerFitGroupRequest) }
     }
@@ -149,6 +156,7 @@ class FitGroupServiceTest {
         Mockito.`when`(bankCodeRepository.findByCode(penaltyAccountBankCode)).thenReturn(Optional.of(bankCode))
         Mockito.`when`(fitGroupRepository.save(any(fitGroup.javaClass))).thenReturn(fitGroup)
         Mockito.`when`(fitLeaderRepository.save(any(fitLeader.javaClass))).thenReturn(fitLeader)
+        Mockito.`when`(fitMateRepository.save(any(fitMate.javaClass))).thenReturn(fitMate)
         //when then
         Assertions.assertDoesNotThrow { fitGroupService.registerFitGroup(registerFitGroupRequest) }
     }

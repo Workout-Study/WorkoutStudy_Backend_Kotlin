@@ -6,9 +6,10 @@ import com.fitmate.fitgroupservice.service.FitGroupHistoryService
 import com.fitmate.fitgroupservice.service.MultiMediaEndPointService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
+import org.springframework.transaction.event.TransactionPhase
+import org.springframework.transaction.event.TransactionalEventListener
 
 @Component
 class FitGroupDeleteEventListener(
@@ -26,7 +27,8 @@ class FitGroupDeleteEventListener(
      *
      * @param deleteFitGroupEvent delete fit group event
      */
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Async
     fun registerFitGroupHistory(deleteFitGroupEvent: DeleteFitGroupEvent) {
         logger?.info(
             "DeleteFitGroupEvent with registerFitGroupHistory start - fit group id = {}",
@@ -40,7 +42,7 @@ class FitGroupDeleteEventListener(
      *
      * @param deleteFitGroupEvent delete fit group event
      */
-    @EventListener(DeleteFitGroupEvent::class)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     fun deleteMultiMediaEndPoint(deleteFitGroupEvent: DeleteFitGroupEvent) {
         logger?.info(
@@ -55,7 +57,7 @@ class FitGroupDeleteEventListener(
      *
      * @param deleteFitGroupEvent delete fit group event
      */
-    @EventListener(DeleteFitGroupEvent::class)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     fun produceFitGroup(deleteFitGroupEvent: DeleteFitGroupEvent) {
         FitGroupRegisterEventListener.logger?.info(
