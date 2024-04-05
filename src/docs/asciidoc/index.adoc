@@ -9,6 +9,13 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
 [[common]]
 = 개발 환경 정보
 
