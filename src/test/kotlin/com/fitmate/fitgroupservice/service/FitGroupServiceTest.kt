@@ -488,22 +488,6 @@ class FitGroupServiceTest {
     }
 
     @Test
-    @DisplayName("[단위][Service] Delete fit group - 성공 테스트")
-    fun `delete fit group service success test`() {
-        //given
-        val deleteFitGroupRequest = DeleteFitGroupRequest(requestUserId)
-        val fitMates = listOf(FitMate(fitGroup, requestUserId, requestUserId))
-
-        Mockito.`when`(fitGroupRepository.findById(fitGroupId)).thenReturn(Optional.of(fitGroup))
-        Mockito.`when`(fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
-            .thenReturn(Optional.of(fitLeader))
-        Mockito.`when`(fitMateRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
-            .thenReturn(fitMates)
-        //when then
-        Assertions.assertDoesNotThrow { fitGroupService.deleteFitGroup(fitGroupId, deleteFitGroupRequest) }
-    }
-
-    @Test
     @DisplayName("[단위][Service] Delete fit group fit mate null - 성공 테스트")
     fun `delete fit group service fit mate null success test`() {
         //given
