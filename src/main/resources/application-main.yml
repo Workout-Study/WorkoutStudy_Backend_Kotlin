@@ -16,6 +16,11 @@ spring:
     generate-ddl: true
     database: mysql
     open-in-view: false
+    defer-datasource-initialization: true
+  sql:
+    init:
+      platform: mysql
+      mode: embedded
 
   kafka:
     consumer:

@@ -1,5 +1,5 @@
 FROM openjdk:17-jdk
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
-CMD java -Dspring.profiles.active=main
+ENV USE_PROFILE main
+ENTRYPOINT ["java","-Dspring.profiles.active=${USE_PROFILE}","-jar","/app.jar"]
