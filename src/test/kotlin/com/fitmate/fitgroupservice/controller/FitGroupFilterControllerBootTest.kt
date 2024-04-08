@@ -22,6 +22,7 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*
 import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.request.RequestDocumentation.*
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -31,6 +32,7 @@ import org.springframework.web.util.UriComponentsBuilder
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@TestPropertySource(locations = ["classpath:application-test.yml"])
 class FitGroupFilterControllerBootTest {
 
     @Autowired
