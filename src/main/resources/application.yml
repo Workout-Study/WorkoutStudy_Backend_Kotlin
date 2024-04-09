@@ -55,7 +55,7 @@ spring:
     name: fit-group-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://172.17.0.1:3306/fitGroup?validationQuery="select 1"
+    url: jdbc:mysql://mysql:3306/fitGroup?validationQuery="select 1"
     username: fitGroup
     password: fitGroup
   jpa:
@@ -72,12 +72,12 @@ spring:
 
   kafka:
     consumer:
-      bootstrap-servers: 172.17.0.1:9092
+      bootstrap-servers: kafka:9092
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
-      bootstrap-servers: 172.17.0.1:9092
+      bootstrap-servers: kafka:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
