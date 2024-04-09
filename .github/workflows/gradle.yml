@@ -55,4 +55,4 @@ jobs:
             docker stop fit-group
             docker rm fit-group
             docker pull ${{secrets.DOCKER_USERNAME}}/fit-group:latest
-            docker run --name fit-group -d -p 8080:8080 -v /etc/localtime:/etc/localtime:ro -e TZ=Asia/Seoul ${{secrets.DOCKER_USERNAME}}/fit-group:latest --network fit
+            docker run --name fit-group -d -p 8080:8080 --network fit -v /etc/localtime:/etc/localtime:ro -e TZ=Asia/Seoul ${{secrets.DOCKER_USERNAME}}/fit-group:latest
