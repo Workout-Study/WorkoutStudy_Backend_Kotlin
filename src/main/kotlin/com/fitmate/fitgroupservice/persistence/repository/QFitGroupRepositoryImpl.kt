@@ -34,7 +34,6 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
                 fitGroup,
                 fitMate.count().coalesce(0L)
                     .castToNum(Int::class.java).`as`("presentFitMateCount"),
-                fitGroup.id
             )
         ).from(fitGroup)
             .leftJoin(fitLeader)
@@ -50,7 +49,7 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
             .where(
                 categoryCondition(fitGroupFilterRequest.category)
             )
-            .groupBy(fitGroup.id)
+            .groupBy(fitGroup)
             .having(conditionWithMaxGroup(fitGroupFilterRequest.withMaxGroup))
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
@@ -77,7 +76,6 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
                         ),
                     "presentFitMateCount"
                 ),
-                fitGroup.id
             )
         ).from(fitMate)
             .leftJoin(fitGroup)
