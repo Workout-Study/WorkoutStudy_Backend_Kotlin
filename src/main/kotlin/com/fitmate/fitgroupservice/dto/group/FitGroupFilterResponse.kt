@@ -7,4 +7,5 @@ data class FitGroupFilterResponse(
     val fitLeader: FitLeader?,
     val fitGroup: FitGroup,
     val presentFitMateCount: Int,
+    val fitGroupId: Long
 )

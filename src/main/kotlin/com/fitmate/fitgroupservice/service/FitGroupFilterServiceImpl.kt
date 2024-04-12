@@ -44,7 +44,11 @@ class FitGroupFilterServiceImpl(
             )
         }.toList()
 
-        return SliceImpl(fitGroupDetailResponseList, pageable, hasNext)
+        return SliceImpl(
+            fitGroupDetailResponseList,
+            PageRequest.of(fitGroupFilterRequest.pageNumber, fitGroupFilterRequest.pageSize),
+            hasNext
+        )
     }
 
     @Transactional(readOnly = true)

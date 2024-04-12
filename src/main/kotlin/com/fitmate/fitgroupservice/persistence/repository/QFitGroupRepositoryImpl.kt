@@ -33,7 +33,8 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
                 fitLeader,
                 fitGroup,
                 fitMate.count().coalesce(0L)
-                    .castToNum(Int::class.java).`as`("presentFitMateCount")
+                    .castToNum(Int::class.java).`as`("presentFitMateCount"),
+                fitGroup.id
             )
         ).from(fitGroup)
             .leftJoin(fitLeader)
@@ -100,7 +101,7 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
 
     private fun conditionWithMaxGroup(withMaxGroup: Boolean): Predicate? {
         return if (!withMaxGroup) {
-            fitGroup.maxFitMate.lt(fitMate.count().coalesce(0L))
+            fitGroup.maxFitMate.gt(fitMate.count().coalesce(0L))
         } else null
     }
 
