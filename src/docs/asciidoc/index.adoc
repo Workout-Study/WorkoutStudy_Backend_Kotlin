@@ -178,6 +178,32 @@ http-response
 
 include::{snippets}/fit-group-filter/http-response.adoc[]
 
+=== Fit Group Filter By User id
+
+path-parameters
+
+include::{snippets}/fit-group-filter-by-user-id/path-parameters.adoc[]
+
+http-request
+
+include::{snippets}/fit-group-filter-by-user-id/http-request.adoc[]
+
+curl-request
+
+include::{snippets}/fit-group-filter-by-user-id/curl-request.adoc[]
+
+response-fields
+
+include::{snippets}/fit-group-filter-by-user-id/response-fields.adoc[]
+
+response-body
+
+include::{snippets}/fit-group-filter-by-user-id/response-body.adoc[]
+
+http-response
+
+include::{snippets}/fit-group-filter-by-user-id/http-response.adoc[]
+
 == 2. bank-code
 
 === Get Bank-code List

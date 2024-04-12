@@ -1,6 +1,7 @@
 package com.fitmate.fitgroupservice.controller
 
 import com.fitmate.fitgroupservice.common.GlobalURI
+import com.fitmate.fitgroupservice.dto.filter.FitGroupDetailsResponse
 import com.fitmate.fitgroupservice.dto.filter.FitGroupFilterRequest
 import com.fitmate.fitgroupservice.dto.group.FitGroupDetailResponse
 import com.fitmate.fitgroupservice.persistence.entity.BankCode
@@ -171,6 +172,71 @@ class FitGroupFilterControllerTest {
                         fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("처음인지 여부"),
                         fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막인지 여부"),
                         fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("비어있는지 여부")
+                    )
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("[단위][Controller] Fit group filter by user id 조회 - 성공 테스트")
+    @Throws(Exception::class)
+    fun `fit group filter by user id controller success test`() {
+        //given
+        val fitGroupFilterRequest = FitGroupFilterRequest(withMaxGroup, category, pageNumber, pageSize)
+
+        val fitGroupDetailResponseList = getFitGroupDetailResponses(fitGroupFilterRequest)
+
+        Mockito.`when`(fitGroupFilterService.getFitGroupListByUserId(requestUserId))
+            .thenReturn(FitGroupDetailsResponse(fitGroupDetailResponseList))
+
+        //when
+        val resultActions = mockMvc.perform(
+            get(GlobalURI.FILTER_ROOT + GlobalURI.PATH_VARIABLE_USER_ID_WITH_BRACE, requestUserId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+        //then
+        resultActions.andExpect(status().isOk())
+            .andDo(print())
+            .andDo(
+                document(
+                    "fit-group-filter-by-user-id",
+                    pathParameters(
+                        parameterWithName(GlobalURI.PATH_VARIABLE_USER_ID)
+                            .description("fit group 목록을 조회할 user id")
+                    ),
+                    responseFields(
+                        fieldWithPath("fitGroupDetails[]").type(JsonFieldType.ARRAY).description("fit group List"),
+                        fieldWithPath("fitGroupDetails[].fitGroupId").type(JsonFieldType.NUMBER)
+                            .description("fit group의 id"),
+                        fieldWithPath("fitGroupDetails[].fitLeaderUserId").type(JsonFieldType.STRING)
+                            .description("fit group의 leader user id"),
+                        fieldWithPath("fitGroupDetails[].fitGroupName").type(JsonFieldType.STRING)
+                            .description("fit group의 이름"),
+                        fieldWithPath("fitGroupDetails[].penaltyAmount").type(JsonFieldType.NUMBER)
+                            .description("fit group의 패널티 금액"),
+                        fieldWithPath("fitGroupDetails[].penaltyAccountBankCode").type(JsonFieldType.STRING)
+                            .description("fit group의 패널티 입금 계좌 은행코드"),
+                        fieldWithPath("fitGroupDetails[].penaltyAccountNumber").type(JsonFieldType.STRING)
+                            .description("fit group의 패널티 입금 계좌번호"),
+                        fieldWithPath("fitGroupDetails[].category").type(JsonFieldType.NUMBER)
+                            .description("fit group의 카테고리 ( 1:헬스, 2:축구, 3:농구, 4:야구, 5: 클라이밍, 6: 배드민턴, 7: 필라테스, 10: 기타 )"),
+                        fieldWithPath("fitGroupDetails[].introduction").type(JsonFieldType.STRING)
+                            .description("fit group의 소개글"),
+                        fieldWithPath("fitGroupDetails[].cycle").type(JsonFieldType.NUMBER)
+                            .description("fit group의 운동 인증 주기 ( null시 기본값 일주일 - 1: 일주일, 2: 한달, 3: 일년 )"),
+                        fieldWithPath("fitGroupDetails[].frequency").type(JsonFieldType.NUMBER)
+                            .description("fit group의 주기별 인증 필요 횟수"),
+                        fieldWithPath("fitGroupDetails[].maxFitMate").type(JsonFieldType.NUMBER)
+                            .description("fit group최대 인원 수"),
+                        fieldWithPath("fitGroupDetails[].presentFitMateCount").type(JsonFieldType.NUMBER)
+                            .description("fit group현재 인원 수"),
+                        fieldWithPath("fitGroupDetails[].multiMediaEndPoints").type(JsonFieldType.ARRAY)
+                            .description("fit group 멀티 미디어 end point list ( 주어진 index 순으로 return )"),
+                        fieldWithPath("fitGroupDetails[].state").type(JsonFieldType.BOOLEAN)
+                            .description("fit group의 상태 (false: 정상, true: 삭제)"),
+                        fieldWithPath("fitGroupDetails[].createdAt").type(JsonFieldType.STRING)
+                            .description("fit group 생성 일자"),
                     )
                 )
             )
