@@ -1,6 +1,7 @@
 package com.fitmate.fitgroupservice.service
 
 import com.fitmate.fitgroupservice.common.GlobalStatus
+import com.fitmate.fitgroupservice.dto.filter.FitGroupDetailsResponse
 import com.fitmate.fitgroupservice.dto.filter.FitGroupFilterRequest
 import com.fitmate.fitgroupservice.dto.group.FitGroupDetailResponse
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
@@ -38,12 +39,28 @@ class FitGroupFilterServiceImpl(
             FitGroupDetailResponse(
                 it.fitLeader,
                 it.fitGroup,
-                it.presentFitMateCount + (it.fitLeader?.let { 1 } ?: 0),
+                it.presentFitMateCount,
                 findMultiMediaEndPointsAndGet(it.fitGroup)
             )
         }.toList()
 
         return SliceImpl(fitGroupDetailResponseList, pageable, hasNext)
+    }
+
+    @Transactional(readOnly = true)
+    override fun getFitGroupListByUserId(userId: String): FitGroupDetailsResponse {
+        val fitGroupList = fitGroupRepository.filterFitGroupByUserId(userId)
+
+        val fitGroupDetailResponseList: List<FitGroupDetailResponse> = fitGroupList.map {
+            FitGroupDetailResponse(
+                it.fitLeader,
+                it.fitGroup,
+                it.presentFitMateCount,
+                findMultiMediaEndPointsAndGet(it.fitGroup)
+            )
+        }.toList()
+
+        return FitGroupDetailsResponse(fitGroupDetailResponseList)
     }
 
     private fun findMultiMediaEndPointsAndGet(fitGroup: FitGroup): List<String> {

@@ -178,4 +178,19 @@ class FitGroupFilterControllerBootTest {
         resultActions.andExpect(status().isOk())
             .andDo(print())
     }
+
+    @Test
+    @DisplayName("[통합][Controller] Fit group filter by user id 조회 - 성공 테스트")
+    @Throws(Exception::class)
+    fun `fit group filter by user id controller success test`() {
+        //given when
+        val resultActions = mockMvc.perform(
+            get(GlobalURI.FILTER_ROOT + GlobalURI.PATH_VARIABLE_USER_ID_WITH_BRACE, requestUserId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+        //then
+        resultActions.andExpect(status().isOk())
+            .andDo(print())
+    }
 }
