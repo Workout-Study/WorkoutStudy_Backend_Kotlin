@@ -76,7 +76,8 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
                             subQueryFitMate.fitGroup.eq(fitGroup)
                         ),
                     "presentFitMateCount"
-                )
+                ),
+                fitGroup.id
             )
         ).from(fitMate)
             .leftJoin(fitGroup)
