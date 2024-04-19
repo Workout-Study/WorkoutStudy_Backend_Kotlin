@@ -52,7 +52,7 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
             .groupBy(fitGroup)
             .having(conditionWithMaxGroup(fitGroupFilterRequest.withMaxGroup))
             .offset(pageable.offset)
-            .limit(pageable.pageSize.toLong())
+            .limit(pageable.pageSize.toLong() + 1)
             .orderBy(
                 fitMate.count().coalesce(0L).desc()
             )
