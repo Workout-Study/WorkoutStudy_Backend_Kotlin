@@ -37,4 +37,10 @@ class GlobalExceptionHandler {
         logger?.info("ResourceAlreadyExistException", resourceAlreadyExistException)
         return ResponseEntity.badRequest().body(resourceAlreadyExistException.message)
     }
+
+    @ExceptionHandler(ResourceNotFoundException::class)
+    fun resourceNotFoundException(resourceNotFoundException: ResourceNotFoundException): ResponseEntity<String> {
+        logger?.info("ResourceNotFoundException", resourceNotFoundException)
+        return ResponseEntity.badRequest().body(resourceNotFoundException.message)
+    }
 }

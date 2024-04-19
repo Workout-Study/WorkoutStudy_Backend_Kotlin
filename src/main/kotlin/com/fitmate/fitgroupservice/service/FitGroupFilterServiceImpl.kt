@@ -27,7 +27,7 @@ class FitGroupFilterServiceImpl(
      */
     @Transactional(readOnly = true)
     override fun getFitGroupListByFilter(fitGroupFilterRequest: FitGroupFilterRequest): Slice<FitGroupDetailResponse> {
-        val pageable = PageRequest.of(fitGroupFilterRequest.pageNumber, fitGroupFilterRequest.pageSize + 1)
+        val pageable = PageRequest.of(fitGroupFilterRequest.pageNumber, fitGroupFilterRequest.pageSize)
 
         var fitGroupList = fitGroupRepository.filterFitGroup(fitGroupFilterRequest, pageable)
 
