@@ -45,7 +45,7 @@ class FitGroupServiceTest {
     @Mock
     private lateinit var eventPublisher: ApplicationEventPublisher
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -70,17 +70,17 @@ class FitGroupServiceTest {
     fun setFitGroupAndFitLeader() {
         fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, requestUserId
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
-        fitLeader = FitLeader(fitGroup, requestUserId, requestUserId)
+        fitLeader = FitLeader(fitGroup, requestUserId, requestUserId.toString())
 
-        fitMate = FitMate(fitGroup, requestUserId, requestUserId)
+        fitMate = FitMate(fitGroup, requestUserId, requestUserId.toString())
 
         fitGroup.id = fitGroupId
         fitLeader.id = fitLeaderId
         fitMate.id = fitMateId
-        multiMediaEndPoints = multiMediaEndPoint.map { MultiMediaEndPoint(fitGroup, it, requestUserId) }
+        multiMediaEndPoints = multiMediaEndPoint.map { MultiMediaEndPoint(fitGroup, it, requestUserId.toString()) }
     }
 
     @Test
@@ -327,9 +327,9 @@ class FitGroupServiceTest {
             multiMediaEndPoint
         )
 
-        val notMatchedLeaderUserId = "notMatchedLeaderUserId"
+        val notMatchedLeaderUserId = requestUserId % 2
 
-        val notMatchFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId)
+        val notMatchFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId.toString())
 
         Mockito.`when`(fitGroupRepository.findById(fitGroupId)).thenReturn(Optional.of(fitGroup))
         Mockito.`when`(fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
@@ -560,9 +560,9 @@ class FitGroupServiceTest {
         //given
         val deleteFitGroupRequest = DeleteFitGroupRequest(requestUserId)
 
-        val notMatchedLeaderUserId = "notMatchedLeaderUserId"
+        val notMatchedLeaderUserId = requestUserId % 2
 
-        val notMatchFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId)
+        val notMatchFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId.toString())
 
         Mockito.`when`(fitGroupRepository.findById(fitGroupId)).thenReturn(Optional.of(fitGroup))
         Mockito.`when`(fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))

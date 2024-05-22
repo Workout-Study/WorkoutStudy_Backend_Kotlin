@@ -33,7 +33,7 @@ class FitGroupControllerValidationTest {
     @MockBean
     private lateinit var fitGroupService: FitGroupService
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val bankCode = "090"
@@ -45,38 +45,6 @@ class FitGroupControllerValidationTest {
     private val fitGroupId = 1L
     private val maxFitMate = 20
     private val multiMediaEndPoint: List<String> = listOf("https://avatars.githubusercontent.com/u/105261146?v=4")
-
-    @ParameterizedTest
-    @EmptySource
-    @DisplayName("[단위][Controller] Fit group 등록 request user id - Validation 실패 테스트")
-    @Throws(Exception::class)
-    fun `register fit group controller request user id validation fail test`(testRequestUserId: String) {
-        //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(
-            testRequestUserId,
-            fitGroupName,
-            penaltyAmount,
-            bankCode,
-            penaltyAccount,
-            category,
-            introduction,
-            cycle,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
-
-        //when
-        val resultActions = mockMvc.perform(
-            post(GlobalURI.GROUP_ROOT)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(registerFitGroupRequest))
-                .accept(MediaType.APPLICATION_JSON)
-        )
-        //then
-        resultActions.andExpect(status().isBadRequest())
-            .andDo(print())
-    }
 
     @ParameterizedTest
     @EmptySource
@@ -264,38 +232,6 @@ class FitGroupControllerValidationTest {
 
     @ParameterizedTest
     @EmptySource
-    @DisplayName("[단위][Controller] Fit group 수정 request user id - Validation 실패 테스트")
-    @Throws(Exception::class)
-    fun `update fit group controller request user id validation fail test`(testRequestUserId: String) {
-        //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(
-            testRequestUserId,
-            fitGroupName,
-            penaltyAmount,
-            bankCode,
-            penaltyAccount,
-            category,
-            introduction,
-            cycle,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
-
-        //when
-        val resultActions = mockMvc.perform(
-            put("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}", fitGroupId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updateFitGroupRequest))
-                .accept(MediaType.APPLICATION_JSON)
-        )
-        //then
-        resultActions.andExpect(status().isBadRequest())
-            .andDo(print())
-    }
-
-    @ParameterizedTest
-    @EmptySource
     @DisplayName("[단위][Controller] Fit group 수정 fit group name - Validation 실패 테스트")
     @Throws(Exception::class)
     fun `update fit group controller fit group name validation fail test`(testFitGroupName: String) {
@@ -474,26 +410,6 @@ class FitGroupControllerValidationTest {
         //when
         val resultActions = mockMvc.perform(
             delete("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}", testFitGroupId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(deleteFitGroupRequest))
-                .accept(MediaType.APPLICATION_JSON)
-        )
-        //then
-        resultActions.andExpect(status().isBadRequest())
-            .andDo(print())
-    }
-
-    @ParameterizedTest
-    @EmptySource
-    @DisplayName("[단위][Controller] Fit group 삭제 request user id - Validation 실패 테스트")
-    @Throws(Exception::class)
-    fun `delete fit group controller request user id validation fail test`(testRequestUserId: String) {
-        //given
-        val deleteFitGroupRequest = DeleteFitGroupRequest(testRequestUserId)
-
-        //when
-        val resultActions = mockMvc.perform(
-            delete("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}", fitGroupId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(deleteFitGroupRequest))
                 .accept(MediaType.APPLICATION_JSON)

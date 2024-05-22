@@ -56,20 +56,20 @@ class FitGroupServiceImpl(
     }
 
     private fun createFitMate(fitGroup: FitGroup, registerFitGroupRequest: RegisterFitGroupRequest): FitMate =
-        FitMate(fitGroup, registerFitGroupRequest.requestUserId, registerFitGroupRequest.requestUserId)
+        FitMate(fitGroup, registerFitGroupRequest.requestUserId, registerFitGroupRequest.requestUserId.toString())
 
     private fun createMultiMediaEndPoint(
         endPoint: String,
         fitGroup: FitGroup,
-        requestUserId: String
+        requestUserId: Int
     ): MultiMediaEndPoint =
-        MultiMediaEndPoint(fitGroup, endPoint, requestUserId)
+        MultiMediaEndPoint(fitGroup, endPoint, requestUserId.toString())
 
     private fun createFitLeader(savedFitGroup: FitGroup, registerFitGroupRequest: RegisterFitGroupRequest): FitLeader =
         FitLeader(
             savedFitGroup,
             registerFitGroupRequest.requestUserId,
-            registerFitGroupRequest.requestUserId
+            registerFitGroupRequest.requestUserId.toString()
         )
 
     private fun createFitGroup(registerFitGroupRequest: RegisterFitGroupRequest, bankCode: BankCode): FitGroup =
@@ -83,7 +83,7 @@ class FitGroupServiceImpl(
             registerFitGroupRequest.cycle ?: 1,
             registerFitGroupRequest.frequency,
             registerFitGroupRequest.maxFitMate,
-            registerFitGroupRequest.requestUserId
+            registerFitGroupRequest.requestUserId.toString()
         )
 
     /**
@@ -206,7 +206,7 @@ class FitGroupServiceImpl(
         if (fitMates.isNotEmpty()) eventPublisher.publishEvent(DeleteFitMateEvent(fitGroup.id!!, fitMates[0].id!!))
     }
 
-    private fun checkFitLeaderWithRequestUser(fitLeader: FitLeader, requestUserId: String) {
+    private fun checkFitLeaderWithRequestUser(fitLeader: FitLeader, requestUserId: Int) {
         if (fitLeader.fitLeaderUserId != requestUserId)
             throw BadRequestException("Request user does not match with fit leader. fit group only the leader can update.")
     }

@@ -45,7 +45,7 @@ class FitGroupFilterControllerTest {
     private val pageSize = 5
     private val pageRequest = PageRequest.of(pageNumber, pageSize)
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val bankCode = BankCode("090", "카카오뱅크")
@@ -126,7 +126,7 @@ class FitGroupFilterControllerTest {
                     responseFields(
                         fieldWithPath("content[]").type(JsonFieldType.ARRAY).description("fit group List"),
                         fieldWithPath("content[].fitGroupId").type(JsonFieldType.NUMBER).description("fit group의 id"),
-                        fieldWithPath("content[].fitLeaderUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("content[].fitLeaderUserId").type(JsonFieldType.NUMBER)
                             .description("fit group의 leader user id"),
                         fieldWithPath("content[].fitGroupName").type(JsonFieldType.STRING).description("fit group의 이름"),
                         fieldWithPath("content[].penaltyAmount").type(JsonFieldType.NUMBER)
@@ -209,7 +209,7 @@ class FitGroupFilterControllerTest {
                         fieldWithPath("fitGroupDetails[]").type(JsonFieldType.ARRAY).description("fit group List"),
                         fieldWithPath("fitGroupDetails[].fitGroupId").type(JsonFieldType.NUMBER)
                             .description("fit group의 id"),
-                        fieldWithPath("fitGroupDetails[].fitLeaderUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("fitGroupDetails[].fitLeaderUserId").type(JsonFieldType.NUMBER)
                             .description("fit group의 leader user id"),
                         fieldWithPath("fitGroupDetails[].fitGroupName").type(JsonFieldType.STRING)
                             .description("fit group의 이름"),
@@ -256,12 +256,12 @@ class FitGroupFilterControllerTest {
                 cycle ?: 1,
                 frequency,
                 maxFitMate + i,
-                requestUserId + i
+                (requestUserId + i).toString()
             )
 
             fitGroup.id = fitGroupId + i
 
-            val fitLeader = FitLeader(fitGroup, requestUserId + i, requestUserId + i)
+            val fitLeader = FitLeader(fitGroup, requestUserId + i, (requestUserId + i).toString())
 
             fitLeader.id = fitLeaderId + i
 

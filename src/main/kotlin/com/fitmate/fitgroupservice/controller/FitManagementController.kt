@@ -29,7 +29,7 @@ class FitManagementController(private val fitManagementService: FitManagementSer
     )
     fun kickFitMate(
         @PathVariable(GlobalURI.PATH_VARIABLE_FIT_GROUP_ID) fitGroupId: Long,
-        @PathVariable(GlobalURI.PATH_VARIABLE_USER_ID) userId: String,
+        @PathVariable(GlobalURI.PATH_VARIABLE_USER_ID) userId: Int,
         @RequestBody @Valid kickFitMateRequest: KickFitMateRequest
     ): ResponseEntity<KickFitMateResponse> {
         return ResponseEntity.ok().body(fitManagementService.kickFitMate(fitGroupId, userId, kickFitMateRequest))

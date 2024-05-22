@@ -99,3 +99,10 @@ sourceSets {
         }
     }
 }
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}") {
+        into "static/docs"
+    }
+}

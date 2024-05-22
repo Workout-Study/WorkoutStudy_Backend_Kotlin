@@ -10,5 +10,5 @@ interface QFitGroupRepository {
         pageable: PageRequest
     ): List<FitGroupFilterResponse>
 
-    fun filterFitGroupByUserId(userId: String): List<FitGroupFilterResponse>
+    fun filterFitGroupByUserId(userId: Int): List<FitGroupFilterResponse>
 }

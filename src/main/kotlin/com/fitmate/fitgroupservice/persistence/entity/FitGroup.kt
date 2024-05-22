@@ -40,6 +40,6 @@ class FitGroup(
         this.frequency = updateFitGroupRequest.frequency
         this.maxFitMate = updateFitGroupRequest.maxFitMate
         this.updatedAt = Instant.now()
-        this.updateUser = updateFitGroupRequest.requestUserId
+        this.updateUser = updateFitGroupRequest.requestUserId.toString()
     }
 }

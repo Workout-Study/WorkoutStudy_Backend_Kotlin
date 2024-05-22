@@ -36,8 +36,8 @@ class FitManagementControllerTest {
     @MockBean
     private lateinit var fitManagementService: FitManagementService
 
-    private val userId = "kickedUserId"
-    private val requestUserId = "leaderUserId"
+    private val userId = 861
+    private val requestUserId = 11422
     private val fitGroupId = 1L
 
     @Test
@@ -74,7 +74,7 @@ class FitManagementControllerTest {
                             .description("추방할 Fit mate user id")
                     ),
                     requestFields(
-                        fieldWithPath("requestUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("requestUserId").type(JsonFieldType.NUMBER)
                             .description("추방을 요청한 User id ( fit leader 여야함 )")
                     ),
                     responseFields(

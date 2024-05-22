@@ -22,5 +22,5 @@ interface FitGroupFilterService {
      * @param userId condition of user id
      * @return content and slice data
      */
-    fun getFitGroupListByUserId(userId: String): FitGroupDetailsResponse
+    fun getFitGroupListByUserId(userId: Int): FitGroupDetailsResponse
 }

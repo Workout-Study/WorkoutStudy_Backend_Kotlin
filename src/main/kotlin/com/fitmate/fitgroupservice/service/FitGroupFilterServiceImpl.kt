@@ -52,7 +52,7 @@ class FitGroupFilterServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun getFitGroupListByUserId(userId: String): FitGroupDetailsResponse {
+    override fun getFitGroupListByUserId(userId: Int): FitGroupDetailsResponse {
         val fitGroupList = fitGroupRepository.filterFitGroupByUserId(userId)
 
         val fitGroupDetailResponseList: List<FitGroupDetailResponse> = fitGroupList.map {
