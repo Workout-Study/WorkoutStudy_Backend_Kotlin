@@ -1,7 +1,6 @@
 spring:
   profiles:
     active: local
-
   application:
     name: fit-group-service
   h2:
