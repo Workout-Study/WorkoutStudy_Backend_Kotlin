@@ -13,5 +13,5 @@ interface FitManagementService {
      * @param kickFitMateRequest request user id ( must be leader id )
      * @return Boolean about kick fit mate success
      */
-    fun kickFitMate(fitGroupId: Long, userId: String, kickFitMateRequest: KickFitMateRequest): KickFitMateResponse
+    fun kickFitMate(fitGroupId: Long, userId: Int, kickFitMateRequest: KickFitMateRequest): KickFitMateResponse
 }

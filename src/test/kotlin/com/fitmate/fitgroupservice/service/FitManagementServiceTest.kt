@@ -41,8 +41,8 @@ class FitManagementServiceTest {
     @Mock
     private lateinit var eventPublisher: ApplicationEventPublisher
 
-    private val fitMateUserId = "fitMateUserId"
-    private val requestUserId = "testUserId"
+    private val fitMateUserId = 9756
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val bankCode = BankCode("090", "카카오뱅크")
@@ -64,16 +64,16 @@ class FitManagementServiceTest {
     fun setFitGroupAndFitLeader() {
         fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, requestUserId
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         fitGroup.id = fitGroupId
 
-        fitLeader = FitLeader(fitGroup, requestUserId, requestUserId)
+        fitLeader = FitLeader(fitGroup, requestUserId, requestUserId.toString())
 
         fitLeader.id = fitLeaderId
 
-        fitMate = FitMate(fitGroup, fitMateUserId, fitMateUserId)
+        fitMate = FitMate(fitGroup, fitMateUserId, fitMateUserId.toString())
 
         fitMate.id = fitMateId
     }
@@ -182,7 +182,9 @@ class FitManagementServiceTest {
             requestUserId,
         )
 
-        val wrongFitLeader = FitLeader(fitGroup, "notMatchedLeader", "test")
+        val notMatchedLeaderUserId = requestUserId % 2
+
+        val wrongFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId.toString())
 
         Mockito.`when`(fitGroupRepository.findById(fitGroup.id!!)).thenReturn(Optional.of(fitGroup))
         Mockito.`when`(

@@ -53,7 +53,7 @@ class FitGroupFilterControllerBootTest {
     private val pageNumber = 1
     private val pageSize = 5
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -69,7 +69,11 @@ class FitGroupFilterControllerBootTest {
 
     @BeforeEach
     fun makeDefaultFitGroupData() {
-        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode).get()
+        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode)
+            .orElseGet {
+                val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
+                return@orElseGet bankCodeRepository.save(bankCode)
+            }
 
         for (i in 1..pageSize * (pageNumber)) {
             val fitGroup = FitGroup(
@@ -82,15 +86,15 @@ class FitGroupFilterControllerBootTest {
                 cycle ?: 1,
                 frequency,
                 maxFitMate + i,
-                requestUserId + i
+                (requestUserId + i).toString()
             )
 
             val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-            fitLeaderRepository.save(FitLeader(savedFitGroup, requestUserId + i, requestUserId + i))
+            fitLeaderRepository.save(FitLeader(savedFitGroup, requestUserId + i, (requestUserId + i).toString()))
 
             for (j in i..maxFitMate) {
-                val fitMate = FitMate(savedFitGroup, j.toString(), j.toString())
+                val fitMate = FitMate(savedFitGroup, j, j.toString())
                 fitMateRepository.save(fitMate)
             }
         }
@@ -105,15 +109,15 @@ class FitGroupFilterControllerBootTest {
             cycle ?: 1,
             frequency,
             maxFitMate,
-            requestUserId
+            requestUserId.toString()
         )
 
         maxFitMateGroup = fitGroupRepository.save(fitGroup)
 
-        fitLeaderRepository.save(FitLeader(maxFitMateGroup, requestUserId, requestUserId))
+        fitLeaderRepository.save(FitLeader(maxFitMateGroup, requestUserId, requestUserId.toString()))
 
         for (i in 1..<maxFitMate) {
-            val fitMate = FitMate(maxFitMateGroup, i.toString(), i.toString())
+            val fitMate = FitMate(maxFitMateGroup, i, i.toString())
             fitMateRepository.save(fitMate)
         }
 
@@ -127,13 +131,13 @@ class FitGroupFilterControllerBootTest {
             cycle ?: 1,
             frequency,
             maxFitMate,
-            requestUserId
+            requestUserId.toString()
         )
 
         withOutLeaderFitGroup = fitGroupRepository.save(otherFitGroup)
 
         for (i in 1..maxFitMate) {
-            val fitMate = FitMate(withOutLeaderFitGroup, i.toString(), i.toString())
+            val fitMate = FitMate(withOutLeaderFitGroup, i, i.toString())
             fitMateRepository.save(fitMate)
         }
     }

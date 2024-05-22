@@ -40,8 +40,8 @@ class FitMateServiceBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
-    private val requestUserId = "testUserId"
-    private val leaderUserId = "leaderUserId"
+    private val requestUserId = 11422
+    private val leaderUserId = 873
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -59,16 +59,21 @@ class FitMateServiceBootTest {
 
     @BeforeEach
     fun createTestFitGroup() {
-        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode).get()
+        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode)
+            .orElseGet {
+                val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
+                return@orElseGet bankCodeRepository.save(bankCode)
+            }
+
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, "test"
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, leaderUserId, "test")
+        val fitLeader = FitLeader(savedFitGroup, leaderUserId, requestUserId.toString())
 
         this.fitLeader = fitLeaderRepository.save(fitLeader)
 
@@ -134,7 +139,7 @@ class FitMateServiceBootTest {
             fitGroup.id!!
         )
 
-        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId))
+        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId.toString()))
 
         //when then
         Assertions.assertThrows(ResourceAlreadyExistException::class.java) {
@@ -171,7 +176,7 @@ class FitMateServiceBootTest {
         )
 
         for (i in 1..maxFitMate) {
-            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, requestUserId + i))
+            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, (requestUserId + i).toString()))
         }
 
         //when then
@@ -188,7 +193,7 @@ class FitMateServiceBootTest {
         //given
 
         for (i in 1..maxFitMate) {
-            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, requestUserId + i))
+            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, (requestUserId + i).toString()))
         }
 
         //when then
@@ -246,7 +251,7 @@ class FitMateServiceBootTest {
         //given
         val deleteMateRequest = DeleteMateRequest(requestUserId)
 
-        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId))
+        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId.toString()))
 
         //when then
         Assertions.assertDoesNotThrow { fitMateService.deleteFitMate(fitGroup.id!!, deleteMateRequest) }

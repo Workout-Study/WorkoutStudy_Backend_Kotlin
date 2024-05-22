@@ -33,7 +33,7 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
                 fitLeader,
                 fitGroup,
                 fitMate.count().coalesce(0L)
-                    .castToNum(Int::class.java).`as`("presentFitMateCount")
+                    .castToNum(Int::class.java).`as`("presentFitMateCount"),
             )
         ).from(fitGroup)
             .leftJoin(fitLeader)
@@ -49,7 +49,7 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
             .where(
                 categoryCondition(fitGroupFilterRequest.category)
             )
-            .groupBy(fitGroup.id)
+            .groupBy(fitGroup)
             .having(conditionWithMaxGroup(fitGroupFilterRequest.withMaxGroup))
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong() + 1)
@@ -58,7 +58,7 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
             )
             .fetch()
 
-    override fun filterFitGroupByUserId(userId: String): List<FitGroupFilterResponse> {
+    override fun filterFitGroupByUserId(userId: Int): List<FitGroupFilterResponse> {
         val subQueryFitMate = QFitMate("fitMate")
 
         return factory.select(
@@ -75,7 +75,7 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
                             subQueryFitMate.fitGroup.eq(fitGroup)
                         ),
                     "presentFitMateCount"
-                )
+                ),
             )
         ).from(fitMate)
             .leftJoin(fitGroup)
@@ -100,7 +100,7 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
 
     private fun conditionWithMaxGroup(withMaxGroup: Boolean): Predicate? {
         return if (!withMaxGroup) {
-            fitGroup.maxFitMate.lt(fitMate.count().coalesce(0L))
+            fitGroup.maxFitMate.gt(fitMate.count().coalesce(0L))
         } else null
     }
 

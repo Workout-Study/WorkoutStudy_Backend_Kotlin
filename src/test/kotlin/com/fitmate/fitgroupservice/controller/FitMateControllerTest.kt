@@ -35,7 +35,7 @@ class FitMateControllerTest {
     @MockBean
     private lateinit var fitMateService: FitMateService
 
-    private val requestUserId = "testUserID"
+    private val requestUserId = 11422
     private val fitGroupId = 1L
 
     @Test
@@ -61,7 +61,7 @@ class FitMateControllerTest {
                 document(
                     "register-fit-mate",
                     requestFields(
-                        fieldWithPath("requestUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("requestUserId").type(JsonFieldType.NUMBER)
                             .description("Fit mate로 등록을 요청한 User id"),
                         fieldWithPath("fitGroupId").type(JsonFieldType.NUMBER)
                             .description("Fit group id")
@@ -81,10 +81,10 @@ class FitMateControllerTest {
         //given
         val fitMateDetailsResponse = FitMateDetailsResponse(
             fitGroupId,
-            FitLeaderDetailDto("fitLeaderUserId", Instant.now()),
+            FitLeaderDetailDto(7, Instant.now()),
             listOf(
-                FitMateDetailDto(1L, "fitMateUserId1", Instant.now()),
-                FitMateDetailDto(2L, "fitMateUserId2", Instant.now())
+                FitMateDetailDto(1L, 8, Instant.now()),
+                FitMateDetailDto(2L, 9, Instant.now())
             )
         )
 
@@ -108,14 +108,14 @@ class FitMateControllerTest {
                     responseFields(
                         fieldWithPath("fitGroupId").type(JsonFieldType.NUMBER).description("조회한 fit group id"),
                         fieldWithPath("fitLeaderDetail").type(JsonFieldType.OBJECT).description("fit group의 리더 detail"),
-                        fieldWithPath("fitLeaderDetail.fitLeaderUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("fitLeaderDetail.fitLeaderUserId").type(JsonFieldType.NUMBER)
                             .description("fit group 리더의 user id"),
                         fieldWithPath("fitLeaderDetail.createdAt").type(JsonFieldType.STRING)
                             .description("fit group 리더의 선정일시"),
                         fieldWithPath("fitMateDetails").type(JsonFieldType.ARRAY).description("fit mate list"),
                         fieldWithPath("fitMateDetails[].fitMateId").type(JsonFieldType.NUMBER)
                             .description("fit mate id"),
-                        fieldWithPath("fitMateDetails[].fitMateUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("fitMateDetails[].fitMateUserId").type(JsonFieldType.NUMBER)
                             .description("fit mate 의 user id"),
                         fieldWithPath("fitMateDetails[].createdAt").type(JsonFieldType.STRING)
                             .description("fit mate 등록일시")
@@ -151,7 +151,7 @@ class FitMateControllerTest {
                             .description("탈퇴할 Fit group id")
                     ),
                     requestFields(
-                        fieldWithPath("requestUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("requestUserId").type(JsonFieldType.NUMBER)
                             .description("탈퇴를 요청한 User id")
                     ),
                     responseFields(

@@ -38,8 +38,8 @@ class FitManagementServiceBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
-    private val fitMateUserId = "fitMateUserId"
-    private val requestUserId = "testUserId"
+    private val fitMateUserId = 9623
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -61,22 +61,27 @@ class FitManagementServiceBootTest {
 
     @BeforeEach
     fun createTestFitGroup() {
-        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode).get()
+        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode)
+            .orElseGet {
+                val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
+                return@orElseGet bankCodeRepository.save(bankCode)
+            }
+
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, "test"
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, "test")
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId.toString())
 
         this.fitLeader = fitLeaderRepository.save(fitLeader)
 
         this.fitGroup = savedFitGroup
 
-        this.fitMate = fitMateRepository.save(FitMate(savedFitGroup, fitMateUserId, fitMateUserId))
+        this.fitMate = fitMateRepository.save(FitMate(savedFitGroup, fitMateUserId, fitMateUserId.toString()))
     }
 
     @Test
@@ -168,7 +173,9 @@ class FitManagementServiceBootTest {
         fitLeader.delete()
         fitLeaderRepository.save(fitLeader)
 
-        val wrongFitLeader = FitLeader(fitGroup, "notMatchedLeader", "test")
+        val notMatchedLeaderUserId = requestUserId % 2
+
+        val wrongFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId.toString())
         fitLeaderRepository.save(wrongFitLeader)
 
         //when then

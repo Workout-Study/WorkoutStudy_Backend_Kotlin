@@ -12,7 +12,7 @@ data class FitGroupDetailResponse(
 ) {
 
     val fitGroupId: Long = fitGroup.id!!
-    val fitLeaderUserId: String? = fitLeader?.fitLeaderUserId
+    val fitLeaderUserId: Int? = fitLeader?.fitLeaderUserId
     val fitGroupName: String = fitGroup.fitGroupName
     val penaltyAmount: Int = fitGroup.penaltyAmount
     val penaltyAccountBankCode: String = fitGroup.penaltyAccountBankCode.code

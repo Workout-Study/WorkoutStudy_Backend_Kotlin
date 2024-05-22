@@ -44,11 +44,15 @@ class FitGroupFilterServiceImpl(
             )
         }.toList()
 
-        return SliceImpl(fitGroupDetailResponseList, pageable, hasNext)
+        return SliceImpl(
+            fitGroupDetailResponseList,
+            PageRequest.of(fitGroupFilterRequest.pageNumber, fitGroupFilterRequest.pageSize),
+            hasNext
+        )
     }
 
     @Transactional(readOnly = true)
-    override fun getFitGroupListByUserId(userId: String): FitGroupDetailsResponse {
+    override fun getFitGroupListByUserId(userId: Int): FitGroupDetailsResponse {
         val fitGroupList = fitGroupRepository.filterFitGroupByUserId(userId)
 
         val fitGroupDetailResponseList: List<FitGroupDetailResponse> = fitGroupList.map {

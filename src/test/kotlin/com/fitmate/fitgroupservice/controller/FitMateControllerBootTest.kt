@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 class FitMateControllerBootTest {
 
     @Autowired
@@ -50,7 +49,7 @@ class FitMateControllerBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -66,32 +65,37 @@ class FitMateControllerBootTest {
 
     @BeforeEach
     fun createTestFitGroup() {
-        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode).get()
+        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode)
+            .orElseGet {
+                val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
+                return@orElseGet bankCodeRepository.save(bankCode)
+            }
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, "test"
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, "test")
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId.toString())
 
         fitLeaderRepository.save(fitLeader)
 
         this.fitGroup = savedFitGroup
 
         for (i in 0..3) {
-            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, requestUserId + i))
+            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, (requestUserId + i).toString()))
         }
     }
 
     @Test
     @DisplayName("[통합][Controller] Fit mate 등록 - 성공 테스트")
     @Throws(Exception::class)
+    @Transactional
     fun `register fit mate controller success test`() {
         //given
-        val registerFitMateRequest = RegisterMateRequest("newTestUserId", fitGroup.id!!)
+        val registerFitMateRequest = RegisterMateRequest(741, fitGroup.id!!)
 
         //when
         val resultActions = mockMvc.perform(
@@ -108,6 +112,7 @@ class FitMateControllerBootTest {
     @Test
     @DisplayName("[통합][Controller] Fit mate 목록 조회 - 성공 테스트")
     @Throws(Exception::class)
+    @Transactional
     fun `get fit mate list controller success test`() {
         //given when
         val resultActions = mockMvc.perform(
@@ -123,11 +128,14 @@ class FitMateControllerBootTest {
     @Test
     @DisplayName("[통합][Controller] Fit mate 탈퇴 - 성공 테스트")
     @Throws(Exception::class)
+    @Transactional
     fun `delete fit mate controller success test`() {
         //given
-        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId))
+        val fitMateUserId = requestUserId % 2
 
-        val deleteMateRequest = DeleteMateRequest(requestUserId)
+        fitMateRepository.save(FitMate(fitGroup, fitMateUserId, fitMateUserId.toString()))
+
+        val deleteMateRequest = DeleteMateRequest(fitMateUserId)
         //when
         val resultActions = mockMvc.perform(
             delete(GlobalURI.MATE_ROOT + GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE, fitGroup.id!!)

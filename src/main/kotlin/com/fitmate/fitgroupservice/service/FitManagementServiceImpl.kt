@@ -35,7 +35,7 @@ class FitManagementServiceImpl(
     @Transactional
     override fun kickFitMate(
         fitGroupId: Long,
-        userId: String,
+        userId: Int,
         kickFitMateRequest: KickFitMateRequest
     ): KickFitMateResponse {
         val fitGroup = findFitGroupAndGet(fitGroupId)
@@ -45,14 +45,14 @@ class FitManagementServiceImpl(
         if (fitLeader.fitLeaderUserId != kickFitMateRequest.requestUserId) throw BadRequestException("Only the fit leader can kick a fit mate")
 
         val fitMate = getFitMateByFitGroupAndUserId(fitGroup, userId)
-        fitMate.kick(kickFitMateRequest.requestUserId)
+        fitMate.kick(kickFitMateRequest.requestUserId.toString())
 
         eventPublisher.publishEvent(DeleteFitMateEvent(fitGroup.id!!, fitMate.id!!))
 
         return KickFitMateResponse(fitMate.isDeleted)
     }
 
-    private fun getFitMateByFitGroupAndUserId(fitGroup: FitGroup, userId: String): FitMate =
+    private fun getFitMateByFitGroupAndUserId(fitGroup: FitGroup, userId: Int): FitMate =
         fitMateRepository.findByFitGroupAndFitMateUserIdAndState(
             fitGroup,
             userId,

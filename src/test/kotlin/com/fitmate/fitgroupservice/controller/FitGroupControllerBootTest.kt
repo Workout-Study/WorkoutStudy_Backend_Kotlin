@@ -44,7 +44,7 @@ class FitGroupControllerBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -61,16 +61,21 @@ class FitGroupControllerBootTest {
 
     @BeforeEach
     fun createTestFitGroup() {
-        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode).get()
+        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode)
+            .orElseGet {
+                val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
+                return@orElseGet bankCodeRepository.save(bankCode)
+            }
+
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, "test"
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, "test")
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId.toString())
 
         fitLeaderRepository.save(fitLeader)
 
