@@ -61,7 +61,7 @@ class FitMateControllerTest {
                 document(
                     "register-fit-mate",
                     requestFields(
-                        fieldWithPath("requestUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("requestUserId").type(JsonFieldType.NUMBER)
                             .description("Fit mate로 등록을 요청한 User id"),
                         fieldWithPath("fitGroupId").type(JsonFieldType.NUMBER)
                             .description("Fit group id")

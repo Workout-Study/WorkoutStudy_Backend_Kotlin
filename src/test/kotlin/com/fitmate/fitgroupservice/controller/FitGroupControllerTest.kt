@@ -111,7 +111,7 @@ class FitGroupControllerTest {
                 document(
                     "register-fit-group",
                     requestFields(
-                        fieldWithPath("requestUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("requestUserId").type(JsonFieldType.NUMBER)
                             .description("Fit group을 등록하는 User id ( Fit Leader로 등록 )"),
                         fieldWithPath("fitGroupName").type(JsonFieldType.STRING).description("Fit group 이름"),
                         fieldWithPath("penaltyAmount").type(JsonFieldType.NUMBER).description("운동 미인증 패널티 금액"),

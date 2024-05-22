@@ -3,7 +3,7 @@ package com.fitmate.fitgroupservice.dto.group
 import jakarta.validation.constraints.NotEmpty
 
 data class UpdateFitGroupRequest(
-    @field:NotEmpty val requestUserId: Int,
+    val requestUserId: Int,
     @field:NotEmpty val fitGroupName: String,
     val penaltyAmount: Int,
     @field:NotEmpty val penaltyAccountBankCode: String,

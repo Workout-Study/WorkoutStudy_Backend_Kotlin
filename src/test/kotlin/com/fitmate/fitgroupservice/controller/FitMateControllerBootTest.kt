@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 class FitMateControllerBootTest {
 
     @Autowired
@@ -66,7 +65,11 @@ class FitMateControllerBootTest {
 
     @BeforeEach
     fun createTestFitGroup() {
-        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode).get()
+        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode)
+            .orElseGet {
+                val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
+                return@orElseGet bankCodeRepository.save(bankCode)
+            }
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
@@ -89,6 +92,7 @@ class FitMateControllerBootTest {
     @Test
     @DisplayName("[통합][Controller] Fit mate 등록 - 성공 테스트")
     @Throws(Exception::class)
+    @Transactional
     fun `register fit mate controller success test`() {
         //given
         val registerFitMateRequest = RegisterMateRequest(741, fitGroup.id!!)
@@ -108,6 +112,7 @@ class FitMateControllerBootTest {
     @Test
     @DisplayName("[통합][Controller] Fit mate 목록 조회 - 성공 테스트")
     @Throws(Exception::class)
+    @Transactional
     fun `get fit mate list controller success test`() {
         //given when
         val resultActions = mockMvc.perform(
@@ -123,11 +128,14 @@ class FitMateControllerBootTest {
     @Test
     @DisplayName("[통합][Controller] Fit mate 탈퇴 - 성공 테스트")
     @Throws(Exception::class)
+    @Transactional
     fun `delete fit mate controller success test`() {
         //given
-        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId))
+        val fitMateUserId = requestUserId % 2
 
-        val deleteMateRequest = DeleteMateRequest(requestUserId)
+        fitMateRepository.save(FitMate(fitGroup, fitMateUserId, fitMateUserId))
+
+        val deleteMateRequest = DeleteMateRequest(fitMateUserId)
         //when
         val resultActions = mockMvc.perform(
             delete(GlobalURI.MATE_ROOT + GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE, fitGroup.id!!)

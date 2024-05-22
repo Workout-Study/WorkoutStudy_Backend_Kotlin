@@ -59,7 +59,13 @@ class FitGroupFilterServiceBootTest {
 
     @BeforeEach
     fun makeDefaultFitGroupData() {
-        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode).get()
+        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode)
+            .orElseGet {
+                val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
+                return@orElseGet bankCodeRepository.save(bankCode)
+            }
+
+
 
         for (i in 1..pageSize * (pageNumber)) {
             val fitGroup = FitGroup(
