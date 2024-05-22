@@ -7,6 +7,7 @@ import com.fitmate.fitgroupservice.dto.group.FitGroupDetailResponse
 import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
+import com.fitmate.fitgroupservice.persistence.entity.UserForRead
 import com.fitmate.fitgroupservice.service.FitGroupFilterService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
@@ -128,6 +129,8 @@ class FitGroupFilterControllerTest {
                         fieldWithPath("content[].fitGroupId").type(JsonFieldType.NUMBER).description("fit group의 id"),
                         fieldWithPath("content[].fitLeaderUserId").type(JsonFieldType.NUMBER)
                             .description("fit group의 leader user id"),
+                        fieldWithPath("content[].fitGroupLeaderUserNickname").type(JsonFieldType.STRING)
+                            .description("fit group의 leader user nickname"),
                         fieldWithPath("content[].fitGroupName").type(JsonFieldType.STRING).description("fit group의 이름"),
                         fieldWithPath("content[].penaltyAmount").type(JsonFieldType.NUMBER)
                             .description("fit group의 패널티 금액"),
@@ -211,6 +214,8 @@ class FitGroupFilterControllerTest {
                             .description("fit group의 id"),
                         fieldWithPath("fitGroupDetails[].fitLeaderUserId").type(JsonFieldType.NUMBER)
                             .description("fit group의 leader user id"),
+                        fieldWithPath("fitGroupDetails[].fitGroupLeaderUserNickname").type(JsonFieldType.STRING)
+                            .description("Fit Leader User nickname"),
                         fieldWithPath("fitGroupDetails[].fitGroupName").type(JsonFieldType.STRING)
                             .description("fit group의 이름"),
                         fieldWithPath("fitGroupDetails[].penaltyAmount").type(JsonFieldType.NUMBER)
@@ -265,10 +270,15 @@ class FitGroupFilterControllerTest {
 
             fitLeader.id = fitLeaderId + i
 
+            val userForRead = UserForRead(requestUserId + i, "testUser" + i, "testUser" + i)
+
+            userForRead.id = fitLeaderId + i + i
+
             fitGroupDetailResponseList.add(
                 FitGroupDetailResponse(
                     fitLeader,
                     fitGroup,
+                    userForRead,
                     presentFitMateCount + i,
                     multiMediaEndPoint
                 )

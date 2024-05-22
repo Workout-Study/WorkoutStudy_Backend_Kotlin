@@ -5,14 +5,8 @@ import com.fitmate.fitgroupservice.dto.mate.RegisterMateRequest
 import com.fitmate.fitgroupservice.exception.BadRequestException
 import com.fitmate.fitgroupservice.exception.ResourceAlreadyExistException
 import com.fitmate.fitgroupservice.exception.ResourceNotFoundException
-import com.fitmate.fitgroupservice.persistence.entity.BankCode
-import com.fitmate.fitgroupservice.persistence.entity.FitGroup
-import com.fitmate.fitgroupservice.persistence.entity.FitLeader
-import com.fitmate.fitgroupservice.persistence.entity.FitMate
-import com.fitmate.fitgroupservice.persistence.repository.BankCodeRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
+import com.fitmate.fitgroupservice.persistence.entity.*
+import com.fitmate.fitgroupservice.persistence.repository.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -39,6 +33,9 @@ class FitMateServiceBootTest {
 
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
+
+    @Autowired
+    private lateinit var userForReadRepository: UserForReadRepository
 
     private val requestUserId = 11422
     private val leaderUserId = 873
@@ -76,6 +73,10 @@ class FitMateServiceBootTest {
         val fitLeader = FitLeader(savedFitGroup, leaderUserId, requestUserId.toString())
 
         this.fitLeader = fitLeaderRepository.save(fitLeader)
+
+        val userForRead = UserForRead(fitLeader.fitLeaderUserId, "testFitLeader", "testFitLeader")
+
+        userForReadRepository.save(userForRead)
 
         this.fitGroup = savedFitGroup
     }
@@ -194,6 +195,10 @@ class FitMateServiceBootTest {
 
         for (i in 1..maxFitMate) {
             fitMateRepository.save(FitMate(fitGroup, requestUserId + i, (requestUserId + i).toString()))
+
+            val fitMateUserForRead = UserForRead(requestUserId + i, "testFitMate" + i, "testFitMate" + i)
+
+            userForReadRepository.save(fitMateUserForRead)
         }
 
         //when then

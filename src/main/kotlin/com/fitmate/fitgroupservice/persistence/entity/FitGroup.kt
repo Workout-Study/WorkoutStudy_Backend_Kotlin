@@ -3,11 +3,9 @@ package com.fitmate.fitgroupservice.persistence.entity
 import com.fitmate.fitgroupservice.common.GlobalStatus
 import com.fitmate.fitgroupservice.dto.group.UpdateFitGroupRequest
 import jakarta.persistence.*
-import lombok.EqualsAndHashCode
 import java.time.Instant
 
 @Entity
-@EqualsAndHashCode
 class FitGroup(
     @Column(nullable = false) var fitGroupName: String,
     @Column(nullable = false) var penaltyAmount: Int,

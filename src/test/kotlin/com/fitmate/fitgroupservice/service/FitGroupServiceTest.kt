@@ -43,6 +43,9 @@ class FitGroupServiceTest {
     private lateinit var multiMediaEndPointRepository: MultiMediaEndPointRepository
 
     @Mock
+    private lateinit var userForReadRepository: UserForReadRepository
+
+    @Mock
     private lateinit var eventPublisher: ApplicationEventPublisher
 
     private val requestUserId = 11422
@@ -64,6 +67,7 @@ class FitGroupServiceTest {
     private lateinit var fitGroup: FitGroup
     private lateinit var fitLeader: FitLeader
     private lateinit var fitMate: FitMate
+    private lateinit var userForRead: UserForRead
     private val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
 
     @BeforeEach
@@ -77,9 +81,12 @@ class FitGroupServiceTest {
 
         fitMate = FitMate(fitGroup, requestUserId, requestUserId.toString())
 
+        userForRead = UserForRead(fitLeader.fitLeaderUserId, "testUser", "testUser")
+
         fitGroup.id = fitGroupId
         fitLeader.id = fitLeaderId
         fitMate.id = fitMateId
+        userForRead.id = fitLeaderId
         multiMediaEndPoints = multiMediaEndPoint.map { MultiMediaEndPoint(fitGroup, it, requestUserId.toString()) }
     }
 
@@ -417,6 +424,13 @@ class FitGroupServiceTest {
         Mockito.`when`(fitGroupRepository.findById(fitGroupId)).thenReturn(Optional.of(fitGroup))
         Mockito.`when`(fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
             .thenReturn(Optional.of(fitLeader))
+        Mockito.`when`(
+            userForReadRepository.findByUserIdAndState(
+                fitLeader.fitLeaderUserId,
+                GlobalStatus.PERSISTENCE_NOT_DELETED
+            )
+        )
+            .thenReturn(Optional.of(userForRead))
         Mockito.`when`(fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
             .thenReturn(presentFitMateCount)
         Mockito.`when`(
@@ -436,6 +450,13 @@ class FitGroupServiceTest {
         Mockito.`when`(fitGroupRepository.findById(fitGroupId)).thenReturn(Optional.of(fitGroup))
         Mockito.`when`(fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
             .thenReturn(Optional.of(fitLeader))
+        Mockito.`when`(
+            userForReadRepository.findByUserIdAndState(
+                fitLeader.fitLeaderUserId,
+                GlobalStatus.PERSISTENCE_NOT_DELETED
+            )
+        )
+            .thenReturn(Optional.of(userForRead))
         Mockito.`when`(fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
             .thenReturn(null)
         Mockito.`when`(
@@ -455,6 +476,13 @@ class FitGroupServiceTest {
         Mockito.`when`(fitGroupRepository.findById(fitGroupId)).thenReturn(Optional.of(fitGroup))
         Mockito.`when`(fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
             .thenReturn(Optional.of(fitLeader))
+        Mockito.`when`(
+            userForReadRepository.findByUserIdAndState(
+                fitLeader.fitLeaderUserId,
+                GlobalStatus.PERSISTENCE_NOT_DELETED
+            )
+        )
+            .thenReturn(Optional.of(userForRead))
         Mockito.`when`(fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
             .thenReturn(presentFitMateCount)
         Mockito.`when`(
