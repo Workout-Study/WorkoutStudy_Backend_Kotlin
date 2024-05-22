@@ -40,7 +40,7 @@ class FitGroupControllerTest {
     @MockBean
     private lateinit var fitGroupService: FitGroupService
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val bankCode = BankCode("090", "카카오뱅크")
@@ -166,7 +166,7 @@ class FitGroupControllerTest {
                     ),
                     responseFields(
                         fieldWithPath("fitGroupId").type(JsonFieldType.NUMBER).description("Fit group id"),
-                        fieldWithPath("fitLeaderUserId").type(JsonFieldType.STRING).description("Fit Leader User id"),
+                        fieldWithPath("fitLeaderUserId").type(JsonFieldType.NUMBER).description("Fit Leader User id"),
                         fieldWithPath("fitGroupName").type(JsonFieldType.STRING).description("Fit group 이름"),
                         fieldWithPath("penaltyAmount").type(JsonFieldType.NUMBER).description("운동 미인증 패널티 금액"),
                         fieldWithPath("penaltyAccountBankCode").type(JsonFieldType.STRING)
@@ -230,7 +230,7 @@ class FitGroupControllerTest {
                         parameterWithName(GlobalURI.PATH_VARIABLE_FIT_GROUP_ID).description("수정할 Fit group id")
                     ),
                     requestFields(
-                        fieldWithPath("requestUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("requestUserId").type(JsonFieldType.NUMBER)
                             .description("수정을 요청한 User id ( Fit Leader여야함 )"),
                         fieldWithPath("fitGroupName").type(JsonFieldType.STRING).description("수정할 Fit group 이름"),
                         fieldWithPath("penaltyAmount").type(JsonFieldType.NUMBER).description("수정할 운동 미인증 패널티 금액"),
@@ -282,7 +282,7 @@ class FitGroupControllerTest {
                         parameterWithName(GlobalURI.PATH_VARIABLE_FIT_GROUP_ID).description("삭제할 Fit group id")
                     ),
                     requestFields(
-                        fieldWithPath("requestUserId").type(JsonFieldType.STRING)
+                        fieldWithPath("requestUserId").type(JsonFieldType.NUMBER)
                             .description("삭제를 요청한 User id ( Fit Leader여야함 )")
                     ),
                     responseFields(

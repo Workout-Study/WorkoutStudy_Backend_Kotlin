@@ -58,7 +58,7 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
             )
             .fetch()
 
-    override fun filterFitGroupByUserId(userId: String): List<FitGroupFilterResponse> {
+    override fun filterFitGroupByUserId(userId: Int): List<FitGroupFilterResponse> {
         val subQueryFitMate = QFitMate("fitMate")
 
         return factory.select(

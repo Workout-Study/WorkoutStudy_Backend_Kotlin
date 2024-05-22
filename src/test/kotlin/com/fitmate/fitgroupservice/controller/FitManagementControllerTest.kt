@@ -36,8 +36,8 @@ class FitManagementControllerTest {
     @MockBean
     private lateinit var fitManagementService: FitManagementService
 
-    private val userId = "kickedUserId"
-    private val requestUserId = "leaderUserId"
+    private val userId = 861
+    private val requestUserId = 11422
     private val fitGroupId = 1L
 
     @Test

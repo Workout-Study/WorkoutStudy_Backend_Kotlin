@@ -51,8 +51,8 @@ class FitManagementControllerBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
-    private val requestUserId = "requestUserId"
-    private val fitMateUserId = "testUserId"
+    private val requestUserId = 764
+    private val fitMateUserId = 11413
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"

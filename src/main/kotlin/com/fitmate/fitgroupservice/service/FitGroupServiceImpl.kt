@@ -61,7 +61,7 @@ class FitGroupServiceImpl(
     private fun createMultiMediaEndPoint(
         endPoint: String,
         fitGroup: FitGroup,
-        requestUserId: String
+        requestUserId: Int
     ): MultiMediaEndPoint =
         MultiMediaEndPoint(fitGroup, endPoint, requestUserId)
 
@@ -206,7 +206,7 @@ class FitGroupServiceImpl(
         if (fitMates.isNotEmpty()) eventPublisher.publishEvent(DeleteFitMateEvent(fitGroup.id!!, fitMates[0].id!!))
     }
 
-    private fun checkFitLeaderWithRequestUser(fitLeader: FitLeader, requestUserId: String) {
+    private fun checkFitLeaderWithRequestUser(fitLeader: FitLeader, requestUserId: Int) {
         if (fitLeader.fitLeaderUserId != requestUserId)
             throw BadRequestException("Request user does not match with fit leader. fit group only the leader can update.")
     }

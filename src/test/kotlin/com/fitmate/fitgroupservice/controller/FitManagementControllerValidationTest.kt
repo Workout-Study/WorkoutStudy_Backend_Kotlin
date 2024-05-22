@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.EmptySource
+import org.junit.jupiter.params.provider.NullSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -33,8 +33,8 @@ class FitManagementControllerValidationTest {
     @MockBean
     private lateinit var fitManagementService: FitManagementService
 
-    private val userId = "kickedUserId"
-    private val requestUserId = "leaderUserId"
+    private val userId = 8442
+    private val requestUserId = 11422
     private val fitGroupId = 1L
 
     @Test
@@ -62,10 +62,10 @@ class FitManagementControllerValidationTest {
     }
 
     @ParameterizedTest
-    @EmptySource
+    @NullSource
     @DisplayName("[단위][Controller] Fit management fit mate 추방 fit mate user id - Validation 실패 테스트")
     @Throws(Exception::class)
-    fun `kick fit mate controller fit mate user id validation fail test`(testFitMateUserId: String) {
+    fun `kick fit mate controller fit mate user id validation fail test`(testFitMateUserId: Int?) {
         //given
         val kickFitMateRequest = KickFitMateRequest(requestUserId)
 

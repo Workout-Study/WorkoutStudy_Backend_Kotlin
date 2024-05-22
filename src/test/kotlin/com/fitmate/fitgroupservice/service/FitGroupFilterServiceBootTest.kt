@@ -43,7 +43,7 @@ class FitGroupFilterServiceBootTest {
     private val pageSize = 5
     private val pageRequest = PageRequest.of(pageNumber, pageSize)
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -80,7 +80,7 @@ class FitGroupFilterServiceBootTest {
             fitLeaderRepository.save(FitLeader(savedFitGroup, requestUserId + i, requestUserId + i))
 
             for (j in i..maxFitMate) {
-                val fitMate = FitMate(savedFitGroup, j.toString(), j.toString())
+                val fitMate = FitMate(savedFitGroup, j, j)
                 fitMateRepository.save(fitMate)
             }
         }
@@ -103,7 +103,7 @@ class FitGroupFilterServiceBootTest {
         fitLeaderRepository.save(FitLeader(maxFitMateGroup, requestUserId, requestUserId))
 
         for (i in 1..<maxFitMate) {
-            val fitMate = FitMate(maxFitMateGroup, i.toString(), i.toString())
+            val fitMate = FitMate(maxFitMateGroup, i, i)
             fitMateRepository.save(fitMate)
         }
 
@@ -123,7 +123,7 @@ class FitGroupFilterServiceBootTest {
         withOutLeaderFitGroup = fitGroupRepository.save(otherFitGroup)
 
         for (i in 1..maxFitMate) {
-            val fitMate = FitMate(withOutLeaderFitGroup, i.toString(), i.toString())
+            val fitMate = FitMate(withOutLeaderFitGroup, i, i)
             fitMateRepository.save(fitMate)
         }
     }

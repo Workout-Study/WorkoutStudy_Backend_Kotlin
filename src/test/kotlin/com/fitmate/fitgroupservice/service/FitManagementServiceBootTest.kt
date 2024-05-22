@@ -38,8 +38,8 @@ class FitManagementServiceBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
-    private val fitMateUserId = "fitMateUserId"
-    private val requestUserId = "testUserId"
+    private val fitMateUserId = 9623
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -65,12 +65,12 @@ class FitManagementServiceBootTest {
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, "test"
+                ?: 1, frequency, maxFitMate, requestUserId
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, "test")
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId)
 
         this.fitLeader = fitLeaderRepository.save(fitLeader)
 
@@ -168,7 +168,9 @@ class FitManagementServiceBootTest {
         fitLeader.delete()
         fitLeaderRepository.save(fitLeader)
 
-        val wrongFitLeader = FitLeader(fitGroup, "notMatchedLeader", "test")
+        val notMatchedLeaderUserId = requestUserId % 2
+
+        val wrongFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId)
         fitLeaderRepository.save(wrongFitLeader)
 
         //when then

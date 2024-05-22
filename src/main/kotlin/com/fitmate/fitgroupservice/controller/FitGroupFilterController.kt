@@ -35,7 +35,7 @@ class FitGroupFilterController(private val fitGroupFilterService: FitGroupFilter
      */
     @GetMapping(GlobalURI.FILTER_ROOT + GlobalURI.PATH_VARIABLE_USER_ID_WITH_BRACE)
     fun getFitGroupListByUserId(
-        @PathVariable(GlobalURI.PATH_VARIABLE_USER_ID) userId: String,
+        @PathVariable(GlobalURI.PATH_VARIABLE_USER_ID) userId: Int,
     ): ResponseEntity<FitGroupDetailsResponse> {
         return ResponseEntity.ok().body(fitGroupFilterService.getFitGroupListByUserId(userId))
     }

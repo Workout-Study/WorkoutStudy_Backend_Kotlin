@@ -45,7 +45,7 @@ class FitGroupServiceTest {
     @Mock
     private lateinit var eventPublisher: ApplicationEventPublisher
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -327,7 +327,7 @@ class FitGroupServiceTest {
             multiMediaEndPoint
         )
 
-        val notMatchedLeaderUserId = "notMatchedLeaderUserId"
+        val notMatchedLeaderUserId = requestUserId % 2
 
         val notMatchFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId)
 
@@ -560,7 +560,7 @@ class FitGroupServiceTest {
         //given
         val deleteFitGroupRequest = DeleteFitGroupRequest(requestUserId)
 
-        val notMatchedLeaderUserId = "notMatchedLeaderUserId"
+        val notMatchedLeaderUserId = requestUserId % 2
 
         val notMatchFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId)
 

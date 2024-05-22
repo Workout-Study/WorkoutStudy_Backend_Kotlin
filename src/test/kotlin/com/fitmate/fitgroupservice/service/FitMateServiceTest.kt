@@ -44,7 +44,7 @@ class FitMateServiceTest {
     @Mock
     private lateinit var eventPublisher: ApplicationEventPublisher
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val bankCode = BankCode("090", "카카오뱅크")

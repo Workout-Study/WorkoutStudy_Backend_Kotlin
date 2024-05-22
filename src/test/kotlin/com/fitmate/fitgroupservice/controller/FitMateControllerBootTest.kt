@@ -50,7 +50,7 @@ class FitMateControllerBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -70,12 +70,12 @@ class FitMateControllerBootTest {
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, "test"
+                ?: 1, frequency, maxFitMate, requestUserId
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, "test")
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId)
 
         fitLeaderRepository.save(fitLeader)
 
@@ -91,7 +91,7 @@ class FitMateControllerBootTest {
     @Throws(Exception::class)
     fun `register fit mate controller success test`() {
         //given
-        val registerFitMateRequest = RegisterMateRequest("newTestUserId", fitGroup.id!!)
+        val registerFitMateRequest = RegisterMateRequest(741, fitGroup.id!!)
 
         //when
         val resultActions = mockMvc.perform(

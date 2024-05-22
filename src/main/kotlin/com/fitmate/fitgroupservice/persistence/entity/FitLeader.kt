@@ -11,9 +11,9 @@ class FitLeader(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fit_group_id", nullable = false)
     val fitGroup: FitGroup,
-    @Column(nullable = false) val fitLeaderUserId: String,
-    createUser: String
-) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
+    @Column(nullable = false) val fitLeaderUserId: Int,
+    createUser: Int
+) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser.toString()) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

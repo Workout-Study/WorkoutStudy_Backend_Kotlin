@@ -37,7 +37,7 @@ class FitGroupServiceBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
-    private val requestUserId = "testUserId"
+    private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
     private val penaltyAccountBankCode = "090"
@@ -60,12 +60,12 @@ class FitGroupServiceBootTest {
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, "test"
+                ?: 1, frequency, maxFitMate, requestUserId
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, "test")
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId)
 
         this.fitLeader = fitLeaderRepository.save(fitLeader)
 
@@ -246,7 +246,7 @@ class FitGroupServiceBootTest {
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
-        val notMatchedLeaderUserId = "notMatchedLeaderUserId"
+        val notMatchedLeaderUserId = requestUserId % 2
 
         val newFitGroup = fitGroupRepository.save(
             FitGroup(
@@ -314,7 +314,7 @@ class FitGroupServiceBootTest {
     fun `get fit group detail service success test`() {
         //given
         fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId))
-        multiMediaEndPointRepository.save(MultiMediaEndPoint(fitGroup, requestUserId, requestUserId))
+        multiMediaEndPointRepository.save(MultiMediaEndPoint(fitGroup, multiMediaEndPoint[0], requestUserId))
 
         //when then
         Assertions.assertDoesNotThrow { fitGroupService.getFitGroupDetail(fitGroup.id!!) }
@@ -324,7 +324,7 @@ class FitGroupServiceBootTest {
     @DisplayName("[통합][Service] Get fit group detail data fit mate null count - 성공 테스트")
     fun `get fit group detail service fit mate null count success test`() {
         //given
-        multiMediaEndPointRepository.save(MultiMediaEndPoint(fitGroup, requestUserId, requestUserId))
+        multiMediaEndPointRepository.save(MultiMediaEndPoint(fitGroup, multiMediaEndPoint[0], requestUserId))
 
         //when then
         Assertions.assertDoesNotThrow { fitGroupService.getFitGroupDetail(fitGroup.id!!) }
@@ -434,7 +434,7 @@ class FitGroupServiceBootTest {
         //given
         val deleteFitGroupRequest = DeleteFitGroupRequest(requestUserId)
 
-        val notMatchedLeaderUserId = "notMatchedLeaderUserId"
+        val notMatchedLeaderUserId = requestUserId % 2
 
         val newFitGroup = fitGroupRepository.save(
             FitGroup(
