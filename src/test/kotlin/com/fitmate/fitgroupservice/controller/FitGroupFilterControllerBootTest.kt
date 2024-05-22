@@ -86,15 +86,15 @@ class FitGroupFilterControllerBootTest {
                 cycle ?: 1,
                 frequency,
                 maxFitMate + i,
-                requestUserId + i
+                (requestUserId + i).toString()
             )
 
             val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-            fitLeaderRepository.save(FitLeader(savedFitGroup, requestUserId + i, requestUserId + i))
+            fitLeaderRepository.save(FitLeader(savedFitGroup, requestUserId + i, (requestUserId + i).toString()))
 
             for (j in i..maxFitMate) {
-                val fitMate = FitMate(savedFitGroup, j, j)
+                val fitMate = FitMate(savedFitGroup, j, j.toString())
                 fitMateRepository.save(fitMate)
             }
         }
@@ -109,15 +109,15 @@ class FitGroupFilterControllerBootTest {
             cycle ?: 1,
             frequency,
             maxFitMate,
-            requestUserId
+            requestUserId.toString()
         )
 
         maxFitMateGroup = fitGroupRepository.save(fitGroup)
 
-        fitLeaderRepository.save(FitLeader(maxFitMateGroup, requestUserId, requestUserId))
+        fitLeaderRepository.save(FitLeader(maxFitMateGroup, requestUserId, requestUserId.toString()))
 
         for (i in 1..<maxFitMate) {
-            val fitMate = FitMate(maxFitMateGroup, i, i)
+            val fitMate = FitMate(maxFitMateGroup, i, i.toString())
             fitMateRepository.save(fitMate)
         }
 
@@ -131,13 +131,13 @@ class FitGroupFilterControllerBootTest {
             cycle ?: 1,
             frequency,
             maxFitMate,
-            requestUserId
+            requestUserId.toString()
         )
 
         withOutLeaderFitGroup = fitGroupRepository.save(otherFitGroup)
 
         for (i in 1..maxFitMate) {
-            val fitMate = FitMate(withOutLeaderFitGroup, i, i)
+            val fitMate = FitMate(withOutLeaderFitGroup, i, i.toString())
             fitMateRepository.save(fitMate)
         }
     }

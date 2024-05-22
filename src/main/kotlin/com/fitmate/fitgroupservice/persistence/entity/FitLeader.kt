@@ -12,8 +12,8 @@ class FitLeader(
     @JoinColumn(name = "fit_group_id", nullable = false)
     val fitGroup: FitGroup,
     @Column(nullable = false) val fitLeaderUserId: Int,
-    createUser: Int
-) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser.toString()) {
+    createUser: String
+) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

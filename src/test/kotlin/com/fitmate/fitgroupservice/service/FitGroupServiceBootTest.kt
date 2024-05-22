@@ -65,12 +65,12 @@ class FitGroupServiceBootTest {
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, requestUserId
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId)
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId.toString())
 
         this.fitLeader = fitLeaderRepository.save(fitLeader)
 
@@ -256,10 +256,10 @@ class FitGroupServiceBootTest {
         val newFitGroup = fitGroupRepository.save(
             FitGroup(
                 fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                    ?: 1, frequency, maxFitMate, notMatchedLeaderUserId
+                    ?: 1, frequency, maxFitMate, notMatchedLeaderUserId.toString()
             )
         )
-        val notMatchFitLeader = FitLeader(newFitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId)
+        val notMatchFitLeader = FitLeader(newFitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId.toString())
         fitLeaderRepository.save(notMatchFitLeader)
 
         //when then
@@ -278,7 +278,7 @@ class FitGroupServiceBootTest {
         val newMaxFitMate = 2
 
         for (i in 0..newMaxFitMate) {
-            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, requestUserId + i))
+            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, (requestUserId + i).toString()))
         }
 
         val updateFitGroupRequest = UpdateFitGroupRequest(
@@ -318,8 +318,8 @@ class FitGroupServiceBootTest {
     @DisplayName("[통합][Service] Get fit group detail data - 성공 테스트")
     fun `get fit group detail service success test`() {
         //given
-        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId))
-        multiMediaEndPointRepository.save(MultiMediaEndPoint(fitGroup, multiMediaEndPoint[0], requestUserId))
+        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId.toString()))
+        multiMediaEndPointRepository.save(MultiMediaEndPoint(fitGroup, multiMediaEndPoint[0], requestUserId.toString()))
 
         //when then
         Assertions.assertDoesNotThrow { fitGroupService.getFitGroupDetail(fitGroup.id!!) }
@@ -329,7 +329,7 @@ class FitGroupServiceBootTest {
     @DisplayName("[통합][Service] Get fit group detail data fit mate null count - 성공 테스트")
     fun `get fit group detail service fit mate null count success test`() {
         //given
-        multiMediaEndPointRepository.save(MultiMediaEndPoint(fitGroup, multiMediaEndPoint[0], requestUserId))
+        multiMediaEndPointRepository.save(MultiMediaEndPoint(fitGroup, multiMediaEndPoint[0], requestUserId.toString()))
 
         //when then
         Assertions.assertDoesNotThrow { fitGroupService.getFitGroupDetail(fitGroup.id!!) }
@@ -339,7 +339,7 @@ class FitGroupServiceBootTest {
     @DisplayName("[통합][Service] Get fit group detail data multi media end point null - 성공 테스트")
     fun `get fit group detail service multi media end point null success test`() {
         //given
-        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId))
+        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId.toString()))
 
         //when then
         Assertions.assertDoesNotThrow { fitGroupService.getFitGroupDetail(fitGroup.id!!) }
@@ -366,7 +366,7 @@ class FitGroupServiceBootTest {
     @DisplayName("[통합][Service] Delete fit group - 성공 테스트")
     fun `delete fit group service success test`() {
         //given
-        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId))
+        fitMateRepository.save(FitMate(fitGroup, requestUserId, requestUserId.toString()))
 
         val deleteFitGroupRequest = DeleteFitGroupRequest(requestUserId)
 
@@ -444,10 +444,10 @@ class FitGroupServiceBootTest {
         val newFitGroup = fitGroupRepository.save(
             FitGroup(
                 fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                    ?: 1, frequency, maxFitMate, notMatchedLeaderUserId
+                    ?: 1, frequency, maxFitMate, notMatchedLeaderUserId.toString()
             )
         )
-        val notMatchFitLeader = FitLeader(newFitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId)
+        val notMatchFitLeader = FitLeader(newFitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId.toString())
         fitLeaderRepository.save(notMatchFitLeader)
         //when then
         Assertions.assertThrows(BadRequestException::class.java) {

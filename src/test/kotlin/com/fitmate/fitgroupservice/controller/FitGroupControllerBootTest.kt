@@ -70,12 +70,12 @@ class FitGroupControllerBootTest {
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, requestUserId
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId)
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId.toString())
 
         fitLeaderRepository.save(fitLeader)
 

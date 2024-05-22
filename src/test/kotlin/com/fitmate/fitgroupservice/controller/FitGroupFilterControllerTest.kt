@@ -256,12 +256,12 @@ class FitGroupFilterControllerTest {
                 cycle ?: 1,
                 frequency,
                 maxFitMate + i,
-                requestUserId + i
+                (requestUserId + i).toString()
             )
 
             fitGroup.id = fitGroupId + i
 
-            val fitLeader = FitLeader(fitGroup, requestUserId + i, requestUserId + i)
+            val fitLeader = FitLeader(fitGroup, requestUserId + i, (requestUserId + i).toString())
 
             fitLeader.id = fitLeaderId + i
 

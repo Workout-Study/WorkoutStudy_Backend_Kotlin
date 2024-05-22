@@ -73,19 +73,19 @@ class FitMateControllerBootTest {
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, requestUserId
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId)
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId.toString())
 
         fitLeaderRepository.save(fitLeader)
 
         this.fitGroup = savedFitGroup
 
         for (i in 0..3) {
-            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, requestUserId + i))
+            fitMateRepository.save(FitMate(fitGroup, requestUserId + i, (requestUserId + i).toString()))
         }
     }
 
@@ -133,7 +133,7 @@ class FitMateControllerBootTest {
         //given
         val fitMateUserId = requestUserId % 2
 
-        fitMateRepository.save(FitMate(fitGroup, fitMateUserId, fitMateUserId))
+        fitMateRepository.save(FitMate(fitGroup, fitMateUserId, fitMateUserId.toString()))
 
         val deleteMateRequest = DeleteMateRequest(fitMateUserId)
         //when

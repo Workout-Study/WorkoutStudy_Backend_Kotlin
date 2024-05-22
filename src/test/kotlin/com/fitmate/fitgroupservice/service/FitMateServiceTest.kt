@@ -66,16 +66,16 @@ class FitMateServiceTest {
     fun setFitGroupAndFitLeader() {
         fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, requestUserId
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         fitGroup.id = fitGroupId
 
-        fitLeader = FitLeader(fitGroup, requestUserId, requestUserId)
+        fitLeader = FitLeader(fitGroup, requestUserId, requestUserId.toString())
 
         fitLeader.id = fitLeaderId
 
-        fitMate = FitMate(fitGroup, requestUserId, requestUserId)
+        fitMate = FitMate(fitGroup, requestUserId, requestUserId.toString())
 
         fitMate.id = fitMateId
     }

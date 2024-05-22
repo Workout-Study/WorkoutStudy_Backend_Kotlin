@@ -64,16 +64,16 @@ class FitManagementServiceTest {
     fun setFitGroupAndFitLeader() {
         fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, requestUserId
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         fitGroup.id = fitGroupId
 
-        fitLeader = FitLeader(fitGroup, requestUserId, requestUserId)
+        fitLeader = FitLeader(fitGroup, requestUserId, requestUserId.toString())
 
         fitLeader.id = fitLeaderId
 
-        fitMate = FitMate(fitGroup, fitMateUserId, fitMateUserId)
+        fitMate = FitMate(fitGroup, fitMateUserId, fitMateUserId.toString())
 
         fitMate.id = fitMateId
     }
@@ -184,7 +184,7 @@ class FitManagementServiceTest {
 
         val notMatchedLeaderUserId = requestUserId % 2
 
-        val wrongFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId)
+        val wrongFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId.toString())
 
         Mockito.`when`(fitGroupRepository.findById(fitGroup.id!!)).thenReturn(Optional.of(fitGroup))
         Mockito.`when`(

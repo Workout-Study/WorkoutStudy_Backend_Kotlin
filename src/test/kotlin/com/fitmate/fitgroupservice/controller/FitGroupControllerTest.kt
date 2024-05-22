@@ -65,10 +65,10 @@ class FitGroupControllerTest {
         cycle ?: 1,
         frequency,
         maxFitMate,
-        requestUserId
+        requestUserId.toString()
     )
 
-    private val fitLeader = FitLeader(fitGroup, requestUserId, requestUserId)
+    private val fitLeader = FitLeader(fitGroup, requestUserId, requestUserId.toString())
 
     @BeforeEach
     fun setFitGroupFitLeaderId() {

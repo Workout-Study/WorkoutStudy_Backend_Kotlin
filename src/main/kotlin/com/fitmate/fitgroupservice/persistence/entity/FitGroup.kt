@@ -23,8 +23,8 @@ class FitGroup(
     var cycle: Int,
     @Column(nullable = false) var frequency: Int,
     @Column(nullable = false) var maxFitMate: Int,
-    createUser: Int
-) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser.toString()) {
+    createUser: String
+) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

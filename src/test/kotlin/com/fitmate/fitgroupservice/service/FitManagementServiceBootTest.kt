@@ -70,18 +70,18 @@ class FitManagementServiceBootTest {
 
         val fitGroup = FitGroup(
             fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, requestUserId
+                ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
         val savedFitGroup = fitGroupRepository.save(fitGroup)
 
-        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId)
+        val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId.toString())
 
         this.fitLeader = fitLeaderRepository.save(fitLeader)
 
         this.fitGroup = savedFitGroup
 
-        this.fitMate = fitMateRepository.save(FitMate(savedFitGroup, fitMateUserId, fitMateUserId))
+        this.fitMate = fitMateRepository.save(FitMate(savedFitGroup, fitMateUserId, fitMateUserId.toString()))
     }
 
     @Test
@@ -175,7 +175,7 @@ class FitManagementServiceBootTest {
 
         val notMatchedLeaderUserId = requestUserId % 2
 
-        val wrongFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId)
+        val wrongFitLeader = FitLeader(fitGroup, notMatchedLeaderUserId, notMatchedLeaderUserId.toString())
         fitLeaderRepository.save(wrongFitLeader)
 
         //when then

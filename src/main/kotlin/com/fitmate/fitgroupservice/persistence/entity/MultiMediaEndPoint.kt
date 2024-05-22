@@ -12,8 +12,8 @@ class MultiMediaEndPoint(
     @JoinColumn(name = "fit_group_id", nullable = false)
     val fitGroup: FitGroup,
     val endPoint: String,
-    createUser: Int
-) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser.toString()) {
+    createUser: String
+) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
