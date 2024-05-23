@@ -43,4 +43,10 @@ class GlobalExceptionHandler {
         logger?.info("ResourceNotFoundException", resourceNotFoundException)
         return ResponseEntity.badRequest().body(resourceNotFoundException.message)
     }
+
+    @ExceptionHandler(NotExpectResultException::class)
+    fun notExpectResultException(notExpectResultException: NotExpectResultException): ResponseEntity<String> {
+        logger?.info("NotExpectResultException", notExpectResultException)
+        return ResponseEntity.badRequest().body(notExpectResultException.message)
+    }
 }

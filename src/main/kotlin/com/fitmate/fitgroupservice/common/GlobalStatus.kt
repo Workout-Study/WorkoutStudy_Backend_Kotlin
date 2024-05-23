@@ -11,5 +11,10 @@ class GlobalStatus {
 
         const val KAFKA_TOPIC_FIT_GROUP = "fit-group"
         const val KAFKA_TOPIC_FIT_MATE = "fit-mate"
+        const val KAFKA_TOPIC_USER_CREATE_EVENT = "user-create-event"
+        const val KAFKA_TOPIC_USER_DELETE_EVENT = "user-delete-event"
+        const val KAFKA_TOPIC_USER_UPDATE_EVENT = "user-update-event"
+
+        const val KAFKA_GROUP_ID = "fit-group-service"
     }
 }

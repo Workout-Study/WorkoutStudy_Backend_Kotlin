@@ -6,9 +6,11 @@ import com.fitmate.fitgroupservice.dto.group.*
 import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
+import com.fitmate.fitgroupservice.persistence.entity.UserForRead
 import com.fitmate.fitgroupservice.persistence.repository.BankCodeRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
+import com.fitmate.fitgroupservice.persistence.repository.UserForReadRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -44,6 +46,9 @@ class FitGroupControllerBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
+    @Autowired
+    private lateinit var userForReadRepository: UserForReadRepository
+
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
@@ -78,6 +83,10 @@ class FitGroupControllerBootTest {
         val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId.toString())
 
         fitLeaderRepository.save(fitLeader)
+
+        val userForRead = UserForRead(fitLeader.fitLeaderUserId, "testFitLeader", "testFitLeader")
+
+        userForReadRepository.save(userForRead)
 
         this.fitGroup = savedFitGroup
     }

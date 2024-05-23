@@ -10,9 +10,11 @@ import com.fitmate.fitgroupservice.exception.ResourceNotFoundException
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.FitMate
+import com.fitmate.fitgroupservice.persistence.entity.UserForRead
 import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
+import com.fitmate.fitgroupservice.persistence.repository.UserForReadRepository
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -22,6 +24,7 @@ class FitMateServiceImpl(
     private val fitMateRepository: FitMateRepository,
     private val fitGroupRepository: FitGroupRepository,
     private val fitLeaderRepository: FitLeaderRepository,
+    private val userForReadRepository: UserForReadRepository,
     private val eventPublisher: ApplicationEventPublisher
 ) : FitMateService {
 
@@ -83,18 +86,33 @@ class FitMateServiceImpl(
         val fitMates = fitMateRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
 
         val fitMatesDetails = fitMates?.map {
+            val userForRead =
+                userForReadRepository.findByUserIdAndState(it.fitMateUserId, GlobalStatus.PERSISTENCE_NOT_DELETED)
+                    .orElseThrow { ResourceNotFoundException("user for read does not exist") }
+
             FitMateDetailDto(
                 it.id!!,
                 it.fitMateUserId,
+                userForRead.nickname,
                 it.createdAt
             )
         } ?: listOf()
 
-        val fitLeader: FitLeader? = if (optionalFitLeader.isPresent) optionalFitLeader.get() else null
+        var fitLeaderUserForRead: UserForRead? = null
+
+        val fitLeader: FitLeader? = if (optionalFitLeader.isPresent) {
+            fitLeaderUserForRead =
+                userForReadRepository.findByUserIdAndState(
+                    optionalFitLeader.get().fitLeaderUserId,
+                    GlobalStatus.PERSISTENCE_NOT_DELETED
+                )
+                    .orElseThrow { ResourceNotFoundException("user for read does not exist") }
+            optionalFitLeader.get()
+        } else null
 
         return FitMateDetailsResponse(
             fitGroup.id!!,
-            FitLeaderDetailDto(fitLeader?.fitLeaderUserId, fitLeader?.createdAt),
+            FitLeaderDetailDto(fitLeader?.fitLeaderUserId, fitLeaderUserForRead?.nickname, fitLeader?.createdAt),
             fitMatesDetails
         )
     }

@@ -3,14 +3,8 @@ package com.fitmate.fitgroupservice.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.mate.*
-import com.fitmate.fitgroupservice.persistence.entity.BankCode
-import com.fitmate.fitgroupservice.persistence.entity.FitGroup
-import com.fitmate.fitgroupservice.persistence.entity.FitLeader
-import com.fitmate.fitgroupservice.persistence.entity.FitMate
-import com.fitmate.fitgroupservice.persistence.repository.BankCodeRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
-import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
+import com.fitmate.fitgroupservice.persistence.entity.*
+import com.fitmate.fitgroupservice.persistence.repository.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -49,6 +43,9 @@ class FitMateControllerBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
+    @Autowired
+    private lateinit var userForReadRepository: UserForReadRepository
+
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
@@ -82,10 +79,18 @@ class FitMateControllerBootTest {
 
         fitLeaderRepository.save(fitLeader)
 
+        val userForRead = UserForRead(fitLeader.fitLeaderUserId, "testFitLeader", "testFitLeader")
+
+        userForReadRepository.save(userForRead)
+
         this.fitGroup = savedFitGroup
 
-        for (i in 0..3) {
+        for (i in 1..3) {
             fitMateRepository.save(FitMate(fitGroup, requestUserId + i, (requestUserId + i).toString()))
+
+            val fitMateUserForRead = UserForRead(requestUserId + i, "testFitMate" + i, "testFitMate" + i)
+
+            userForReadRepository.save(fitMateUserForRead)
         }
     }
 

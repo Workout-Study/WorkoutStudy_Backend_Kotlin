@@ -1,12 +1,10 @@
 package com.fitmate.fitgroupservice.persistence.entity
 
 import jakarta.persistence.*
-import lombok.EqualsAndHashCode
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters
 import java.time.Instant
 
 @Entity
-@EqualsAndHashCode
 class FitGroupHistory(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fit_group_id", nullable = false) val fitGroup: FitGroup

@@ -10,6 +10,7 @@ import com.fitmate.fitgroupservice.persistence.repository.*
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class FitGroupServiceImpl(
@@ -18,6 +19,7 @@ class FitGroupServiceImpl(
     private val fitMateRepository: FitMateRepository,
     private val multiMediaEndPointRepository: MultiMediaEndPointRepository,
     private val bankCodeRepository: BankCodeRepository,
+    private val userForReadReadRepository: UserForReadRepository,
     private val eventPublisher: ApplicationEventPublisher
 ) : FitGroupService {
 
@@ -96,16 +98,22 @@ class FitGroupServiceImpl(
     override fun getFitGroupDetail(fitGroupId: Long): FitGroupDetailResponse {
         val fitGroup = findFitGroupAndGet(fitGroupId)
         val fitLeader = findFitLeaderAndGet(fitGroup)
+        val userForRead = findUserForReadAndGet(fitLeader.fitLeaderUserId)
 
         return FitGroupDetailResponse(
             fitLeader,
             fitGroup,
+            userForRead,
             getFitMateCountByFitGroup(fitGroup),
             findMultiMediaEndPointsAndGet(fitGroup)
         )
     }
 
-    private fun findFitGroupAndGet(fitGroupId: Long): FitGroup =
+    private fun findUserForReadAndGet(userId: Int): UserForRead? =
+        userForReadReadRepository.findByUserIdAndState(userId, GlobalStatus.PERSISTENCE_NOT_DELETED)
+            .getOrNull()
+
+    fun findFitGroupAndGet(fitGroupId: Long): FitGroup =
         fitGroupRepository.findById(fitGroupId)
             .orElseThrow { ResourceNotFoundException("Fit group does not exist") }
 

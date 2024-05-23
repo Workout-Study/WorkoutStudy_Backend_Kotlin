@@ -81,10 +81,10 @@ class FitMateControllerTest {
         //given
         val fitMateDetailsResponse = FitMateDetailsResponse(
             fitGroupId,
-            FitLeaderDetailDto(7, Instant.now()),
+            FitLeaderDetailDto(7, "testUserId", Instant.now()),
             listOf(
-                FitMateDetailDto(1L, 8, Instant.now()),
-                FitMateDetailDto(2L, 9, Instant.now())
+                FitMateDetailDto(1L, 8, "testUserId8", Instant.now()),
+                FitMateDetailDto(2L, 9, "testUserId9", Instant.now())
             )
         )
 
@@ -110,6 +110,8 @@ class FitMateControllerTest {
                         fieldWithPath("fitLeaderDetail").type(JsonFieldType.OBJECT).description("fit group의 리더 detail"),
                         fieldWithPath("fitLeaderDetail.fitLeaderUserId").type(JsonFieldType.NUMBER)
                             .description("fit group 리더의 user id"),
+                        fieldWithPath("fitLeaderDetail.fitLeaderUserNickname").type(JsonFieldType.STRING)
+                            .description("fit group 리더의 user nickname"),
                         fieldWithPath("fitLeaderDetail.createdAt").type(JsonFieldType.STRING)
                             .description("fit group 리더의 선정일시"),
                         fieldWithPath("fitMateDetails").type(JsonFieldType.ARRAY).description("fit mate list"),
@@ -117,6 +119,8 @@ class FitMateControllerTest {
                             .description("fit mate id"),
                         fieldWithPath("fitMateDetails[].fitMateUserId").type(JsonFieldType.NUMBER)
                             .description("fit mate 의 user id"),
+                        fieldWithPath("fitMateDetails[].fitMateUserNickname").type(JsonFieldType.STRING)
+                            .description("fit mate 의 user nickname"),
                         fieldWithPath("fitMateDetails[].createdAt").type(JsonFieldType.STRING)
                             .description("fit mate 등록일시")
                     )
