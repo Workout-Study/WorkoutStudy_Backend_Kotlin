@@ -6,6 +6,7 @@ import com.fitmate.fitgroupservice.dto.group.*
 import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
+import com.fitmate.fitgroupservice.persistence.entity.UserForRead
 import com.fitmate.fitgroupservice.service.FitGroupService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -69,6 +70,8 @@ class FitGroupControllerTest {
     )
 
     private val fitLeader = FitLeader(fitGroup, requestUserId, requestUserId.toString())
+
+    private val userForRead = UserForRead(requestUserId, "testUser", "testUser")
 
     @BeforeEach
     fun setFitGroupFitLeaderId() {
@@ -144,6 +147,7 @@ class FitGroupControllerTest {
         val fitGroupDetailResponse = FitGroupDetailResponse(
             fitLeader,
             fitGroup,
+            userForRead,
             presentFitMateCount,
             multiMediaEndPoint
         )
@@ -167,6 +171,8 @@ class FitGroupControllerTest {
                     responseFields(
                         fieldWithPath("fitGroupId").type(JsonFieldType.NUMBER).description("Fit group id"),
                         fieldWithPath("fitLeaderUserId").type(JsonFieldType.NUMBER).description("Fit Leader User id"),
+                        fieldWithPath("fitGroupLeaderUserNickname").type(JsonFieldType.STRING)
+                            .description("Fit Leader User nickname"),
                         fieldWithPath("fitGroupName").type(JsonFieldType.STRING).description("Fit group 이름"),
                         fieldWithPath("penaltyAmount").type(JsonFieldType.NUMBER).description("운동 미인증 패널티 금액"),
                         fieldWithPath("penaltyAccountBankCode").type(JsonFieldType.STRING)

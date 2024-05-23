@@ -6,13 +6,11 @@ import com.fitmate.fitgroupservice.dto.mate.RegisterMateRequest
 import com.fitmate.fitgroupservice.exception.BadRequestException
 import com.fitmate.fitgroupservice.exception.ResourceAlreadyExistException
 import com.fitmate.fitgroupservice.exception.ResourceNotFoundException
-import com.fitmate.fitgroupservice.persistence.entity.BankCode
-import com.fitmate.fitgroupservice.persistence.entity.FitGroup
-import com.fitmate.fitgroupservice.persistence.entity.FitLeader
-import com.fitmate.fitgroupservice.persistence.entity.FitMate
+import com.fitmate.fitgroupservice.persistence.entity.*
 import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
+import com.fitmate.fitgroupservice.persistence.repository.UserForReadRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -42,6 +40,9 @@ class FitMateServiceTest {
     private lateinit var fitMateRepository: FitMateRepository
 
     @Mock
+    private lateinit var userForReadRepository: UserForReadRepository
+
+    @Mock
     private lateinit var eventPublisher: ApplicationEventPublisher
 
     private val requestUserId = 11422
@@ -61,6 +62,7 @@ class FitMateServiceTest {
     private lateinit var fitGroup: FitGroup
     private lateinit var fitLeader: FitLeader
     private lateinit var fitMate: FitMate
+    private lateinit var userForRead: UserForRead
 
     @BeforeEach
     fun setFitGroupAndFitLeader() {
@@ -78,6 +80,10 @@ class FitMateServiceTest {
         fitMate = FitMate(fitGroup, requestUserId, requestUserId.toString())
 
         fitMate.id = fitMateId
+
+        userForRead = UserForRead(fitLeader.fitLeaderUserId, "testUser", "testUser")
+
+        userForRead.id = fitLeaderId
     }
 
     @Test
@@ -246,6 +252,13 @@ class FitMateServiceTest {
         Mockito.`when`(
             fitMateRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
         ).thenReturn(listOf(fitMate))
+        Mockito.`when`(
+            userForReadRepository.findByUserIdAndState(
+                fitLeader.fitLeaderUserId,
+                GlobalStatus.PERSISTENCE_NOT_DELETED
+            )
+        )
+            .thenReturn(Optional.of(userForRead))
         //when then
         Assertions.assertDoesNotThrow { fitMateService.getFitMateListByFitGroup(fitGroup.id!!) }
     }
@@ -264,6 +277,13 @@ class FitMateServiceTest {
         Mockito.`when`(
             fitMateRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
         ).thenReturn(listOf())
+        Mockito.`when`(
+            userForReadRepository.findByUserIdAndState(
+                fitLeader.fitLeaderUserId,
+                GlobalStatus.PERSISTENCE_NOT_DELETED
+            )
+        )
+            .thenReturn(Optional.of(userForRead))
         //when then
         Assertions.assertDoesNotThrow { fitMateService.getFitMateListByFitGroup(fitGroup.id!!) }
     }
@@ -282,6 +302,13 @@ class FitMateServiceTest {
         Mockito.`when`(
             fitMateRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED)
         ).thenReturn(listOf(fitMate))
+        Mockito.`when`(
+            userForReadRepository.findByUserIdAndState(
+                fitLeader.fitLeaderUserId,
+                GlobalStatus.PERSISTENCE_NOT_DELETED
+            )
+        )
+            .thenReturn(Optional.of(userForRead))
         //when then
         Assertions.assertDoesNotThrow { fitMateService.getFitMateListByFitGroup(fitGroup.id!!) }
     }

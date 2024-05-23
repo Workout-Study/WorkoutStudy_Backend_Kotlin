@@ -37,6 +37,9 @@ class FitGroupServiceBootTest {
     @Autowired
     private lateinit var bankCodeRepository: BankCodeRepository
 
+    @Autowired
+    private lateinit var userForReadRepository: UserForReadRepository
+
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
@@ -73,6 +76,10 @@ class FitGroupServiceBootTest {
         val fitLeader = FitLeader(savedFitGroup, requestUserId, requestUserId.toString())
 
         this.fitLeader = fitLeaderRepository.save(fitLeader)
+
+        val userForRead = UserForRead(fitLeader.fitLeaderUserId, "testFitLeader", "testFitLeader")
+
+        userForReadRepository.save(userForRead)
 
         this.fitGroup = savedFitGroup
     }
