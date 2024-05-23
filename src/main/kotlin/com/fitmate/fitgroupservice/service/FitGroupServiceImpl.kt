@@ -10,6 +10,7 @@ import com.fitmate.fitgroupservice.persistence.repository.*
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class FitGroupServiceImpl(
@@ -108,9 +109,9 @@ class FitGroupServiceImpl(
         )
     }
 
-    private fun findUserForReadAndGet(userId: Int): UserForRead =
+    private fun findUserForReadAndGet(userId: Int): UserForRead? =
         userForReadReadRepository.findByUserIdAndState(userId, GlobalStatus.PERSISTENCE_NOT_DELETED)
-            .orElseThrow { ResourceNotFoundException("user for read does not exist") }
+            .getOrNull()
 
     fun findFitGroupAndGet(fitGroupId: Long): FitGroup =
         fitGroupRepository.findById(fitGroupId)
