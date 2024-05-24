@@ -18,6 +18,7 @@ import com.fitmate.fitgroupservice.persistence.repository.UserForReadRepository
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.jvm.optionals.getOrNull
 
 @Service
 class FitMateServiceImpl(
@@ -88,12 +89,12 @@ class FitMateServiceImpl(
         val fitMatesDetails = fitMates?.map {
             val userForRead =
                 userForReadRepository.findByUserIdAndState(it.fitMateUserId, GlobalStatus.PERSISTENCE_NOT_DELETED)
-                    .orElseThrow { ResourceNotFoundException("user for read does not exist") }
+                    .getOrNull()
 
             FitMateDetailDto(
                 it.id!!,
                 it.fitMateUserId,
-                userForRead.nickname,
+                userForRead?.nickname,
                 it.createdAt
             )
         } ?: listOf()
@@ -106,7 +107,7 @@ class FitMateServiceImpl(
                     optionalFitLeader.get().fitLeaderUserId,
                     GlobalStatus.PERSISTENCE_NOT_DELETED
                 )
-                    .orElseThrow { ResourceNotFoundException("user for read does not exist") }
+                    .getOrNull()
             optionalFitLeader.get()
         } else null
 
