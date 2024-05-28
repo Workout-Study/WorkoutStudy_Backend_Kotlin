@@ -47,7 +47,8 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
                     .and(fitMate.state.eq(GlobalStatus.PERSISTENCE_NOT_DELETED))
             )
             .where(
-                categoryCondition(fitGroupFilterRequest.category)
+                categoryCondition(fitGroupFilterRequest.category),
+                fitGroup.state.eq(GlobalStatus.PERSISTENCE_NOT_DELETED)
             )
             .groupBy(fitGroup)
             .having(conditionWithMaxGroup(fitGroupFilterRequest.withMaxGroup))
