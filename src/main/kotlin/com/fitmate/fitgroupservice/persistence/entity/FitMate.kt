@@ -14,6 +14,7 @@ class FitMate(
 ) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
 
     fun kick(kicker: String) {
+        this.state = GlobalStatus.PERSISTENCE_DELETED
         this.updatedAt = Instant.now()
         this.updateUser = kicker
     }
