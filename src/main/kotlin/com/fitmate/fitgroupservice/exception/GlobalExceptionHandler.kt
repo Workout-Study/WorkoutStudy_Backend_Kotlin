@@ -1,5 +1,6 @@
 package com.fitmate.fitgroupservice.exception
 
+import com.fitmate.fitgroupservice.utils.SenderUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
-class GlobalExceptionHandler {
+class GlobalExceptionHandler(
+    private val senderUtils: SenderUtils
+) {
 
     companion object {
         val logger: Logger? = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
@@ -22,8 +25,9 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(NullPointerException::class)
     fun nullPointerException(nullPointerException: NullPointerException): ResponseEntity<String> {
-        logger?.info("NullPointerException ", nullPointerException)
-        return ResponseEntity.badRequest().body(nullPointerException.message)
+        logger?.error("NullPointerException ", nullPointerException)
+        senderUtils.sendSlack("NullPointerException $nullPointerException")
+        return ResponseEntity.internalServerError().body(nullPointerException.message)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
@@ -48,5 +52,18 @@ class GlobalExceptionHandler {
     fun notExpectResultException(notExpectResultException: NotExpectResultException): ResponseEntity<String> {
         logger?.info("NotExpectResultException", notExpectResultException)
         return ResponseEntity.badRequest().body(notExpectResultException.message)
+    }
+
+    @ExceptionHandler(SendMessageException::class)
+    fun sendMessageException(sendMessageException: SendMessageException): ResponseEntity<String> {
+        logger?.error("SendMessageException", sendMessageException)
+        return ResponseEntity.badRequest().body(sendMessageException.message)
+    }
+
+    @ExceptionHandler(Exception::class)
+    fun exception(exception: Exception): ResponseEntity<String> {
+        logger?.error("Exception ", exception)
+        senderUtils.sendSlack("Exception $exception")
+        return ResponseEntity.internalServerError().body(exception.message)
     }
 }
