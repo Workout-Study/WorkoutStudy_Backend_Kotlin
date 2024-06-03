@@ -8,6 +8,7 @@ import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.UserForRead
 import com.fitmate.fitgroupservice.service.FitGroupService
+import com.fitmate.fitgroupservice.utils.SenderUtils
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -40,6 +41,9 @@ class FitGroupControllerTest {
 
     @MockBean
     private lateinit var fitGroupService: FitGroupService
+
+    @MockBean
+    private lateinit var senderUtils: SenderUtils
 
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"

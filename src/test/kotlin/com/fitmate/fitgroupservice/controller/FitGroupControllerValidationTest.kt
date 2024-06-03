@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.group.*
 import com.fitmate.fitgroupservice.service.FitGroupService
+import com.fitmate.fitgroupservice.utils.SenderUtils
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -32,6 +33,9 @@ class FitGroupControllerValidationTest {
 
     @MockBean
     private lateinit var fitGroupService: FitGroupService
+
+    @MockBean
+    private lateinit var senderUtils: SenderUtils
 
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
