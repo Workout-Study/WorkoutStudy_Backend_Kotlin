@@ -4,6 +4,7 @@ import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.bank.BankCodeDetailDto
 import com.fitmate.fitgroupservice.dto.bank.BankCodesResponse
 import com.fitmate.fitgroupservice.service.BankCodeService
+import com.fitmate.fitgroupservice.utils.SenderUtils
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -29,6 +30,9 @@ class BankCodeControllerTest {
 
     @MockBean
     private lateinit var bankCodeService: BankCodeService
+
+    @MockBean
+    private lateinit var senderUtils: SenderUtils
 
     private val kakaoBankCodeDetailDto = BankCodeDetailDto("090", "카카오뱅크")
     private val kBankCodeDetailDto = BankCodeDetailDto("089", "케이뱅크")
