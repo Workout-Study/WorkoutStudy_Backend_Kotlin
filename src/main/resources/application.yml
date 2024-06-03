@@ -1,6 +1,12 @@
 spring:
   profiles:
     active: local
+  config:
+    import: "optional:configserver:http://config:8888"
+  cloud:
+    config:
+      name: fit-group-service
+      profile: local
   application:
     name: fit-group-service
   h2:
@@ -86,9 +92,15 @@ server:
 
 eureka:
   instance:
-    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${server.port}}
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://127.0.0.1:8761/eureka
+      defaultZone: http://eureka:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
