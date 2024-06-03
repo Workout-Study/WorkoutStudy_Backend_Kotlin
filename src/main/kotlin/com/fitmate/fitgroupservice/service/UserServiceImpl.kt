@@ -1,6 +1,5 @@
 package com.fitmate.fitgroupservice.service
 
-import com.fitmate.fitgroupservice.common.GlobalStatus
 import com.fitmate.fitgroupservice.common.UserServiceURI
 import com.fitmate.fitgroupservice.dto.user.UserInfoResponse
 import com.fitmate.fitgroupservice.exception.NotExpectResultException
@@ -35,22 +34,11 @@ class UserServiceImpl(
         val userInfoResponse: UserInfoResponse = response.body ?: throw NotExpectResultException("user info is null")
 
         val userForRead =
-            userForReadRepository.findByUserIdAndState(userInfoResponse.userId, GlobalStatus.PERSISTENCE_NOT_DELETED)
+            userForReadRepository.findByUserId(userInfoResponse.userId)
                 .orElseGet { UserForRead(userInfoResponse.userId, userInfoResponse.nickname, eventPublisher) }
 
         userForRead.updateByResponse(userInfoResponse, eventPublisher)
 
         userForReadRepository.save(userForRead)
-    }
-
-    @Transactional
-    override fun deleteUser(userIdInt: Int, eventPublisher: String) {
-        val userOpt = userForReadRepository.findByUserIdAndState(userIdInt, GlobalStatus.PERSISTENCE_NOT_DELETED)
-
-        if (userOpt.isEmpty) return
-
-        val userForRead = userOpt.get()
-
-        userForRead.delete(eventPublisher)
     }
 }

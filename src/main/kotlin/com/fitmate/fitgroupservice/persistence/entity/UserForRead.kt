@@ -18,6 +18,7 @@ class UserForRead(
 
     fun updateByResponse(userInfoResponse: UserInfoResponse, eventPublisher: String) {
         this.nickname = userInfoResponse.nickname
+        this.state = userInfoResponse.state
         this.updatedAt = Instant.now()
         this.updateUser = eventPublisher
     }
