@@ -5,6 +5,7 @@ import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.management.KickFitMateRequest
 import com.fitmate.fitgroupservice.dto.management.KickFitMateResponse
 import com.fitmate.fitgroupservice.service.FitManagementService
+import com.fitmate.fitgroupservice.utils.SenderUtils
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -35,6 +36,9 @@ class FitManagementControllerTest {
 
     @MockBean
     private lateinit var fitManagementService: FitManagementService
+
+    @MockBean
+    private lateinit var senderUtils: SenderUtils
 
     private val userId = 861
     private val requestUserId = 11422

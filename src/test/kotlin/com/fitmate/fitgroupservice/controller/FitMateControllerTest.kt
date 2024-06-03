@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.mate.*
 import com.fitmate.fitgroupservice.service.FitMateService
+import com.fitmate.fitgroupservice.utils.SenderUtils
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -34,6 +35,9 @@ class FitMateControllerTest {
 
     @MockBean
     private lateinit var fitMateService: FitMateService
+
+    @MockBean
+    private lateinit var senderUtils: SenderUtils
 
     private val requestUserId = 11422
     private val fitGroupId = 1L

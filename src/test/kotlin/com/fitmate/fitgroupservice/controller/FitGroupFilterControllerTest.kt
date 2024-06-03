@@ -9,6 +9,7 @@ import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.UserForRead
 import com.fitmate.fitgroupservice.service.FitGroupFilterService
+import com.fitmate.fitgroupservice.utils.SenderUtils
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -39,6 +40,9 @@ class FitGroupFilterControllerTest {
 
     @MockBean
     private lateinit var fitGroupFilterService: FitGroupFilterService
+
+    @MockBean
+    private lateinit var senderUtils: SenderUtils
 
     private val withMaxGroup = false
     private val category = 1
