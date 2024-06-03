@@ -2,7 +2,11 @@ package com.fitmate.fitgroupservice.utils
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fitmate.fitgroupservice.common.SlackProperties
 import com.fitmate.fitgroupservice.exception.NotExpectResultException
+import com.fitmate.fitgroupservice.exception.SendMessageException
+import com.slack.api.Slack
+import com.slack.api.methods.request.chat.ChatPostMessageRequest
 import io.netty.channel.ChannelOption
 import io.netty.handler.logging.LogLevel
 import io.netty.handler.timeout.ReadTimeoutHandler
@@ -30,6 +34,7 @@ import java.util.function.Consumer
 @Component
 class SenderUtils(
     private var webClientBuilder: WebClient.Builder,
+    private val slackProperties: SlackProperties,
     private var objectMapper: ObjectMapper
 ) {
 
@@ -166,5 +171,24 @@ class SenderUtils(
         val om = ObjectMapper()
         om.setSerializationInclusion(JsonInclude.Include.NON_NULL)
         return om
+    }
+
+    fun sendSlack(message: String) {
+        val slack = Slack.getInstance()
+        val token = slackProperties.token
+        val methods = slack.methods(token)
+
+        // Build a request object
+        val request = ChatPostMessageRequest.builder()
+            .channel("#fit-group-exception") // 채널명 or 채널 ID
+            .text(message)
+            .build()
+
+        // Get a response as a Java object
+        try {
+            val response = methods.chatPostMessage(request)
+        } catch (e: Exception) {
+            throw SendMessageException(e.message)
+        }
     }
 }
