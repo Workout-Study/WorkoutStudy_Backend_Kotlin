@@ -56,6 +56,11 @@ spring:
   config:
     activate:
       on-profile: main
+    import: "optional:configserver:http://config:8888"
+  cloud:
+    config:
+      name: fit-group-service
+      profile: main
   application:
     name: fit-group-service
   datasource:
