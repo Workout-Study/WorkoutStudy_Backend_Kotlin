@@ -27,6 +27,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: make properties
+        run: |
+          # slack-properties.yml 파일 생성
+          cd ./src/main/resources
+          touch ./slack-properties.yml
+          echo "${{ secrets.SLACK }}" >> ./slack-properties.yml
+        shell: bash
+
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
