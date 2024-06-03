@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface UserForReadRepository : JpaRepository<UserForRead, Int> {
-    fun findByUserIdAndState(userIdInt: Int, state: Boolean): Optional<UserForRead>
+    fun findByUserIdAndState(userId: Int, state: Boolean): Optional<UserForRead>
+
+    fun findByUserId(userId: Int): Optional<UserForRead>
 }

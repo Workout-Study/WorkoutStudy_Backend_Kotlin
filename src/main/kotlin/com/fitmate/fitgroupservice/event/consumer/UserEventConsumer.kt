@@ -16,12 +16,12 @@ class UserEventConsumer(private val userService: UserService) {
     }
 
     /**
-     * kafka user create, update event listener inbound
+     * kafka user info event listener inbound
      *
      * @param userId user id where an event occurred
      */
     @KafkaListener(
-        topics = [GlobalStatus.KAFKA_TOPIC_USER_CREATE_EVENT, GlobalStatus.KAFKA_TOPIC_USER_UPDATE_EVENT],
+        topics = [GlobalStatus.KAFKA_TOPIC_USER_INFO_EVENT],
         groupId = GlobalStatus.KAFKA_GROUP_ID
     )
     fun userEvent(userId: String) {
@@ -37,29 +37,5 @@ class UserEventConsumer(private val userService: UserService) {
         }
 
         userService.saveUser(userIdInt, "kafka")
-    }
-
-    /**
-     * kafka user delete event listener inbound
-     *
-     * @param userId user id where an event occurred
-     */
-    @KafkaListener(
-        topics = [GlobalStatus.KAFKA_TOPIC_USER_DELETE_EVENT],
-        groupId = GlobalStatus.KAFKA_GROUP_ID
-    )
-    fun userDeleteEvent(userId: String) {
-        logger?.info("KafkaListener userDeleteEvent with userDeleteEvent start - user id = {}", userId)
-
-        val userIdInt: Int
-
-        try {
-            userIdInt = userId.toInt()
-        } catch (exception: Exception) {
-            logger?.error("userDeleteEvent consume exception = ", exception)
-            throw BadRequestException("user id must be int")
-        }
-
-        userService.deleteUser(userIdInt, "kafka")
     }
 }
