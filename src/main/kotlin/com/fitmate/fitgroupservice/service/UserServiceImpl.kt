@@ -1,6 +1,7 @@
 package com.fitmate.fitgroupservice.service
 
 import com.fitmate.fitgroupservice.common.UserServiceURI
+import com.fitmate.fitgroupservice.dto.user.UserCreateMessageDto
 import com.fitmate.fitgroupservice.dto.user.UserInfoResponse
 import com.fitmate.fitgroupservice.exception.NotExpectResultException
 import com.fitmate.fitgroupservice.persistence.entity.UserForRead
@@ -38,6 +39,17 @@ class UserServiceImpl(
                 .orElseGet { UserForRead(userInfoResponse.userId, userInfoResponse.nickname, eventPublisher) }
 
         userForRead.updateByResponse(userInfoResponse, eventPublisher)
+
+        userForReadRepository.save(userForRead)
+    }
+
+    @Transactional
+    override fun createUser(userCreateMessageDto: UserCreateMessageDto, eventPublisher: String) {
+        val userForRead =
+            userForReadRepository.findByUserId(userCreateMessageDto.id)
+                .orElse(UserForRead(userCreateMessageDto.id, userCreateMessageDto.nickname, eventPublisher))
+
+        userForRead.updateByUserMessageDto(userCreateMessageDto, eventPublisher)
 
         userForReadRepository.save(userForRead)
     }

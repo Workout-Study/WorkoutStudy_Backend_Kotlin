@@ -1,6 +1,7 @@
 package com.fitmate.fitgroupservice.persistence.entity
 
 import com.fitmate.fitgroupservice.common.GlobalStatus
+import com.fitmate.fitgroupservice.dto.user.UserCreateMessageDto
 import com.fitmate.fitgroupservice.dto.user.UserInfoResponse
 import jakarta.persistence.*
 import java.time.Instant
@@ -19,6 +20,13 @@ class UserForRead(
     fun updateByResponse(userInfoResponse: UserInfoResponse, eventPublisher: String) {
         this.nickname = userInfoResponse.nickname
         this.state = userInfoResponse.state
+        this.updatedAt = Instant.now()
+        this.updateUser = eventPublisher
+    }
+
+    fun updateByUserMessageDto(userCreateMessageDto: UserCreateMessageDto, eventPublisher: String) {
+        this.nickname = userCreateMessageDto.nickname
+        this.state = userCreateMessageDto.state
         this.updatedAt = Instant.now()
         this.updateUser = eventPublisher
     }
