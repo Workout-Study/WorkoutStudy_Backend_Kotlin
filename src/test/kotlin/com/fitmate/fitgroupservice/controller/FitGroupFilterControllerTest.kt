@@ -4,7 +4,6 @@ import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.filter.FitGroupDetailsResponse
 import com.fitmate.fitgroupservice.dto.filter.FitGroupFilterRequest
 import com.fitmate.fitgroupservice.dto.group.FitGroupDetailResponse
-import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.UserForRead
@@ -53,8 +52,6 @@ class FitGroupFilterControllerTest {
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val bankCode = BankCode("090", "카카오뱅크")
-    private val penaltyAccount = "3333-03-5367420"
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
     private val frequency = 7
@@ -138,10 +135,6 @@ class FitGroupFilterControllerTest {
                         fieldWithPath("content[].fitGroupName").type(JsonFieldType.STRING).description("fit group의 이름"),
                         fieldWithPath("content[].penaltyAmount").type(JsonFieldType.NUMBER)
                             .description("fit group의 패널티 금액"),
-                        fieldWithPath("content[].penaltyAccountBankCode").type(JsonFieldType.STRING)
-                            .description("fit group의 패널티 입금 계좌 은행코드"),
-                        fieldWithPath("content[].penaltyAccountNumber").type(JsonFieldType.STRING)
-                            .description("fit group의 패널티 입금 계좌번호"),
                         fieldWithPath("content[].category").type(JsonFieldType.NUMBER)
                             .description("fit group의 카테고리 ( 1:헬스, 2:축구, 3:농구, 4:야구, 5: 클라이밍, 6: 배드민턴, 7: 필라테스, 10: 기타 )"),
                         fieldWithPath("content[].introduction").type(JsonFieldType.STRING)
@@ -224,10 +217,6 @@ class FitGroupFilterControllerTest {
                             .description("fit group의 이름"),
                         fieldWithPath("fitGroupDetails[].penaltyAmount").type(JsonFieldType.NUMBER)
                             .description("fit group의 패널티 금액"),
-                        fieldWithPath("fitGroupDetails[].penaltyAccountBankCode").type(JsonFieldType.STRING)
-                            .description("fit group의 패널티 입금 계좌 은행코드"),
-                        fieldWithPath("fitGroupDetails[].penaltyAccountNumber").type(JsonFieldType.STRING)
-                            .description("fit group의 패널티 입금 계좌번호"),
                         fieldWithPath("fitGroupDetails[].category").type(JsonFieldType.NUMBER)
                             .description("fit group의 카테고리 ( 1:헬스, 2:축구, 3:농구, 4:야구, 5: 클라이밍, 6: 배드민턴, 7: 필라테스, 10: 기타 )"),
                         fieldWithPath("fitGroupDetails[].introduction").type(JsonFieldType.STRING)
@@ -258,8 +247,6 @@ class FitGroupFilterControllerTest {
             val fitGroup = FitGroup(
                 fitGroupName + i,
                 penaltyAmount + i,
-                bankCode,
-                penaltyAccount + i,
                 category,
                 introduction + i,
                 cycle ?: 1,

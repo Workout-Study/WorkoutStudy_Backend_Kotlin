@@ -3,7 +3,6 @@ package com.fitmate.fitgroupservice.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.group.*
-import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.UserForRead
@@ -48,8 +47,6 @@ class FitGroupControllerTest {
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val bankCode = BankCode("090", "카카오뱅크")
-    private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
@@ -63,8 +60,6 @@ class FitGroupControllerTest {
     private val fitGroup = FitGroup(
         fitGroupName,
         penaltyAmount,
-        bankCode,
-        penaltyAccount,
         category,
         introduction,
         cycle ?: 1,
@@ -92,8 +87,6 @@ class FitGroupControllerTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode.code,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -122,10 +115,6 @@ class FitGroupControllerTest {
                             .description("Fit group을 등록하는 User id ( Fit Leader로 등록 )"),
                         fieldWithPath("fitGroupName").type(JsonFieldType.STRING).description("Fit group 이름"),
                         fieldWithPath("penaltyAmount").type(JsonFieldType.NUMBER).description("운동 미인증 패널티 금액"),
-                        fieldWithPath("penaltyAccountBankCode").type(JsonFieldType.STRING)
-                            .description("운동 미인증 패널티 입금 은행"),
-                        fieldWithPath("penaltyAccountNumber").type(JsonFieldType.STRING)
-                            .description("운동 미인증 패널티 입금 계좌"),
                         fieldWithPath("category").type(JsonFieldType.NUMBER)
                             .description("운동 category ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 기타 )"),
                         fieldWithPath("introduction").type(JsonFieldType.STRING).description("스터디 설명"),
@@ -179,10 +168,6 @@ class FitGroupControllerTest {
                             .description("Fit Leader User nickname"),
                         fieldWithPath("fitGroupName").type(JsonFieldType.STRING).description("Fit group 이름"),
                         fieldWithPath("penaltyAmount").type(JsonFieldType.NUMBER).description("운동 미인증 패널티 금액"),
-                        fieldWithPath("penaltyAccountBankCode").type(JsonFieldType.STRING)
-                            .description("운동 미인증 패널티 입금 은행"),
-                        fieldWithPath("penaltyAccountNumber").type(JsonFieldType.STRING)
-                            .description("운동 미인증 패널티 입금 계좌"),
                         fieldWithPath("category").type(JsonFieldType.NUMBER)
                             .description("운동 category ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 기타 )"),
                         fieldWithPath("introduction").type(JsonFieldType.STRING).description("스터디 설명"),
@@ -210,8 +195,6 @@ class FitGroupControllerTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode.code,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -244,10 +227,6 @@ class FitGroupControllerTest {
                             .description("수정을 요청한 User id ( Fit Leader여야함 )"),
                         fieldWithPath("fitGroupName").type(JsonFieldType.STRING).description("수정할 Fit group 이름"),
                         fieldWithPath("penaltyAmount").type(JsonFieldType.NUMBER).description("수정할 운동 미인증 패널티 금액"),
-                        fieldWithPath("penaltyAccountBankCode").type(JsonFieldType.STRING)
-                            .description("수정할 운동 미인증 패널티 입금 은행"),
-                        fieldWithPath("penaltyAccountNumber").type(JsonFieldType.STRING)
-                            .description("수정할  운동 미인증 패널티 입금 계좌"),
                         fieldWithPath("category").type(JsonFieldType.NUMBER)
                             .description("수정할 운동 category ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 기타 )"),
                         fieldWithPath("introduction").type(JsonFieldType.STRING).description("수정할 스터디 설명"),

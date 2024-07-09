@@ -40,8 +40,6 @@ class FitGroupControllerValidationTest {
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val bankCode = "090"
-    private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
@@ -60,72 +58,6 @@ class FitGroupControllerValidationTest {
             requestUserId,
             testFitGroupName,
             penaltyAmount,
-            bankCode,
-            penaltyAccount,
-            category,
-            introduction,
-            cycle,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
-
-        //when
-        val resultActions = mockMvc.perform(
-            post(GlobalURI.GROUP_ROOT)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(registerFitGroupRequest))
-                .accept(MediaType.APPLICATION_JSON)
-        )
-        //then
-        resultActions.andExpect(status().isBadRequest())
-            .andDo(print())
-    }
-
-    @ParameterizedTest
-    @EmptySource
-    @DisplayName("[단위][Controller] Fit group 등록 penalty bank code - Validation 실패 테스트")
-    @Throws(Exception::class)
-    fun `register fit group controller penalty bank code validation fail test`(testPenaltyAccountBankCode: String) {
-        //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(
-            requestUserId,
-            fitGroupName,
-            penaltyAmount,
-            testPenaltyAccountBankCode,
-            penaltyAccount,
-            category,
-            introduction,
-            cycle,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
-
-        //when
-        val resultActions = mockMvc.perform(
-            post(GlobalURI.GROUP_ROOT)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(registerFitGroupRequest))
-                .accept(MediaType.APPLICATION_JSON)
-        )
-        //then
-        resultActions.andExpect(status().isBadRequest())
-            .andDo(print())
-    }
-
-    @ParameterizedTest
-    @EmptySource
-    @DisplayName("[단위][Controller] Fit group 등록 penalty account number - Validation 실패 테스트")
-    @Throws(Exception::class)
-    fun `register fit group controller penalty account number validation fail test`(testPenaltyAccountNumber: String) {
-        //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(
-            requestUserId,
-            fitGroupName,
-            penaltyAmount,
-            bankCode,
-            testPenaltyAccountNumber,
             category,
             introduction,
             cycle,
@@ -156,8 +88,6 @@ class FitGroupControllerValidationTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
-            penaltyAccount,
             category,
             testIntroduction,
             cycle,
@@ -191,8 +121,6 @@ class FitGroupControllerValidationTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -244,8 +172,6 @@ class FitGroupControllerValidationTest {
             requestUserId,
             testFitGroupName,
             penaltyAmount,
-            bankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -266,69 +192,6 @@ class FitGroupControllerValidationTest {
             .andDo(print())
     }
 
-    @ParameterizedTest
-    @EmptySource
-    @DisplayName("[단위][Controller] Fit group 수정 penalty bank code - Validation 실패 테스트")
-    @Throws(Exception::class)
-    fun `update fit group controller penalty bank code validation fail test`(testPenaltyBankCode: String) {
-        //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId,
-            fitGroupName,
-            penaltyAmount,
-            testPenaltyBankCode,
-            penaltyAccount,
-            category,
-            introduction,
-            cycle,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
-
-        //when
-        val resultActions = mockMvc.perform(
-            put("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}", fitGroupId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updateFitGroupRequest))
-                .accept(MediaType.APPLICATION_JSON)
-        )
-        //then
-        resultActions.andExpect(status().isBadRequest())
-            .andDo(print())
-    }
-
-    @ParameterizedTest
-    @EmptySource
-    @DisplayName("[단위][Controller] Fit group 수정 penalty account number - Validation 실패 테스트")
-    @Throws(Exception::class)
-    fun `update fit group controller penalty account number validation fail test`(testPenaltyAccountNumber: String) {
-        //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId,
-            fitGroupName,
-            penaltyAmount,
-            bankCode,
-            testPenaltyAccountNumber,
-            category,
-            introduction,
-            cycle,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
-
-        //when
-        val resultActions = mockMvc.perform(
-            put("${GlobalURI.GROUP_ROOT}${GlobalURI.PATH_VARIABLE_FIT_GROUP_ID_WITH_BRACE}", fitGroupId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updateFitGroupRequest))
-                .accept(MediaType.APPLICATION_JSON)
-        )
-        //then
-        resultActions.andExpect(status().isBadRequest())
-            .andDo(print())
-    }
 
     @ParameterizedTest
     @EmptySource
@@ -340,8 +203,6 @@ class FitGroupControllerValidationTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
-            penaltyAccount,
             category,
             testIntroduction,
             cycle,
@@ -376,8 +237,6 @@ class FitGroupControllerValidationTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle,

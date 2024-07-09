@@ -35,16 +35,11 @@ class FitGroupServiceBootTest {
     private lateinit var multiMediaEndPointRepository: MultiMediaEndPointRepository
 
     @Autowired
-    private lateinit var bankCodeRepository: BankCodeRepository
-
-    @Autowired
     private lateinit var userForReadRepository: UserForReadRepository
 
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val penaltyAccountBankCode = "090"
-    private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
@@ -53,21 +48,13 @@ class FitGroupServiceBootTest {
     private val maxFitMate = 20
     private val multiMediaEndPoint: List<String> = listOf("https://avatars.githubusercontent.com/u/105261146?v=4")
 
-    private lateinit var bankCode: BankCode
     private lateinit var fitGroup: FitGroup
     private lateinit var fitLeader: FitLeader
 
     @BeforeEach
     fun createTestFitGroup() {
-        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode)
-            .orElseGet {
-                val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
-                return@orElseGet bankCodeRepository.save(bankCode)
-            }
-
-
         val fitGroup = FitGroup(
-            fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+            fitGroupName, penaltyAmount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
@@ -92,8 +79,6 @@ class FitGroupServiceBootTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode.code,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -114,8 +99,6 @@ class FitGroupServiceBootTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode.code,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -136,8 +119,6 @@ class FitGroupServiceBootTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode.code,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -151,37 +132,11 @@ class FitGroupServiceBootTest {
     }
 
     @Test
-    @DisplayName("[통합][Service] Register fit group no resource bank code - 실패 테스트")
-    fun `register fit group service no resource bank code fail test`() {
-        //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(
-            requestUserId,
-            fitGroupName,
-            penaltyAmount,
-            "wrongBankCode",
-            penaltyAccount,
-            category,
-            introduction,
-            cycle,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
-
-        //when then
-        Assertions.assertThrows(ResourceNotFoundException::class.java) {
-            fitGroupService.registerFitGroup(
-                registerFitGroupRequest
-            )
-        }
-    }
-
-    @Test
     @DisplayName("[통합][Service] Update fit group - 성공 테스트")
     fun `update fit group service success test`() {
         //given
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
@@ -194,7 +149,7 @@ class FitGroupServiceBootTest {
     fun `update fit group service fit group not found fail test`() {
         //given
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
@@ -212,7 +167,7 @@ class FitGroupServiceBootTest {
     fun `update fit group service fit group already deleted fail test`() {
         //given
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
@@ -233,7 +188,7 @@ class FitGroupServiceBootTest {
     fun `update fit group service fit leader does not exist fail test`() {
         //given
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
@@ -254,7 +209,7 @@ class FitGroupServiceBootTest {
     fun `update fit group service fit leader does not match fail test`() {
         //given
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, multiMediaEndPoint
         )
 
@@ -262,7 +217,7 @@ class FitGroupServiceBootTest {
 
         val newFitGroup = fitGroupRepository.save(
             FitGroup(
-                fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+                fitGroupName, penaltyAmount, category, introduction, cycle
                     ?: 1, frequency, maxFitMate, notMatchedLeaderUserId.toString()
             )
         )
@@ -289,30 +244,12 @@ class FitGroupServiceBootTest {
         }
 
         val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, bankCode.code, penaltyAccount, category, introduction, cycle
+            requestUserId, fitGroupName, penaltyAmount, category, introduction, cycle
                 ?: 1, frequency, newMaxFitMate, multiMediaEndPoint
         )
 
         //when then
         Assertions.assertThrows(BadRequestException::class.java) {
-            fitGroupService.updateFitGroup(
-                fitGroup.id!!,
-                updateFitGroupRequest
-            )
-        }
-    }
-
-    @Test
-    @DisplayName("[통합][Service] Update fit group no resource bank code - 실패 테스트")
-    fun `update fit group service no resource bank code fail test`() {
-        //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId, fitGroupName, penaltyAmount, "wrongBankCode", penaltyAccount, category, introduction, cycle
-                ?: 1, frequency, maxFitMate, multiMediaEndPoint
-        )
-
-        //when then
-        Assertions.assertThrows(ResourceNotFoundException::class.java) {
             fitGroupService.updateFitGroup(
                 fitGroup.id!!,
                 updateFitGroupRequest
@@ -450,7 +387,7 @@ class FitGroupServiceBootTest {
 
         val newFitGroup = fitGroupRepository.save(
             FitGroup(
-                fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+                fitGroupName, penaltyAmount, category, introduction, cycle
                     ?: 1, frequency, maxFitMate, notMatchedLeaderUserId.toString()
             )
         )

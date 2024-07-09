@@ -204,31 +204,7 @@ http-response
 
 include::{snippets}/fit-group-filter-by-user-id/http-response.adoc[]
 
-== 2. bank-code
-
-=== Get Bank-code List
-
-http-request
-
-include::{snippets}/get-bank-code-list/http-request.adoc[]
-
-curl-request
-
-include::{snippets}/get-bank-code-list/curl-request.adoc[]
-
-response-fields
-
-include::{snippets}/get-bank-code-list/response-fields.adoc[]
-
-response-body
-
-include::{snippets}/get-bank-code-list/response-body.adoc[]
-
-http-response
-
-include::{snippets}/get-bank-code-list/http-response.adoc[]
-
-== 3. fit-mate
+== 2. fit-mate
 
 === Register Fit Mate
 
@@ -324,7 +300,7 @@ http-response
 
 include::{snippets}/delete-fit-mate/http-response.adoc[]
 
-== 4. fit-management
+== 3. fit-management
 
 === Kick Fit Mate
 
