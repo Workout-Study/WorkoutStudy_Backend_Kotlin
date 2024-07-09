@@ -4,7 +4,6 @@ import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.filter.FitGroupDetailsResponse
 import com.fitmate.fitgroupservice.dto.filter.FitGroupFilterRequest
 import com.fitmate.fitgroupservice.dto.group.FitGroupDetailResponse
-import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.UserForRead
@@ -14,6 +13,8 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import org.mockito.kotlin.any
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -49,12 +50,11 @@ class FitGroupFilterControllerTest {
     private val pageNumber = 1
     private val pageSize = 5
     private val pageRequest = PageRequest.of(pageNumber, pageSize)
+    private val fitGroupNameSearch = "헬창"
 
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val bankCode = BankCode("090", "카카오뱅크")
-    private val penaltyAccount = "3333-03-5367420"
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
     private val frequency = 7
@@ -92,13 +92,14 @@ class FitGroupFilterControllerTest {
     @Throws(Exception::class)
     fun `fit group filter controller full condition success test`() {
         //given
-        val fitGroupFilterRequest = FitGroupFilterRequest(withMaxGroup, category, pageNumber, pageSize)
+        val fitGroupFilterRequest =
+            FitGroupFilterRequest(withMaxGroup, category, fitGroupNameSearch, pageNumber, pageSize)
 
         val fitGroupDetailResponseList = getFitGroupDetailResponses(fitGroupFilterRequest)
 
         val fitGroupDetailResponse = SliceImpl(fitGroupDetailResponseList, pageRequest, true)
 
-        Mockito.`when`(fitGroupFilterService.getFitGroupListByFilter(fitGroupFilterRequest))
+        whenever(fitGroupFilterService.getFitGroupListByFilter(any<FitGroupFilterRequest>()))
             .thenReturn(fitGroupDetailResponse)
 
         val queryString = UriComponentsBuilder.newInstance()
@@ -106,6 +107,7 @@ class FitGroupFilterControllerTest {
             .queryParam("category", fitGroupFilterRequest.category)
             .queryParam("pageNumber", fitGroupFilterRequest.pageNumber)
             .queryParam("pageSize", fitGroupFilterRequest.pageSize)
+            .queryParam("fitGroupNameSearch", fitGroupFilterRequest.fitGroupNameSearch)
             .build()
             .encode()
             .toUriString()
@@ -126,7 +128,8 @@ class FitGroupFilterControllerTest {
                         parameterWithName("pageSize").description("조회할 fit group slice size ( null일 경우 기본값 5 )"),
                         parameterWithName("withMaxGroup")
                             .description("인원이 다 찬 방도 포함할 건지"),
-                        parameterWithName("category").description("조회할 fit group의 카테고리 ( null일 경우 전체 )")
+                        parameterWithName("category").description("조회할 fit group의 카테고리 ( null일 경우 전체 )"),
+                        parameterWithName("fitGroupNameSearch").description("조회할 fit group의 제목으로 검색 ( null일 경우 전체 )")
                     ),
                     responseFields(
                         fieldWithPath("content[]").type(JsonFieldType.ARRAY).description("fit group List"),
@@ -138,10 +141,6 @@ class FitGroupFilterControllerTest {
                         fieldWithPath("content[].fitGroupName").type(JsonFieldType.STRING).description("fit group의 이름"),
                         fieldWithPath("content[].penaltyAmount").type(JsonFieldType.NUMBER)
                             .description("fit group의 패널티 금액"),
-                        fieldWithPath("content[].penaltyAccountBankCode").type(JsonFieldType.STRING)
-                            .description("fit group의 패널티 입금 계좌 은행코드"),
-                        fieldWithPath("content[].penaltyAccountNumber").type(JsonFieldType.STRING)
-                            .description("fit group의 패널티 입금 계좌번호"),
                         fieldWithPath("content[].category").type(JsonFieldType.NUMBER)
                             .description("fit group의 카테고리 ( 1:헬스, 2:축구, 3:농구, 4:야구, 5: 클라이밍, 6: 배드민턴, 7: 필라테스, 10: 기타 )"),
                         fieldWithPath("content[].introduction").type(JsonFieldType.STRING)
@@ -189,7 +188,8 @@ class FitGroupFilterControllerTest {
     @Throws(Exception::class)
     fun `fit group filter by user id controller success test`() {
         //given
-        val fitGroupFilterRequest = FitGroupFilterRequest(withMaxGroup, category, pageNumber, pageSize)
+        val fitGroupFilterRequest =
+            FitGroupFilterRequest(withMaxGroup, category, fitGroupNameSearch, pageNumber, pageSize)
 
         val fitGroupDetailResponseList = getFitGroupDetailResponses(fitGroupFilterRequest)
 
@@ -224,10 +224,6 @@ class FitGroupFilterControllerTest {
                             .description("fit group의 이름"),
                         fieldWithPath("fitGroupDetails[].penaltyAmount").type(JsonFieldType.NUMBER)
                             .description("fit group의 패널티 금액"),
-                        fieldWithPath("fitGroupDetails[].penaltyAccountBankCode").type(JsonFieldType.STRING)
-                            .description("fit group의 패널티 입금 계좌 은행코드"),
-                        fieldWithPath("fitGroupDetails[].penaltyAccountNumber").type(JsonFieldType.STRING)
-                            .description("fit group의 패널티 입금 계좌번호"),
                         fieldWithPath("fitGroupDetails[].category").type(JsonFieldType.NUMBER)
                             .description("fit group의 카테고리 ( 1:헬스, 2:축구, 3:농구, 4:야구, 5: 클라이밍, 6: 배드민턴, 7: 필라테스, 10: 기타 )"),
                         fieldWithPath("fitGroupDetails[].introduction").type(JsonFieldType.STRING)
@@ -258,8 +254,6 @@ class FitGroupFilterControllerTest {
             val fitGroup = FitGroup(
                 fitGroupName + i,
                 penaltyAmount + i,
-                bankCode,
-                penaltyAccount + i,
                 category,
                 introduction + i,
                 cycle ?: 1,

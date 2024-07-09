@@ -2,11 +2,9 @@ package com.fitmate.fitgroupservice.controller
 
 import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.filter.FitGroupFilterRequest
-import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.FitMate
-import com.fitmate.fitgroupservice.persistence.repository.BankCodeRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitMateRepository
@@ -45,42 +43,29 @@ class FitGroupFilterControllerBootTest {
     @Autowired
     private lateinit var fitLeaderRepository: FitLeaderRepository
 
-    @Autowired
-    private lateinit var bankCodeRepository: BankCodeRepository
-
     private val withMaxGroup = false
     private val category = 1
     private val pageNumber = 1
     private val pageSize = 5
+    private val fitGroupNameSearch = "헬창"
 
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val penaltyAccountBankCode = "090"
-    private val penaltyAccount = "3333-03-5367420"
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
     private val frequency = 7
     private val maxFitMate = 20
 
-    private lateinit var bankCode: BankCode
     private lateinit var maxFitMateGroup: FitGroup
     private lateinit var withOutLeaderFitGroup: FitGroup
 
     @BeforeEach
     fun makeDefaultFitGroupData() {
-        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode)
-            .orElseGet {
-                val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
-                return@orElseGet bankCodeRepository.save(bankCode)
-            }
-
         for (i in 1..pageSize * (pageNumber)) {
             val fitGroup = FitGroup(
                 fitGroupName + i,
                 penaltyAmount + i,
-                bankCode,
-                penaltyAccount + i,
                 category,
                 introduction + i,
                 cycle ?: 1,
@@ -102,8 +87,6 @@ class FitGroupFilterControllerBootTest {
         val fitGroup = FitGroup(
             fitGroupName,
             penaltyAmount,
-            bankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle ?: 1,
@@ -124,8 +107,6 @@ class FitGroupFilterControllerBootTest {
         val otherFitGroup = FitGroup(
             fitGroupName,
             penaltyAmount,
-            bankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle ?: 1,
@@ -162,13 +143,15 @@ class FitGroupFilterControllerBootTest {
     @Throws(Exception::class)
     fun `fit group filter controller full condition success test`() {
         //given
-        val fitGroupFilterRequest = FitGroupFilterRequest(withMaxGroup, category, pageNumber, pageSize)
+        val fitGroupFilterRequest =
+            FitGroupFilterRequest(withMaxGroup, category, fitGroupNameSearch, pageNumber, pageSize)
 
         val queryString = UriComponentsBuilder.newInstance()
             .queryParam("withMaxGroup", fitGroupFilterRequest.withMaxGroup)
             .queryParam("category", fitGroupFilterRequest.category)
             .queryParam("pageNumber", fitGroupFilterRequest.pageNumber)
             .queryParam("pageSize", fitGroupFilterRequest.pageSize)
+            .queryParam("fitGroupNameSearch", fitGroupFilterRequest.fitGroupNameSearch)
             .build()
             .encode()
             .toUriString()

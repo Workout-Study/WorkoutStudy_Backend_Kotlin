@@ -3,11 +3,9 @@ package com.fitmate.fitgroupservice.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fitmate.fitgroupservice.common.GlobalURI
 import com.fitmate.fitgroupservice.dto.group.*
-import com.fitmate.fitgroupservice.persistence.entity.BankCode
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.UserForRead
-import com.fitmate.fitgroupservice.persistence.repository.BankCodeRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitGroupRepository
 import com.fitmate.fitgroupservice.persistence.repository.FitLeaderRepository
 import com.fitmate.fitgroupservice.persistence.repository.UserForReadRepository
@@ -44,16 +42,11 @@ class FitGroupControllerBootTest {
     private lateinit var fitLeaderRepository: FitLeaderRepository
 
     @Autowired
-    private lateinit var bankCodeRepository: BankCodeRepository
-
-    @Autowired
     private lateinit var userForReadRepository: UserForReadRepository
 
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val penaltyAccountBankCode = "090"
-    private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
@@ -61,20 +54,12 @@ class FitGroupControllerBootTest {
     private val maxFitMate = 20
     private val multiMediaEndPoint: List<String> = listOf("https://avatars.githubusercontent.com/u/105261146?v=4")
 
-    private lateinit var bankCode: BankCode
     private lateinit var fitGroup: FitGroup
 
     @BeforeEach
     fun createTestFitGroup() {
-        bankCode = bankCodeRepository.findByCode(penaltyAccountBankCode)
-            .orElseGet {
-                val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
-                return@orElseGet bankCodeRepository.save(bankCode)
-            }
-
-
         val fitGroup = FitGroup(
-            fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+            fitGroupName, penaltyAmount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
@@ -100,8 +85,6 @@ class FitGroupControllerBootTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode.code,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -147,8 +130,6 @@ class FitGroupControllerBootTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            bankCode.code,
-            penaltyAccount,
             category,
             introduction,
             cycle,

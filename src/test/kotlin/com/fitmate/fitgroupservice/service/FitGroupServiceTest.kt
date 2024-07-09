@@ -37,9 +37,6 @@ class FitGroupServiceTest {
     private lateinit var fitMateRepository: FitMateRepository
 
     @Mock
-    private lateinit var bankCodeRepository: BankCodeRepository
-
-    @Mock
     private lateinit var multiMediaEndPointRepository: MultiMediaEndPointRepository
 
     @Mock
@@ -51,8 +48,6 @@ class FitGroupServiceTest {
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
     private val penaltyAmount = 5000
-    private val penaltyAccountBankCode = "090"
-    private val penaltyAccount = "3333-03-5367420"
     private val category = 1
     private val introduction = "헬창들은 일주일에 7번은 운동해야한다고 생각합니다 당신도 헬창이 됩시다 근육 휴식따윈 생각도 마십쇼"
     private val cycle = null
@@ -68,12 +63,11 @@ class FitGroupServiceTest {
     private lateinit var fitLeader: FitLeader
     private lateinit var fitMate: FitMate
     private lateinit var userForRead: UserForRead
-    private val bankCode = BankCode(penaltyAccountBankCode, "카카오뱅크")
 
     @BeforeEach
     fun setFitGroupAndFitLeader() {
         fitGroup = FitGroup(
-            fitGroupName, penaltyAmount, bankCode, penaltyAccount, category, introduction, cycle
+            fitGroupName, penaltyAmount, category, introduction, cycle
                 ?: 1, frequency, maxFitMate, requestUserId.toString()
         )
 
@@ -98,8 +92,6 @@ class FitGroupServiceTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -108,7 +100,6 @@ class FitGroupServiceTest {
             multiMediaEndPoint
         )
 
-        Mockito.`when`(bankCodeRepository.findByCode(penaltyAccountBankCode)).thenReturn(Optional.of(bankCode))
         Mockito.`when`(fitGroupRepository.save(any(fitGroup.javaClass))).thenReturn(fitGroup)
         Mockito.`when`(fitLeaderRepository.save(any(fitLeader.javaClass))).thenReturn(fitLeader)
         Mockito.`when`(fitMateRepository.save(any(fitMate.javaClass))).thenReturn(fitMate)
@@ -124,8 +115,6 @@ class FitGroupServiceTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -134,7 +123,6 @@ class FitGroupServiceTest {
             null
         )
 
-        Mockito.`when`(bankCodeRepository.findByCode(penaltyAccountBankCode)).thenReturn(Optional.of(bankCode))
         Mockito.`when`(fitGroupRepository.save(any(fitGroup.javaClass))).thenReturn(fitGroup)
         Mockito.`when`(fitLeaderRepository.save(any(fitLeader.javaClass))).thenReturn(fitLeader)
         Mockito.`when`(fitMateRepository.save(any(fitMate.javaClass))).thenReturn(fitMate)
@@ -150,8 +138,6 @@ class FitGroupServiceTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle,
@@ -160,39 +146,11 @@ class FitGroupServiceTest {
             listOf()
         )
 
-        Mockito.`when`(bankCodeRepository.findByCode(penaltyAccountBankCode)).thenReturn(Optional.of(bankCode))
         Mockito.`when`(fitGroupRepository.save(any(fitGroup.javaClass))).thenReturn(fitGroup)
         Mockito.`when`(fitLeaderRepository.save(any(fitLeader.javaClass))).thenReturn(fitLeader)
         Mockito.`when`(fitMateRepository.save(any(fitMate.javaClass))).thenReturn(fitMate)
         //when then
         Assertions.assertDoesNotThrow { fitGroupService.registerFitGroup(registerFitGroupRequest) }
-    }
-
-    @Test
-    @DisplayName("[단위][Service] Register fit group no resource bank code - 실패 테스트")
-    fun `register fit group service no resource bank code fail test`() {
-        //given
-        val registerFitGroupRequest = RegisterFitGroupRequest(
-            requestUserId,
-            fitGroupName,
-            penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
-            category,
-            introduction,
-            cycle,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
-
-        Mockito.`when`(bankCodeRepository.findByCode(penaltyAccountBankCode)).thenReturn(Optional.empty())
-        //when then
-        Assertions.assertThrows(ResourceNotFoundException::class.java) {
-            fitGroupService.registerFitGroup(
-                registerFitGroupRequest
-            )
-        }
     }
 
     @Test
@@ -203,8 +161,6 @@ class FitGroupServiceTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle
@@ -214,7 +170,6 @@ class FitGroupServiceTest {
             multiMediaEndPoint
         )
 
-        Mockito.`when`(bankCodeRepository.findByCode(penaltyAccountBankCode)).thenReturn(Optional.of(bankCode))
         Mockito.`when`(fitGroupRepository.findById(fitGroupId)).thenReturn(Optional.of(fitGroup))
         Mockito.`when`(fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
             .thenReturn(Optional.of(fitLeader))
@@ -232,8 +187,6 @@ class FitGroupServiceTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle
@@ -261,8 +214,6 @@ class FitGroupServiceTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle
@@ -292,8 +243,6 @@ class FitGroupServiceTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle
@@ -323,8 +272,6 @@ class FitGroupServiceTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle
@@ -358,8 +305,6 @@ class FitGroupServiceTest {
             requestUserId,
             fitGroupName,
             penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
             category,
             introduction,
             cycle
@@ -376,40 +321,6 @@ class FitGroupServiceTest {
             .thenReturn(maxFitMate + 1)
         //when then
         Assertions.assertThrows(BadRequestException::class.java) {
-            fitGroupService.updateFitGroup(
-                fitGroupId,
-                updateFitGroupRequest
-            )
-        }
-    }
-
-    @Test
-    @DisplayName("[단위][Service] Update fit no resource bank code - 실패 테스트")
-    fun `update fit group service no resource bank code fail test`() {
-        //given
-        val updateFitGroupRequest = UpdateFitGroupRequest(
-            requestUserId,
-            fitGroupName,
-            penaltyAmount,
-            penaltyAccountBankCode,
-            penaltyAccount,
-            category,
-            introduction,
-            cycle
-                ?: 1,
-            frequency,
-            maxFitMate,
-            multiMediaEndPoint
-        )
-
-        Mockito.`when`(fitGroupRepository.findById(fitGroupId)).thenReturn(Optional.of(fitGroup))
-        Mockito.`when`(fitLeaderRepository.findByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
-            .thenReturn(Optional.of(fitLeader))
-        Mockito.`when`(fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED))
-            .thenReturn(0)
-        Mockito.`when`(bankCodeRepository.findByCode(penaltyAccountBankCode)).thenReturn(Optional.empty())
-        //when then
-        Assertions.assertThrows(ResourceNotFoundException::class.java) {
             fitGroupService.updateFitGroup(
                 fitGroupId,
                 updateFitGroupRequest

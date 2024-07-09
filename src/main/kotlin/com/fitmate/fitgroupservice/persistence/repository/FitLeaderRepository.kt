@@ -12,4 +12,6 @@ interface FitLeaderRepository : JpaRepository<FitLeader, Long> {
         requestUserId: Int,
         persistenceNotDeleted: Boolean
     ): Optional<FitLeader>
+
+    fun countByFitLeaderUserIdAndState(userId: Int, state: Boolean): Int
 }

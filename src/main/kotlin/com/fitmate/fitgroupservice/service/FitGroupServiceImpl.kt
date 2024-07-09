@@ -18,7 +18,6 @@ class FitGroupServiceImpl(
     private val fitLeaderRepository: FitLeaderRepository,
     private val fitMateRepository: FitMateRepository,
     private val multiMediaEndPointRepository: MultiMediaEndPointRepository,
-    private val bankCodeRepository: BankCodeRepository,
     private val userForReadReadRepository: UserForReadRepository,
     private val eventPublisher: ApplicationEventPublisher
 ) : FitGroupService {
@@ -31,10 +30,14 @@ class FitGroupServiceImpl(
      */
     @Transactional
     override fun registerFitGroup(registerFitGroupRequest: RegisterFitGroupRequest): RegisterFitGroupResponse {
-        val bankCode = bankCodeRepository.findByCode(registerFitGroupRequest.penaltyAccountBankCode)
-            .orElseThrow { ResourceNotFoundException("Bank code does not exist") }
+        val fitGroupCount = fitLeaderRepository.countByFitLeaderUserIdAndState(
+            registerFitGroupRequest.requestUserId,
+            GlobalStatus.PERSISTENCE_NOT_DELETED
+        );
 
-        val savedFitGroup = fitGroupRepository.save(createFitGroup(registerFitGroupRequest, bankCode));
+        if (fitGroupCount > 5) throw BadRequestException("fit leader could be only 5 group of leader");
+
+        val savedFitGroup = fitGroupRepository.save(createFitGroup(registerFitGroupRequest));
         val savedFitLeader = fitLeaderRepository.save(createFitLeader(savedFitGroup, registerFitGroupRequest))
         val fitMate = fitMateRepository.save(createFitMate(savedFitGroup, registerFitGroupRequest))
 
@@ -74,12 +77,10 @@ class FitGroupServiceImpl(
             registerFitGroupRequest.requestUserId.toString()
         )
 
-    private fun createFitGroup(registerFitGroupRequest: RegisterFitGroupRequest, bankCode: BankCode): FitGroup =
+    private fun createFitGroup(registerFitGroupRequest: RegisterFitGroupRequest): FitGroup =
         FitGroup(
             registerFitGroupRequest.fitGroupName,
             registerFitGroupRequest.penaltyAmount,
-            bankCode,
-            registerFitGroupRequest.penaltyAccountNumber,
             registerFitGroupRequest.category,
             registerFitGroupRequest.introduction,
             registerFitGroupRequest.cycle ?: 1,
@@ -154,10 +155,7 @@ class FitGroupServiceImpl(
 
         if (presentFitMateCount > updateFitGroupRequest.maxFitMate) throw BadRequestException("Fit mate count bigger then new max fit mate")
 
-        val bankCode = bankCodeRepository.findByCode(updateFitGroupRequest.penaltyAccountBankCode)
-            .orElseThrow { ResourceNotFoundException("Bank code does not exist") }
-
-        fitGroup.update(updateFitGroupRequest, bankCode)
+        fitGroup.update(updateFitGroupRequest)
 
         val multiMediaEndpoints = multiMediaEndPointRepository.findByFitGroupAndStateOrderByIdAsc(
             fitGroup,
