@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import org.mockito.kotlin.any
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -48,6 +50,7 @@ class FitGroupFilterControllerTest {
     private val pageNumber = 1
     private val pageSize = 5
     private val pageRequest = PageRequest.of(pageNumber, pageSize)
+    private val fitGroupNameSearch = "헬창"
 
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
@@ -89,13 +92,14 @@ class FitGroupFilterControllerTest {
     @Throws(Exception::class)
     fun `fit group filter controller full condition success test`() {
         //given
-        val fitGroupFilterRequest = FitGroupFilterRequest(withMaxGroup, category, pageNumber, pageSize)
+        val fitGroupFilterRequest =
+            FitGroupFilterRequest(withMaxGroup, category, fitGroupNameSearch, pageNumber, pageSize)
 
         val fitGroupDetailResponseList = getFitGroupDetailResponses(fitGroupFilterRequest)
 
         val fitGroupDetailResponse = SliceImpl(fitGroupDetailResponseList, pageRequest, true)
 
-        Mockito.`when`(fitGroupFilterService.getFitGroupListByFilter(fitGroupFilterRequest))
+        whenever(fitGroupFilterService.getFitGroupListByFilter(any<FitGroupFilterRequest>()))
             .thenReturn(fitGroupDetailResponse)
 
         val queryString = UriComponentsBuilder.newInstance()
@@ -103,6 +107,7 @@ class FitGroupFilterControllerTest {
             .queryParam("category", fitGroupFilterRequest.category)
             .queryParam("pageNumber", fitGroupFilterRequest.pageNumber)
             .queryParam("pageSize", fitGroupFilterRequest.pageSize)
+            .queryParam("fitGroupNameSearch", fitGroupFilterRequest.fitGroupNameSearch)
             .build()
             .encode()
             .toUriString()
@@ -123,7 +128,8 @@ class FitGroupFilterControllerTest {
                         parameterWithName("pageSize").description("조회할 fit group slice size ( null일 경우 기본값 5 )"),
                         parameterWithName("withMaxGroup")
                             .description("인원이 다 찬 방도 포함할 건지"),
-                        parameterWithName("category").description("조회할 fit group의 카테고리 ( null일 경우 전체 )")
+                        parameterWithName("category").description("조회할 fit group의 카테고리 ( null일 경우 전체 )"),
+                        parameterWithName("fitGroupNameSearch").description("조회할 fit group의 제목으로 검색 ( null일 경우 전체 )")
                     ),
                     responseFields(
                         fieldWithPath("content[]").type(JsonFieldType.ARRAY).description("fit group List"),
@@ -182,7 +188,8 @@ class FitGroupFilterControllerTest {
     @Throws(Exception::class)
     fun `fit group filter by user id controller success test`() {
         //given
-        val fitGroupFilterRequest = FitGroupFilterRequest(withMaxGroup, category, pageNumber, pageSize)
+        val fitGroupFilterRequest =
+            FitGroupFilterRequest(withMaxGroup, category, fitGroupNameSearch, pageNumber, pageSize)
 
         val fitGroupDetailResponseList = getFitGroupDetailResponses(fitGroupFilterRequest)
 

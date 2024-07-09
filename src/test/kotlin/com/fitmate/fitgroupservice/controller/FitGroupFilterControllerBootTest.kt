@@ -47,6 +47,7 @@ class FitGroupFilterControllerBootTest {
     private val category = 1
     private val pageNumber = 1
     private val pageSize = 5
+    private val fitGroupNameSearch = "헬창"
 
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
@@ -142,13 +143,15 @@ class FitGroupFilterControllerBootTest {
     @Throws(Exception::class)
     fun `fit group filter controller full condition success test`() {
         //given
-        val fitGroupFilterRequest = FitGroupFilterRequest(withMaxGroup, category, pageNumber, pageSize)
+        val fitGroupFilterRequest =
+            FitGroupFilterRequest(withMaxGroup, category, fitGroupNameSearch, pageNumber, pageSize)
 
         val queryString = UriComponentsBuilder.newInstance()
             .queryParam("withMaxGroup", fitGroupFilterRequest.withMaxGroup)
             .queryParam("category", fitGroupFilterRequest.category)
             .queryParam("pageNumber", fitGroupFilterRequest.pageNumber)
             .queryParam("pageSize", fitGroupFilterRequest.pageSize)
+            .queryParam("fitGroupNameSearch", fitGroupFilterRequest.fitGroupNameSearch)
             .build()
             .encode()
             .toUriString()

@@ -37,6 +37,7 @@ class FitGroupFilterServiceBootTest {
     private val pageNumber = 1
     private val pageSize = 5
     private val pageRequest = PageRequest.of(pageNumber, pageSize)
+    private val fitGroupNameSearch = "헬창"
 
     private val requestUserId = 11422
     private val fitGroupName = "헬창들은 일주일에 7번 운동해야죠 스터디"
@@ -126,7 +127,8 @@ class FitGroupFilterServiceBootTest {
     @DisplayName("[단위][Service] Fit group filter full condition 조회 - 성공 테스트")
     fun `fit group filter service full condition success test`() {
         //given
-        val fitGroupFilterRequest = FitGroupFilterRequest(withMaxGroup, category, pageNumber, pageSize)
+        val fitGroupFilterRequest =
+            FitGroupFilterRequest(withMaxGroup, category, fitGroupNameSearch, pageNumber, pageSize)
 
         //when then
         Assertions.assertDoesNotThrow { fitGroupFilterService.getFitGroupListByFilter(fitGroupFilterRequest) }

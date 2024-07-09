@@ -48,7 +48,8 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
             )
             .where(
                 categoryCondition(fitGroupFilterRequest.category),
-                fitGroup.state.eq(GlobalStatus.PERSISTENCE_NOT_DELETED)
+                fitGroup.state.eq(GlobalStatus.PERSISTENCE_NOT_DELETED),
+                searchCondition(fitGroupFilterRequest.fitGroupNameSearch)
             )
             .groupBy(fitGroup)
             .having(conditionWithMaxGroup(fitGroupFilterRequest.withMaxGroup))
@@ -58,6 +59,9 @@ class QFitGroupRepositoryImpl(jpaQueryFactory: JPAQueryFactory) : QuerydslReposi
                 fitMate.count().coalesce(0L).desc()
             )
             .fetch()
+
+    private fun searchCondition(fitGroupNameSearch: String?): Predicate? =
+        fitGroupNameSearch?.let { return fitGroup.fitGroupName.contains(fitGroupNameSearch) }
 
     override fun filterFitGroupByUserId(userId: Int): List<FitGroupFilterResponse> {
         val subQueryFitMate = QFitMate("fitMate")
