@@ -6,8 +6,6 @@ data class RegisterFitGroupRequest(
     val requestUserId: Int,
     @field:NotEmpty val fitGroupName: String,
     val penaltyAmount: Int,
-    @field:NotEmpty val penaltyAccountBankCode: String,
-    @field:NotEmpty val penaltyAccountNumber: String,
     val category: Int,
     val introduction: String?,
     val cycle: Int? = 1,

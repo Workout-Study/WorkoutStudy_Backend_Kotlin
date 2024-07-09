@@ -21,12 +21,6 @@ class FitGroupHistory(
     val penaltyAmount: Int = fitGroup.penaltyAmount
 
     @Column(nullable = false)
-    var penaltyAccountBankCode: String = fitGroup.penaltyAccountBankCode.code
-
-    @Column(nullable = false)
-    var penaltyAccountNumber: String = fitGroup.penaltyAccountNumber
-
-    @Column(nullable = false)
     var maxFitMate: Int = fitGroup.maxFitMate
 
     @Column(nullable = false)
