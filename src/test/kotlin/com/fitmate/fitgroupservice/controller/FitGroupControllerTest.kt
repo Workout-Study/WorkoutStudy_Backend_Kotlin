@@ -116,7 +116,7 @@ class FitGroupControllerTest {
                         fieldWithPath("fitGroupName").type(JsonFieldType.STRING).description("Fit group 이름"),
                         fieldWithPath("penaltyAmount").type(JsonFieldType.NUMBER).description("운동 미인증 패널티 금액"),
                         fieldWithPath("category").type(JsonFieldType.NUMBER)
-                            .description("운동 category ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 기타 )"),
+                            .description("운동 category ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 전체 )"),
                         fieldWithPath("introduction").type(JsonFieldType.STRING).description("스터디 설명"),
                         fieldWithPath("cycle").type(JsonFieldType.NULL)
                             .description("운동 인증 주기 ( null시 기본값 일주일 - 1: 일주일, 2: 한달, 3: 일년 )"),
@@ -169,7 +169,7 @@ class FitGroupControllerTest {
                         fieldWithPath("fitGroupName").type(JsonFieldType.STRING).description("Fit group 이름"),
                         fieldWithPath("penaltyAmount").type(JsonFieldType.NUMBER).description("운동 미인증 패널티 금액"),
                         fieldWithPath("category").type(JsonFieldType.NUMBER)
-                            .description("운동 category ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 기타 )"),
+                            .description("운동 category ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 전체 )"),
                         fieldWithPath("introduction").type(JsonFieldType.STRING).description("스터디 설명"),
                         fieldWithPath("cycle").type(JsonFieldType.NUMBER)
                             .description("운동 인증 주기 ( 1: 일주일, 2: 한달, 3: 일년 )"),
@@ -228,7 +228,7 @@ class FitGroupControllerTest {
                         fieldWithPath("fitGroupName").type(JsonFieldType.STRING).description("수정할 Fit group 이름"),
                         fieldWithPath("penaltyAmount").type(JsonFieldType.NUMBER).description("수정할 운동 미인증 패널티 금액"),
                         fieldWithPath("category").type(JsonFieldType.NUMBER)
-                            .description("수정할 운동 category ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 기타 )"),
+                            .description("수정할 운동 category ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 전체 )"),
                         fieldWithPath("introduction").type(JsonFieldType.STRING).description("수정할 스터디 설명"),
                         fieldWithPath("cycle").type(JsonFieldType.NULL)
                             .description("수정할 운동 인증 주기 ( null시 기본값 일주일 - 1: 일주일, 2: 한달, 3: 일년 )"),
