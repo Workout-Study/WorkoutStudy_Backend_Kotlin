@@ -58,6 +58,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: 22
           script: |
+            ${{ secrets.SERVER_PASSWORD }}
             docker stop fit-group
             docker rm fit-group
             docker pull ${{secrets.DOCKER_USERNAME}}/fit-group:latest
