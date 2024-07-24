@@ -142,7 +142,7 @@ class FitGroupFilterControllerTest {
                         fieldWithPath("content[].penaltyAmount").type(JsonFieldType.NUMBER)
                             .description("fit group의 패널티 금액"),
                         fieldWithPath("content[].category").type(JsonFieldType.NUMBER)
-                            .description("fit group의 카테고리 ( 1:헬스, 2:축구, 3:농구, 4:야구, 5: 클라이밍, 6: 배드민턴, 7: 필라테스, 10: 기타 )"),
+                            .description("fit group의 카테고리 ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 전체 )"),
                         fieldWithPath("content[].introduction").type(JsonFieldType.STRING)
                             .description("fit group의 소개글"),
                         fieldWithPath("content[].cycle").type(JsonFieldType.NUMBER)
@@ -225,7 +225,7 @@ class FitGroupFilterControllerTest {
                         fieldWithPath("fitGroupDetails[].penaltyAmount").type(JsonFieldType.NUMBER)
                             .description("fit group의 패널티 금액"),
                         fieldWithPath("fitGroupDetails[].category").type(JsonFieldType.NUMBER)
-                            .description("fit group의 카테고리 ( 1:헬스, 2:축구, 3:농구, 4:야구, 5: 클라이밍, 6: 배드민턴, 7: 필라테스, 10: 기타 )"),
+                            .description("fit group의 카테고리 ( 1: 등산, 2: 생활 체육, 3: 웨이트, 4: 수영, 5: 축구, 6: 농구, 7: 야구, 8: 바이킹, 9: 클라이밍, 10: 전체 )"),
                         fieldWithPath("fitGroupDetails[].introduction").type(JsonFieldType.STRING)
                             .description("fit group의 소개글"),
                         fieldWithPath("fitGroupDetails[].cycle").type(JsonFieldType.NUMBER)
