@@ -13,4 +13,6 @@ interface FitMateRepository : JpaRepository<FitMate, Long> {
         fitMateUserId: Int,
         state: Boolean
     ): Optional<FitMate>
+
+    fun countByFitMateUserIdAndState(userId: Int, state: Boolean): Int
 }
