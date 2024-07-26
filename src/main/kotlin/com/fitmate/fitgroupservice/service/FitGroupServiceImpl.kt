@@ -30,12 +30,12 @@ class FitGroupServiceImpl(
      */
     @Transactional
     override fun registerFitGroup(registerFitGroupRequest: RegisterFitGroupRequest): RegisterFitGroupResponse {
-        val fitGroupCount = fitLeaderRepository.countByFitLeaderUserIdAndState(
+        val fitMateCount = fitMateRepository.countByFitMateUserIdAndState(
             registerFitGroupRequest.requestUserId,
             GlobalStatus.PERSISTENCE_NOT_DELETED
         );
 
-        if (fitGroupCount > 5) throw BadRequestException("fit leader could be only 5 group of leader");
+        if (fitMateCount > 5) throw BadRequestException("fit mate could be only 5 group of mate");
 
         val savedFitGroup = fitGroupRepository.save(createFitGroup(registerFitGroupRequest));
         val savedFitLeader = fitLeaderRepository.save(createFitLeader(savedFitGroup, registerFitGroupRequest))

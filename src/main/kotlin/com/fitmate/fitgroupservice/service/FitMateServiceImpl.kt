@@ -52,6 +52,13 @@ class FitMateServiceImpl(
             GlobalStatus.PERSISTENCE_NOT_DELETED
         ).ifPresent { throw BadRequestException("Fit Group Leader can't register on fit mate") }
 
+        val fitMateCount = fitMateRepository.countByFitMateUserIdAndState(
+            registerMateRequest.requestUserId,
+            GlobalStatus.PERSISTENCE_NOT_DELETED
+        );
+
+        if (fitMateCount > 5) throw BadRequestException("fit mate could be only 5 group of mate");
+
         val presentFitMateCount =
             fitMateRepository.countByFitGroupAndState(fitGroup, GlobalStatus.PERSISTENCE_NOT_DELETED) ?: 0
         if (presentFitMateCount >= fitGroup.maxFitMate) throw BadRequestException("fit group already full")
