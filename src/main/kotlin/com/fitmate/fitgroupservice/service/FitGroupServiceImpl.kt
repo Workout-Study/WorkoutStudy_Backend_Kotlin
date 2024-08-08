@@ -49,7 +49,7 @@ class FitGroupServiceImpl(
 
         publishRegisterEvent(savedFitGroup, fitMate)
 
-        return RegisterFitGroupResponse(savedFitGroup.id != null && savedFitLeader.id != null)
+        return RegisterFitGroupResponse(savedFitGroup.id != null && savedFitLeader.id != null, savedFitGroup.id)
     }
 
     private fun publishRegisterEvent(
