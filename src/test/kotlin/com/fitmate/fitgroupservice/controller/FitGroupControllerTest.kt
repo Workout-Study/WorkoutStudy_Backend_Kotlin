@@ -94,7 +94,7 @@ class FitGroupControllerTest {
             maxFitMate,
             multiMediaEndPoint
         )
-        val registerFitGroupResponse = RegisterFitGroupResponse(true)
+        val registerFitGroupResponse = RegisterFitGroupResponse(true, 13L)
 
         Mockito.`when`(fitGroupService.registerFitGroup(registerFitGroupRequest)).thenReturn(registerFitGroupResponse)
         //when
@@ -126,7 +126,9 @@ class FitGroupControllerTest {
                             .description("멀티 미디어 end point list ( 주어진 index 순으로 return )")
                     ),
                     responseFields(
-                        fieldWithPath("isRegisterSuccess").type(JsonFieldType.BOOLEAN).description("등록 성공 여부")
+                        fieldWithPath("isRegisterSuccess").type(JsonFieldType.BOOLEAN).description("등록 성공 여부"),
+                        fieldWithPath("fitGroupId").type(JsonFieldType.NUMBER)
+                            .description("fit group id (등록 성공시만 return)")
                     )
                 )
             )

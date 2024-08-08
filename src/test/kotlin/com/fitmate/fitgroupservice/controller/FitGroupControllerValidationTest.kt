@@ -96,7 +96,7 @@ class FitGroupControllerValidationTest {
             multiMediaEndPoint
         )
 
-        val registerFitGroupResponse = RegisterFitGroupResponse(true)
+        val registerFitGroupResponse = RegisterFitGroupResponse(true, 12L)
 
         Mockito.`when`(fitGroupService.registerFitGroup(registerFitGroupRequest)).thenReturn(registerFitGroupResponse)
         //when
@@ -129,7 +129,7 @@ class FitGroupControllerValidationTest {
             testMultiMediaEndPoint
         )
 
-        val registerFitGroupResponse = RegisterFitGroupResponse(true)
+        val registerFitGroupResponse = RegisterFitGroupResponse(true, 16L)
 
         Mockito.`when`(fitGroupService.registerFitGroup(registerFitGroupRequest)).thenReturn(registerFitGroupResponse)
         //when
