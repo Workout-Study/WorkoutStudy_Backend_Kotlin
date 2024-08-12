@@ -3,7 +3,7 @@ package com.fitmate.fitgroupservice.dto.group
 import com.fitmate.fitgroupservice.persistence.entity.FitGroup
 import com.fitmate.fitgroupservice.persistence.entity.FitLeader
 import com.fitmate.fitgroupservice.persistence.entity.UserForRead
-import java.time.Instant
+import com.fitmate.fitgroupservice.utils.DateParseUtils
 
 data class FitGroupDetailResponse(
     private val fitLeader: FitLeader?,
@@ -22,7 +22,7 @@ data class FitGroupDetailResponse(
     val introduction: String? = fitGroup.introduction
     val cycle: Int = fitGroup.cycle
     val frequency: Int = fitGroup.frequency
-    val createdAt: Instant = fitGroup.createdAt
+    val createdAt: String = DateParseUtils.instantToString(fitGroup.createdAt)
     val maxFitMate: Int = fitGroup.maxFitMate
     val state: Boolean = fitGroup.state
 }
