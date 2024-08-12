@@ -59,6 +59,8 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     implementation 'com.slack.api:slack-api-client:1.29.2'
+
+    implementation 'com.github.loki4j:loki-logback-appender:1.4.1'
 }
 
 dependencyManagement {
