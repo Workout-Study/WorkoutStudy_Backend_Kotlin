@@ -102,6 +102,7 @@ class FitMateServiceImpl(
                 it.id!!,
                 it.fitMateUserId,
                 userForRead?.nickname,
+                userForRead?.imageUrl,
                 it.createdAt
             )
         } ?: listOf()

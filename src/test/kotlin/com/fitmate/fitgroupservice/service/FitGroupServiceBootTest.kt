@@ -64,7 +64,7 @@ class FitGroupServiceBootTest {
 
         this.fitLeader = fitLeaderRepository.save(fitLeader)
 
-        val userForRead = UserForRead(fitLeader.fitLeaderUserId, "testFitLeader", "testFitLeader")
+        val userForRead = UserForRead(fitLeader.fitLeaderUserId, "testFitLeader", "imageUrl", "testFitLeader")
 
         userForReadRepository.save(userForRead)
 

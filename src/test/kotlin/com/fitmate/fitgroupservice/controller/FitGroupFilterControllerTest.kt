@@ -268,7 +268,7 @@ class FitGroupFilterControllerTest {
 
             fitLeader.id = fitLeaderId + i
 
-            val userForRead = UserForRead(requestUserId + i, "testUser" + i, "testUser" + i)
+            val userForRead = UserForRead(requestUserId + i, "testUser" + i, multiMediaEndPoint[0], "testUser" + i)
 
             userForRead.id = fitLeaderId + i + i
 
