@@ -70,7 +70,7 @@ class FitGroupControllerTest {
 
     private val fitLeader = FitLeader(fitGroup, requestUserId, requestUserId.toString())
 
-    private val userForRead = UserForRead(requestUserId, "testUser", "testUser")
+    private val userForRead = UserForRead(requestUserId, "testUser", multiMediaEndPoint[0], "testUser")
 
     @BeforeEach
     fun setFitGroupFitLeaderId() {

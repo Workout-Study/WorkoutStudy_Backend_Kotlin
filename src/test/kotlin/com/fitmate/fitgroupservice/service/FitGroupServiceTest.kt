@@ -75,7 +75,7 @@ class FitGroupServiceTest {
 
         fitMate = FitMate(fitGroup, requestUserId, requestUserId.toString())
 
-        userForRead = UserForRead(fitLeader.fitLeaderUserId, "testUser", "testUser")
+        userForRead = UserForRead(fitLeader.fitLeaderUserId, "testUser", "imageUrl", "testUser")
 
         fitGroup.id = fitGroupId
         fitLeader.id = fitLeaderId

@@ -7,6 +7,7 @@ data class FitMateDetailDto(
     val fitMateId: Long,
     val fitMateUserId: Int,
     val fitMateUserNickname: String?,
+    val fitMateUserProfileImageUrl: String?,
     private val createdAtInstant: Instant
 ) {
     val createdAt: String = DateParseUtils.instantToString(createdAtInstant)

@@ -10,6 +10,7 @@ import java.time.Instant
 class UserForRead(
     @Column(nullable = false) val userId: Int,
     @Column(nullable = false) var nickname: String,
+    @Column(nullable = false) var imageUrl: String,
     createUser: String
 ) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
 
@@ -20,6 +21,7 @@ class UserForRead(
     fun updateByResponse(userInfoResponse: UserInfoResponse, eventPublisher: String) {
         this.nickname = userInfoResponse.nickname
         this.state = userInfoResponse.state
+        this.imageUrl = userInfoResponse.imageUrl
         this.updatedAt = Instant.now()
         this.updateUser = eventPublisher
     }
@@ -27,6 +29,7 @@ class UserForRead(
     fun updateByUserMessageDto(userCreateMessageDto: UserCreateMessageDto, eventPublisher: String) {
         this.nickname = userCreateMessageDto.nickname
         this.state = userCreateMessageDto.state
+        this.imageUrl = userCreateMessageDto.imageUrl
         this.updatedAt = Instant.now()
         this.updateUser = eventPublisher
     }

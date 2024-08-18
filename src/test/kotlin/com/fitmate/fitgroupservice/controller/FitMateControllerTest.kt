@@ -87,8 +87,20 @@ class FitMateControllerTest {
             fitGroupId,
             FitLeaderDetailDto(7, "testUserId", Instant.now()),
             listOf(
-                FitMateDetailDto(1L, 8, "testUserId8", Instant.now()),
-                FitMateDetailDto(2L, 9, "testUserId9", Instant.now())
+                FitMateDetailDto(
+                    1L,
+                    8,
+                    "testUserId8",
+                    "https://avatars.githubusercontent.com/u/105261146?v=4",
+                    Instant.now()
+                ),
+                FitMateDetailDto(
+                    2L,
+                    9,
+                    "testUserId9",
+                    "https://avatars.githubusercontent.com/u/105261146?v=4",
+                    Instant.now()
+                )
             )
         )
 
@@ -125,6 +137,8 @@ class FitMateControllerTest {
                             .description("fit mate 의 user id"),
                         fieldWithPath("fitMateDetails[].fitMateUserNickname").type(JsonFieldType.STRING)
                             .description("fit mate 의 user nickname"),
+                        fieldWithPath("fitMateDetails[].fitMateUserProfileImageUrl").type(JsonFieldType.STRING)
+                            .description("fit mate 의 user 프로필 이미지 url"),
                         fieldWithPath("fitMateDetails[].createdAt").type(JsonFieldType.STRING)
                             .description("fit mate 등록일시")
                     )

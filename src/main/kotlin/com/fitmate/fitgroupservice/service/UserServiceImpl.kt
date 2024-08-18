@@ -36,7 +36,14 @@ class UserServiceImpl(
 
         val userForRead =
             userForReadRepository.findByUserId(userInfoResponse.userId)
-                .orElseGet { UserForRead(userInfoResponse.userId, userInfoResponse.nickname, eventPublisher) }
+                .orElseGet {
+                    UserForRead(
+                        userInfoResponse.userId,
+                        userInfoResponse.nickname,
+                        userInfoResponse.imageUrl,
+                        eventPublisher
+                    )
+                }
 
         userForRead.updateByResponse(userInfoResponse, eventPublisher)
 
@@ -47,7 +54,14 @@ class UserServiceImpl(
     override fun createUser(userCreateMessageDto: UserCreateMessageDto, eventPublisher: String) {
         val userForRead =
             userForReadRepository.findByUserId(userCreateMessageDto.userId)
-                .orElse(UserForRead(userCreateMessageDto.userId, userCreateMessageDto.nickname, eventPublisher))
+                .orElse(
+                    UserForRead(
+                        userCreateMessageDto.userId,
+                        userCreateMessageDto.nickname,
+                        userCreateMessageDto.imageUrl,
+                        eventPublisher
+                    )
+                )
 
         userForRead.updateByUserMessageDto(userCreateMessageDto, eventPublisher)
 

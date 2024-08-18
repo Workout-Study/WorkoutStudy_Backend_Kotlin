@@ -69,7 +69,8 @@ class FitGroupControllerBootTest {
 
         fitLeaderRepository.save(fitLeader)
 
-        val userForRead = UserForRead(fitLeader.fitLeaderUserId, "testFitLeader", "testFitLeader")
+        val userForRead =
+            UserForRead(fitLeader.fitLeaderUserId, "testFitLeader", multiMediaEndPoint[0], "testFitLeader")
 
         userForReadRepository.save(userForRead)
 

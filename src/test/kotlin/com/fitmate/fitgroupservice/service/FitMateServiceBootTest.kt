@@ -67,7 +67,7 @@ class FitMateServiceBootTest {
 
         this.fitLeader = fitLeaderRepository.save(fitLeader)
 
-        val userForRead = UserForRead(fitLeader.fitLeaderUserId, "testFitLeader", "testFitLeader")
+        val userForRead = UserForRead(fitLeader.fitLeaderUserId, "testFitLeader", "imageUrl", "testFitLeader")
 
         userForReadRepository.save(userForRead)
 
@@ -189,7 +189,7 @@ class FitMateServiceBootTest {
         for (i in 1..maxFitMate) {
             fitMateRepository.save(FitMate(fitGroup, requestUserId + i, (requestUserId + i).toString()))
 
-            val fitMateUserForRead = UserForRead(requestUserId + i, "testFitMate" + i, "testFitMate" + i)
+            val fitMateUserForRead = UserForRead(requestUserId + i, "testFitMate" + i, "imageUrl", "testFitMate" + i)
 
             userForReadRepository.save(fitMateUserForRead)
         }
