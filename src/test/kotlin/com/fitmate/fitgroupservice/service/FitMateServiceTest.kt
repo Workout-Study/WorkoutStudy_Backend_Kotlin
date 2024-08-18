@@ -82,7 +82,7 @@ class FitMateServiceTest {
 
         fitMate.id = fitMateId
 
-        userForRead = UserForRead(fitLeader.fitLeaderUserId, "testUser", "testUser")
+        userForRead = UserForRead(fitLeader.fitLeaderUserId, "testUser", "imageUrl", "testUser")
 
         userForRead.id = fitLeaderId
     }
