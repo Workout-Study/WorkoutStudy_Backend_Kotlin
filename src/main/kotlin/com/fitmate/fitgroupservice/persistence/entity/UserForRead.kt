@@ -10,7 +10,7 @@ import java.time.Instant
 class UserForRead(
     @Column(nullable = false) val userId: Int,
     @Column(nullable = false) var nickname: String,
-    @Column(nullable = false) var imageUrl: String,
+    @Column(nullable = true) var imageUrl: String?,
     createUser: String
 ) : BaseEntity(GlobalStatus.PERSISTENCE_NOT_DELETED, Instant.now(), createUser) {
 

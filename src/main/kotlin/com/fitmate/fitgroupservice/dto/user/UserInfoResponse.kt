@@ -7,7 +7,7 @@ data class UserInfoResponse(
     val userId: Int,
     val nickname: String,
     val state: Boolean,
-    val imageUrl: String,
+    val imageUrl: String?,
     private val createdAtInstant: Instant,
     private val updatedAtInstant: Instant
 ) {
