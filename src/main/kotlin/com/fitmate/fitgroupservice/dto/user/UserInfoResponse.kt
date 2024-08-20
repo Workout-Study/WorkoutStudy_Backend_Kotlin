@@ -1,6 +1,7 @@
 package com.fitmate.fitgroupservice.dto.user
 
 import com.fitmate.fitgroupservice.utils.DateParseUtils
+import org.springframework.util.StringUtils
 import java.time.Instant
 
 data class UserInfoResponse(
@@ -8,9 +9,10 @@ data class UserInfoResponse(
     val nickname: String,
     val state: Boolean,
     val imageUrl: String?,
-    private val createdAtInstant: Instant,
-    private val updatedAtInstant: Instant
+    val createdAt: String,
+    val updatedAt: String?
 ) {
-    val createdAt: String = DateParseUtils.instantToString(createdAtInstant)
-    val updatedAt: String = DateParseUtils.instantToString(updatedAtInstant)
+    val createdAtInstant = DateParseUtils.stringToInstant(createdAt)
+    val updatedAtInstant: Instant? =
+        if (StringUtils.hasText(updatedAt)) DateParseUtils.stringToInstant(updatedAt!!) else null
 }
